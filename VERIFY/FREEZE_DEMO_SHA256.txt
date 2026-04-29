@@ -1,0 +1,12 @@
+SVARE — Hash Freeze (SHA256)
+
+These hashes define the frozen demo artifacts for SVARE v8_1.
+
+demo\svare_v8_1.py
+SHA256: 6efad28201ce096badd0ec4226383ade9def2e02177e7bd0423f2f158ff34d7f
+
+demo\SVARE_HTML_v8_1.html
+SHA256: d00f9d202a58f9f04669409d7e8e82adf176e0dce4397ed657f886900c1a0641
+
+same file -> same hash
+different file -> different hash

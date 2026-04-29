@@ -1,0 +1,260 @@
+SVARE Verification — Structural Value Resolution Engine
+
+1. Open the reference demonstration
+
+Option A (recommended)
+python svare_v8_1.py
+
+Option B (single expression)
+python svare_v8_1.py "2 / 3 depth 8"
+
+2. Observe
+
+deterministic structural value resolution
+no floating-point arithmetic dependency
+no rounding dependency
+no execution-order dependency
+no external libraries
+value is not computed — it is revealed through structure
+evaluation does not determine correctness (only structural sufficiency does)
+
+3. Expected baseline states
+
+resolved (valid structure)
+
+  resolution: RESOLVED  
+  visible_value: <value>  
+  direction: + | - | ZERO  
+  depth: <scale>  
+  certificate: <stable hash>  
+
+forbidden (invalid denominator)
+
+  resolution: FORBIDDEN  
+  visible_value: undefined  
+  reason: DENOM_ZERO  
+
+indeterminate (0 / 0)
+
+  resolution: INDETERMINATE_ZERO  
+  visible_value: indeterminate  
+  reason: ZERO/ZERO  
+
+incomplete (invalid input)
+
+  resolution: INCOMPLETE  
+  visible_value: not_visible  
+
+4. Structural resolution rule
+
+structure_uniquely_resolves = complete AND consistent
+
+value_visible iff structure_uniquely_resolves
+
+5. Expected behavior
+
+valid structure        -> RESOLVED     -> value visible
+invalid denominator    -> FORBIDDEN    -> no value
+indeterminate form     -> INDETERMINATE_ZERO
+invalid syntax         -> INCOMPLETE   -> no value
+
+identical input structure -> identical value + identical resolution state
+certificate identity depends on identical structural encoding
+
+6. Verify determinism
+
+Run the same input twice:
+
+python svare_v8_1.py "5 + 2"
+python svare_v8_1.py "5 + 2"
+
+Expected:
+same visible value
+same certificate (for identical structural encoding)
+
+Confirm:
+
+same input structure -> same result -> same certificate
+canonical same-certificate identity across equivalent surfaces is a future extension
+
+6A. Verify full invariant
+
+For identical inputs:
+
+resolution identical
+visible_value identical
+certificate identical (for identical structural encoding)
+
+7. Verify representative outputs
+
+Example cases
+
+  5 + 2  
+  -7 - 9  
+  -7 * -8  
+  2 / 3 depth 8  
+  9 / 0  
+  0 / 0  
+
+Expected:
+
+valid
+
+  resolution: RESOLVED  
+  visible_value: <correct value>  
+  certificate: <stable>  
+
+division by zero
+
+  resolution: FORBIDDEN  
+  visible_value: undefined  
+
+zero / zero
+
+  resolution: INDETERMINATE_ZERO  
+  visible_value: indeterminate  
+
+7A. Structural Truth vs Numerical Approximation
+
+Compare with typical floating-point systems:
+
+Example:
+
+1.0000000000000001 - 1.0000000000000000
+
+Expected:
+
+SVARE:
+
+preserves structural distinction
+
+Typical floating-point:
+
+may collapse to 0
+
+Observation
+numeric systems may approximate or collapse
+SVARE preserves structural identity
+
+Conclusion
+value != computation
+value = resolve(structure)
+
+8. Verify distinct proof identities
+
+Different expressions:
+
+5 + 2
+5 + 3
+
+Expected:
+different certificate may appear because surface identity is part of structural encoding
+
+Confirm:
+
+different input structure -> certificate may differ
+
+9. Verify incomplete safety
+
+Invalid input:
+
+5 + 
+
+Expected:
+resolution: INCOMPLETE
+visible_value: not_visible
+
+10. Verify forbidden safety
+
+9 / 0
+
+Expected:
+resolution: FORBIDDEN
+visible_value: undefined
+
+11. Verify indeterminate handling
+0 / 0
+
+Expected:
+resolution: INDETERMINATE_ZERO
+visible_value: indeterminate
+
+12. Verify value consistency under equivalent structure
+
+Equivalent expressions:
+
+5 + 2
+2 + 5
+
+Expected:
+same visible value
+
+Note:
+Certificates may differ when the surface expression differs.
+This is expected because the certificate includes expression identity.
+
+13. Verify structural transitions
+
+Change input:
+
+5 + 2  -> RESOLVED
+5 +    -> INCOMPLETE
+9 / 0  -> FORBIDDEN
+
+Expected:
+state changes strictly follow structure
+
+14. Verify bounded visibility
+
+Large value:
+
+22 * 999999999999999999999999999999
+
+Expected:
+scientific format applied
+structure preserved internally
+
+15. Verify file identity
+certutil -hashfile svare_v8_1.py SHA256
+
+Note:
+file hash = file identity
+certificate = structural resolution artifact
+
+Note:
+FORBIDDEN and INDETERMINATE_ZERO are implementation-level resolution states
+that refine the INCOMPLETE/CONFLICT boundary for numeric domains.
+The core structural model remains:
+RESOLVED, INCOMPLETE, CONFLICT.
+
+16. Structural resolution model
+resolve(structure) ->
+
+RESOLVED              if structure valid
+FORBIDDEN             if invalid operation
+INDETERMINATE_ZERO    if undefined form
+INCOMPLETE            if structure insufficient
+
+17. Core invariant
+
+value correctness = resolve(structure)
+
+value_visible iff structure_uniquely_resolves
+
+18. Confirm
+
+identical input structure → identical value
+identical input structure → identical certificate (for identical structural encoding)
+canonical certificate identity across equivalent surfaces is a future extension
+no floating-point dependency
+no rounding dependency
+no execution-order dependency
+no external computation required
+invalid structure does not produce value
+
+Result
+
+Deterministic structural value resolution confirmed for SVARE.
+
+Value correctness emerges from structure —
+not from floating-point arithmetic, rounding, execution order, or computation flow.
