@@ -1,0 +1,313 @@
+⭐ Open Standard License — SVARE Reference Implementation
+
+SVARE — Structural Value Resolution Engine (Correctness Without Computation)
+Shunyaya Structural Resolution Model
+
+---
+
+Legal Status
+
+This license is a permissive Open Standard license for the SVARE reference implementation.
+
+To the maximum extent permitted by applicable law, this license grants rights similar in spirit to permissive open-source licenses, while preserving truthful representation requirements for the SVARE name and reference implementation.
+
+If any provision is found unenforceable, the remaining provisions remain in effect.
+
+---
+
+Nature of Release
+
+This is a minimal, self-contained reference implementation.
+
+It is intended to demonstrate a structural value correctness model — not to represent a full arithmetic system, symbolic mathematics engine, or computational framework.
+
+Behavioral guarantees apply only within the scope of the reference model and its defined structural assumptions.
+
+---
+
+Permission
+
+Permission is hereby granted, free of charge, to any person or organization to:
+
+• use  
+• execute  
+• study  
+• reproduce  
+• publish  
+• distribute  
+• modify  
+• implement  
+• extend  
+
+the SVARE reference implementation, in whole or in part, for commercial or non-commercial use, subject only to the representation and naming conditions defined in this license.
+
+No registration, fees, or approval required.
+
+---
+
+No Restrictions on Use
+
+This reference implementation imposes no restrictions on usage, except:
+
+• truthful representation  
+• non-misleading use of the SVARE name  
+
+Attribution is not required, but is encouraged for clarity and ecosystem integrity.  
+No endorsement or certification is implied.  
+No runtime obligations apply.
+
+---
+
+Separation of License and Structural Truth
+
+This license governs legal usage, distribution, and representation.
+
+It does not govern, alter, or override structural correctness.
+
+Structural correctness is defined independently by:
+
+value correctness = resolve(structure)
+
+Legal permission does not imply structural validity.  
+Structural validity does not depend on legal permission.
+
+---
+
+Practical Interpretation
+
+This license governs usage and representation.
+
+It does not govern correctness.
+
+Correctness within this model is determined solely by structure:
+
+structure_uniquely_resolves = complete AND consistent
+
+Licensing governs usage and representation — not structural correctness.
+
+value correctness = resolve(structure)
+
+Value correctness is a property of structure — independent of arithmetic or execution mechanisms.
+
+Truth is represented by visible value.  
+Proof is represented by certificate.
+
+Structural proof is expressed as:
+
+same structure → same value  
+
+certificate identity depends on structural encoding  
+(canonical same-certificate identity is a future extension)
+
+Different structure → different admissibility outcome  
+
+---
+
+Clarification — Evaluation as Substrate
+
+This statement refers specifically to correctness as a property of structure.
+
+The reference implementation may still perform internal evaluation.
+
+However, such evaluation is not the source of correctness and does not determine value.
+
+Correctness is determined solely by structural sufficiency.
+
+---
+
+Representation & Naming
+
+Modified or extended implementations:
+
+• must not be presented as the canonical SVARE reference implementation unless structural behavior is preserved  
+• must not imply official authorship, certification, or endorsement  
+
+Use of the name “SVARE” must not imply:
+
+• endorsement  
+• certification  
+• governance authority  
+• official status  
+
+---
+
+Recommended Attribution (Optional)
+
+Preferred form:
+
+Implements SVARE — Structural Value Resolution Engine (Shunyaya Structural Model)
+
+Attribution must not imply endorsement.
+
+---
+
+Scope of the Reference Implementation
+
+This release includes:
+
+• structural value definitions  
+• value visibility rules  
+• minimal executable reference (numeric resolution engine)  
+• outputs and reference traces  
+
+SVARE defines a deterministic structural model where value correctness emerges from structure:
+
+resolve(structure) →
+
+• RESOLVED if structure_uniquely_resolves  
+• INCOMPLETE if structure is incomplete  
+• CONFLICT if structure is inconsistent  
+
+---
+
+What This Demonstrates
+
+• value correctness without computation  
+• independence from arithmetic execution  
+• independence from evaluation order  
+• independence from floating-point approximation  
+• structural resolution governing value visibility  
+• safe handling of incomplete or conflicting structure  
+• deterministic and reproducible value states  
+• identical input structure produces identical value and certificate  
+
+---
+
+Conformance
+
+An implementation is considered compatible if it preserves:
+
+• structure-based correctness  
+• independence from computation as a requirement  
+• deterministic resolution  
+• structure-driven value visibility  
+• reproducibility of value and certificate under equivalent inputs  
+• explicit handling of incomplete and conflicting structure  
+
+Conformance is judged solely by observable behavior — not by internal implementation.
+
+S1 = S2 → Value1 = Value2 → Certificate1 = Certificate2
+
+---
+
+Conflict Handling
+
+In this reference implementation:
+
+• CONFLICT is explicitly defined and demonstrated  
+• INCOMPLETE corresponds to incomplete structure (no value)  
+• inconsistent conditions do not produce a visible value  
+
+Conformance requires:
+
+• no forced value under incomplete structure  
+• no arbitrary value under conflicting structure  
+
+---
+
+Canonical Value Identity (Forward Path)
+
+Extended implementations may include canonical identity:
+
+canonical(resolve(S)) → value_identity
+
+This enables:
+
+• equivalence across different valid structural representations  
+• normalization of value truth  
+• identity independent of representation  
+
+This is not required for the reference implementation.
+
+---
+
+Relationship to Shunyaya Framework
+
+SVARE is part of the broader Shunyaya framework.
+
+It builds on:
+
+• SLANG → correctness without execution  
+• ORL → correctness without ordering  
+• STIME → correctness without time  
+• STINT → correctness without connectivity  
+• STRAL → correctness without traversal  
+• STILE → correctness without communication  
+• SVARE → correctness without computation  
+
+Each removes a dependency.  
+Correctness remains preserved by structure.
+
+---
+
+Architecture License
+
+The conceptual architecture and documentation are licensed under:
+
+Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0)
+
+Permitted:
+
+• research  
+• academic use  
+• study and reproduction  
+• non-commercial distribution  
+
+Commercial use of architecture text is not permitted under this license.
+
+Full license:  
+https://creativecommons.org/licenses/by-nc/4.0/
+
+---
+
+Responsibility
+
+Use of SVARE in real-world systems is entirely at the user’s own responsibility.
+
+This reference implementation provides:
+
+• deterministic structural value resolution with reproducible value and certificate  
+• value correctness from structure  
+• safe handling of incomplete and conflicting structure  
+
+It does not provide:
+
+• computational guarantees  
+• numerical stability guarantees in all environments  
+• physical measurement guarantees  
+• system-level execution guarantees  
+• safety-critical assurances  
+• regulatory or compliance guarantees  
+
+---
+
+No Warranty
+
+THE SVARE REFERENCE IMPLEMENTATION IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND.
+
+THIS INCLUDES, BUT IS NOT LIMITED TO:
+
+• MERCHANTABILITY  
+• FITNESS FOR A PARTICULAR PURPOSE  
+• NON-INFRINGEMENT  
+
+IN NO EVENT SHALL THE AUTHORS OR CONTRIBUTORS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM USE OF THIS IMPLEMENTATION.
+
+---
+
+Closing Statement
+
+SVARE explores a simple but fundamental idea:
+
+Value correctness emerges deterministically from structure, without computation, arithmetic execution, or evaluation pipelines.
+
+Computation may reveal value.  
+It does not determine it.
+
+It is released to encourage:
+
+• independent validation  
+• real-world testing  
+• safe experimentation  
+
+SVARE is offered as a minimal reference implementation of that possibility.
