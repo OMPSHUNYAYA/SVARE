@@ -10,10 +10,11 @@
 
 ![Order-Independent](https://img.shields.io/badge/Order-Independent-lightgrey) ![Python](https://img.shields.io/badge/Python-3.9%2B-blue) ![Reference-Engine](https://img.shields.io/badge/Engine-Reference%20v8.1-blue) ![Open-Standard](https://img.shields.io/badge/Reference-Open%20Standard-blue)
 
+![SVARE Verify](https://github.com/OMPSHUNYAYA/SVARE/actions/workflows/svare-verify.yml/badge.svg)
 
 ---
 
-**Reveals correct values without calculation.**
+**Reveals correct values without calculation — through structure.**
 
 The ~17.3 KB reference engine that demonstrates:  
 **value correctness does not require arithmetic, calculation, or execution pipelines.**
