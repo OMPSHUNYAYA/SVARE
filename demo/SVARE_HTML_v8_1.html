@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SVARE v8.1</title>
+  <style>
+    :root {
+      --bg: #070b12;
+      --panel: #101826;
+      --panel2: #0c1320;
+      --text: #f4f7fb;
+      --muted: #aab7c8;
+      --line: #26364f;
+      --accent: #8ee6c9;
+      --accent2: #9db8ff;
+      --warn: #ffd166;
+      --bad: #ff9aa8;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(157,184,255,0.18), transparent 32%),
+        radial-gradient(circle at 100% 0%, rgba(142,230,201,0.14), transparent 28%),
+        linear-gradient(180deg, #070b12, #0b1220);
+      color: var(--text);
+      font-family: var(--font);
+      padding: 14px;
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .title {
+      text-align: center;
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      font-weight: 950;
+      letter-spacing: -0.06em;
+      margin: 6px 0 12px;
+    }
+
+    .top {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.9fr) minmax(320px, 1.1fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .card {
+      background: rgba(16,24,38,0.92);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.28);
+      padding: 16px;
+    }
+
+    .input-card {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    label {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    input {
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid #334765;
+      background: #050913;
+      color: var(--text);
+      padding: 15px 14px;
+      font-size: 1.05rem;
+      outline: none;
+      font-family: var(--mono);
+    }
+
+    input:focus {
+      border-color: var(--accent2);
+      box-shadow: 0 0 0 3px rgba(157,184,255,0.14);
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 11px 15px;
+      font-weight: 900;
+      cursor: pointer;
+      color: #07111f;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+    }
+
+    button.secondary {
+      color: var(--text);
+      background: #172338;
+      border: 1px solid var(--line);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      background: #0c1423;
+      color: #dce7f7;
+      border-radius: 999px;
+      padding: 7px 9px;
+      font-size: 0.76rem;
+      font-family: var(--mono);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .chip:hover { border-color: var(--accent); }
+
+    .small-note {
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.45;
+      margin-top: -2px;
+    }
+
+    .output {
+      display: grid;
+      gap: 10px;
+    }
+
+    .big {
+      background: linear-gradient(135deg, rgba(142,230,201,0.14), rgba(157,184,255,0.10)), #09101d;
+      border: 1px solid #29415f;
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .k {
+      color: var(--warn);
+      font-size: 0.72rem;
+      font-weight: 950;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .value {
+      font-family: var(--mono);
+      font-size: clamp(1.4rem, 4vw, 2.7rem);
+      line-height: 1.08;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .mini {
+      background: #0b1220;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 10px;
+      min-height: 72px;
+    }
+
+    .mini .v {
+      font-family: var(--mono);
+      color: #edf5ff;
+      font-size: 0.88rem;
+      overflow-wrap: anywhere;
+    }
+
+    .note {
+      background: rgba(255,209,102,0.08);
+      border: 1px solid rgba(255,209,102,0.28);
+      color: #ffe9a6;
+      border-radius: 16px;
+      padding: 10px;
+      font-size: 0.88rem;
+      line-height: 1.45;
+      display: none;
+    }
+
+    .walk {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 12px;
+    }
+
+    details {
+      background: rgba(16,24,38,0.72);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px;
+    }
+
+    summary {
+      cursor: pointer;
+      color: var(--accent);
+      font-weight: 900;
+    }
+
+    pre {
+      margin: 10px 0 0;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font-family: var(--mono);
+      color: #d9e7fa;
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+
+    .footer {
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.55;
+      margin: 12px 0 4px;
+      text-align: center;
+    }
+
+
+    .inspector {
+      margin-top: 12px;
+    }
+
+    .inspector-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .inspector-title {
+      font-size: 1.05rem;
+      font-weight: 950;
+      color: var(--accent);
+    }
+
+    .inspector-sub {
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.4;
+    }
+
+    .inspector-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .structure-pair {
+      margin-top: 8px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .structure-box {
+      background: #08101d;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 10px;
+    }
+
+    .structure-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 7px;
+      margin-top: 7px;
+      font-size: 0.82rem;
+    }
+
+    .structure-line:first-of-type {
+      border-top: 0;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .structure-key {
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .structure-val {
+      font-family: var(--mono);
+      color: #edf5ff;
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 850px) {
+      .top, .walk { grid-template-columns: 1fr; }
+      .grid, .inspector-grid, .structure-pair { grid-template-columns: 1fr; }
+      body { padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="title">SVARE: Structural Value Resolution Engine</div>
+
+    <section class="top">
+      <div class="card input-card">
+        <label for="expr">Expression</label>
+        <input id="expr" spellcheck="false" value="-.99*(+0.72)">
+        <div class="row">
+          <button id="resolve">Resolve</button>
+          <button id="clear" class="secondary">Clear</button>
+        </div>
+        <div class="chips">
+          <span class="chip">5 + 2</span>
+          <span class="chip">-.99*(+0.72)</span>
+          <span class="chip">-09999+(+0.99)</span>
+          <span class="chip">0.000009/0.2222 depth 12</span>
+          <span class="chip">1.0000000000000001-1.0000000000000000</span>
+          <span class="chip">-00000.0009-9999</span>
+          <span class="chip">22*999999999999999999999999999999999999999999999999999999999</span>
+        </div>
+        <div class="small-note">
+          Supported in this demo: one structural relation at a time. Chain expressions such as 1+2+3 are intentionally not supported in v8.1.
+        </div>
+      </div>
+
+      <div class="card output">
+        <div class="big">
+          <div class="k">Final Visible Value</div>
+          <div id="finalValue" class="value">—</div>
+        </div>
+        <div class="grid">
+          <div class="mini">
+            <div class="k">State</div>
+            <div id="state" class="v">—</div>
+          </div>
+          <div class="mini">
+            <div class="k">Relation</div>
+            <div id="relation" class="v">—</div>
+          </div>
+          <div class="mini">
+            <div class="k">Direction</div>
+            <div id="direction" class="v">—</div>
+          </div>
+          <div class="mini">
+            <div class="k">Depth</div>
+            <div id="depth" class="v">—</div>
+          </div>
+          <div class="mini">
+            <div class="k">Certificate</div>
+            <div id="cert" class="v">—</div>
+          </div>
+          <div class="mini">
+            <div class="k">Mode</div>
+            <div id="mode" class="v">STRUCTURAL</div>
+          </div>
+        </div>
+        <div id="note" class="note"></div>
+      </div>
+    </section>
+
+
+    <section class="card inspector">
+      <div class="inspector-head">
+        <div class="inspector-title">Structure Inspector</div>
+        <div class="inspector-sub">Input → structural packets → resolution state → visible value</div>
+      </div>
+
+      <div class="inspector-grid">
+        <div class="mini">
+          <div class="k">Surface</div>
+          <div id="inspectSurface" class="v">—</div>
+        </div>
+        <div class="mini">
+          <div class="k">Relation</div>
+          <div id="inspectRelation" class="v">—</div>
+        </div>
+        <div class="mini">
+          <div class="k">Visibility</div>
+          <div id="inspectVisibility" class="v">—</div>
+        </div>
+        <div class="mini">
+          <div class="k">Condition</div>
+          <div id="inspectCondition" class="v">—</div>
+        </div>
+      </div>
+
+      <div class="structure-pair">
+        <div class="structure-box">
+          <div class="k">Left Structure</div>
+          <div class="structure-line">
+            <div class="structure-key">Magnitude</div>
+            <div id="inspectLeftMagnitude" class="structure-val">—</div>
+          </div>
+          <div class="structure-line">
+            <div class="structure-key">Depth</div>
+            <div id="inspectLeftDepth" class="structure-val">—</div>
+          </div>
+          <div class="structure-line">
+            <div class="structure-key">Direction</div>
+            <div id="inspectLeftDirection" class="structure-val">—</div>
+          </div>
+        </div>
+
+        <div class="structure-box">
+          <div class="k">Right Structure</div>
+          <div class="structure-line">
+            <div class="structure-key">Magnitude</div>
+            <div id="inspectRightMagnitude" class="structure-val">—</div>
+          </div>
+          <div class="structure-line">
+            <div class="structure-key">Depth</div>
+            <div id="inspectRightDepth" class="structure-val">—</div>
+          </div>
+          <div class="structure-line">
+            <div class="structure-key">Direction</div>
+            <div id="inspectRightDirection" class="structure-val">—</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="walk">
+      <details open>
+        <summary>Resolution Output</summary>
+        <pre id="terminal"></pre>
+      </details>
+
+      <details>
+        <summary>About</summary>
+        <pre>SVARE v8.1
+Structural Value Resolution Engine
+
+Principle:
+value_visible iff structure_uniquely_resolves
+
+User input:
+ordinary expressions
+
+Supported release mode:
+A + B
+A - B
+A * B
+A / B
+A / B depth N
+
+Not supported in this Phase I demo:
+chain expressions such as 1+2+3
+multi-step grouped expressions
+nested relation resolution
+
+Direction rule:
+negative and explicit positive surfaces become structural direction.
+
+Visibility rule:
+oversized visible values use bounded scientific visibility for public demo responsiveness.
+
+Advantage:
+SVARE preserves structural residue, explicit sign direction, deep decimal behavior, and bounded high-magnitude visibility where ordinary calculators may round, collapse, or reject syntax.
+
+This is a research reference demo, not a production calculator.
+Shunyaya Framework</pre>
+      </details>
+    </section>
+
+    <div class="footer">Structural resolution first. Bounded visibility when needed. Final visible value remains the focus.</div>
+  </main>
+
+  <script>
+    const KERNEL = "SVARE";
+    const VERSION = "8.1";
+    const MAX_REVEAL_DEPTH = 24;
+    const DEFAULT_REVEAL_DEPTH = 6;
+    const MAX_VISIBLE_DIGITS = 18;
+
+    function seal(text) {
+      const data = new TextEncoder().encode(text);
+      return crypto.subtle.digest("SHA-256", data).then(buf => {
+        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 16);
+      });
+    }
+
+    function stripZeros(text) {
+      const out = text.replace(/^0+/, "");
+      return out || "0";
+    }
+
+    function visibleDigitCount(value) {
+      let v = String(value).trim();
+      if (["undefined", "indeterminate", "not_visible"].includes(v)) return 0;
+      if (v.startsWith("-")) v = v.slice(1);
+      let digits = v.includes(".") ? v.split(".").join("") : v;
+      digits = digits.replace(/^0+/, "");
+      return digits.length;
+    }
+
+    function formatVisibleOutput(value) {
+      let v = String(value).trim();
+      if (["undefined", "indeterminate", "not_visible"].includes(v)) return v;
+      const negative = v.startsWith("-");
+      let body = negative ? v.slice(1) : v;
+      let scale = 0;
+      let rawDigits = body;
+      if (body.includes(".")) {
+        const parts = body.split(".");
+        scale = parts[1].length;
+        rawDigits = parts[0] + parts[1];
+      }
+      const digits = rawDigits.replace(/^0+/, "");
+      if (digits === "") return "0";
+      if (digits.length <= MAX_VISIBLE_DIGITS) return value;
+      const exponent = digits.length - 1 - scale;
+      let mantissa = digits[0];
+      const rest = digits.slice(1, MAX_VISIBLE_DIGITS);
+      if (rest) mantissa += "." + rest;
+      return (negative ? "-" : "") + mantissa + "e" + exponent;
+    }
+
+    function isBoundedDisplay(value) {
+      return visibleDigitCount(value) > MAX_VISIBLE_DIGITS;
+    }
+
+    function cleanNumberToken(text) {
+      let t = String(text).trim().replace(/\s+/g, "");
+      let changed = true;
+      while (changed) {
+        changed = false;
+        if (t.length >= 2 && t[0] === "(" && t[t.length - 1] === ")") {
+          let level = 0;
+          let ok = true;
+          for (let i = 0; i < t.length; i++) {
+            if (t[i] === "(") level++;
+            else if (t[i] === ")") {
+              level--;
+              if (level === 0 && i !== t.length - 1) {
+                ok = false;
+                break;
+              }
+            }
+          }
+          if (ok) {
+            t = t.slice(1, -1);
+            changed = true;
+          }
+        }
+        if (t.startsWith("+(") && t.endsWith(")")) {
+          t = "+" + t.slice(2, -1);
+          changed = true;
+        }
+        if (t.startsWith("-(") && t.endsWith(")")) {
+          t = "-" + t.slice(2, -1);
+          changed = true;
+        }
+      }
+      return t;
+    }
+
+    function parseNumber(text) {
+      let t = cleanNumberToken(text);
+      let sign = 1;
+      while (t.startsWith("+") || t.startsWith("-")) {
+        if (t[0] === "-") sign = -sign;
+        t = t.slice(1);
+      }
+      if (t.startsWith("(") && t.endsWith(")")) {
+        return parseNumber((sign < 0 ? "-" : "") + t.slice(1, -1));
+      }
+      if (t.startsWith(".")) t = "0" + t;
+      if (t.endsWith(".")) t += "0";
+      let left, right;
+      if (t.includes(".")) {
+        [left, right] = t.split(".");
+      } else {
+        left = t;
+        right = "";
+      }
+      if (left === "") left = "0";
+      if (!/^\d+$/.test(left) || (right !== "" && !/^\d+$/.test(right))) return null;
+      let digits = stripZeros(left + right);
+      let scale = right.length;
+      if (digits === "0") {
+        sign = 1;
+        scale = 0;
+      }
+      return { sign, digits, scale };
+    }
+
+    function normalizeScaled(sign, digits, scale) {
+      digits = stripZeros(digits);
+      while (scale > 0 && digits.endsWith("0")) {
+        digits = digits.slice(0, -1);
+        scale -= 1;
+      }
+      if (digits === "" || digits === "0") return ["0", 1, "0", 0];
+      let visible;
+      if (scale > 0) {
+        if (digits.length <= scale) {
+          digits = "0".repeat(scale - digits.length + 1) + digits;
+        }
+        const left = stripZeros(digits.slice(0, -scale));
+        const right = digits.slice(-scale);
+        visible = left + "." + right;
+      } else {
+        visible = digits;
+      }
+      if (sign < 0) visible = "-" + visible;
+      return [visible, sign, stripZeros(digits), scale];
+    }
+
+    function compareAbs(a, b) {
+      a = stripZeros(a);
+      b = stripZeros(b);
+      if (a.length < b.length) return -1;
+      if (a.length > b.length) return 1;
+      if (a < b) return -1;
+      if (a > b) return 1;
+      return 0;
+    }
+
+    function addAbs(a, b) {
+      let ia = a.length - 1, ib = b.length - 1, carry = 0, out = [];
+      while (ia >= 0 || ib >= 0 || carry) {
+        const da = ia >= 0 ? a.charCodeAt(ia) - 48 : 0;
+        const db = ib >= 0 ? b.charCodeAt(ib) - 48 : 0;
+        const s = da + db + carry;
+        out.push(String.fromCharCode(48 + (s % 10)));
+        carry = Math.floor(s / 10);
+        ia--;
+        ib--;
+      }
+      return stripZeros(out.reverse().join(""));
+    }
+
+    function subAbs(a, b) {
+      let ia = a.length - 1, ib = b.length - 1, borrow = 0, out = [];
+      while (ia >= 0) {
+        let da = a.charCodeAt(ia) - 48 - borrow;
+        const db = ib >= 0 ? b.charCodeAt(ib) - 48 : 0;
+        if (da < db) {
+          da += 10;
+          borrow = 1;
+        } else {
+          borrow = 0;
+        }
+        out.push(String.fromCharCode(48 + da - db));
+        ia--;
+        ib--;
+      }
+      return stripZeros(out.reverse().join(""));
+    }
+
+    function alignValues(a, b) {
+      const scale = Math.max(a.scale, b.scale);
+      const ad = a.digits + "0".repeat(scale - a.scale);
+      const bd = b.digits + "0".repeat(scale - b.scale);
+      return [ad, bd, scale];
+    }
+
+    function addScaled(a, b) {
+      const [ad, bd, scale] = alignValues(a, b);
+      if (a.sign === b.sign) return [a.sign, addAbs(ad, bd), scale];
+      const rel = compareAbs(ad, bd);
+      if (rel === 0) return [1, "0", 0];
+      if (rel > 0) return [a.sign, subAbs(ad, bd), scale];
+      return [b.sign, subAbs(bd, ad), scale];
+    }
+
+    function multiplyAbs(a, b) {
+      if (a === "0" || b === "0") return "0";
+      const res = Array(a.length + b.length).fill(0);
+      for (let ia = a.length - 1; ia >= 0; ia--) {
+        for (let ib = b.length - 1; ib >= 0; ib--) {
+          res[ia + ib + 1] += (a.charCodeAt(ia) - 48) * (b.charCodeAt(ib) - 48);
+        }
+      }
+      for (let i = res.length - 1; i > 0; i--) {
+        const carry = Math.floor(res[i] / 10);
+        res[i] %= 10;
+        res[i - 1] += carry;
+      }
+      return stripZeros(res.join(""));
+    }
+
+    function mulDigit(a, d) {
+      if (d === 0 || a === "0") return "0";
+      let carry = 0, out = [];
+      for (let i = a.length - 1; i >= 0; i--) {
+        const v = (a.charCodeAt(i) - 48) * d + carry;
+        out.push(String.fromCharCode(48 + (v % 10)));
+        carry = Math.floor(v / 10);
+      }
+      while (carry) {
+        out.push(String.fromCharCode(48 + (carry % 10)));
+        carry = Math.floor(carry / 10);
+      }
+      return stripZeros(out.reverse().join(""));
+    }
+
+    function divmodAbs(n, d) {
+      n = stripZeros(n);
+      d = stripZeros(d);
+      if (d === "0") return [null, null];
+      const q = [];
+      let rem = "0";
+      for (const ch of n) {
+        rem = stripZeros(rem + ch);
+        let digit = 0;
+        for (let cand = 9; cand >= 0; cand--) {
+          const prod = mulDigit(d, cand);
+          if (compareAbs(prod, rem) <= 0) {
+            digit = cand;
+            rem = subAbs(rem, prod);
+            break;
+          }
+        }
+        q.push(String.fromCharCode(48 + digit));
+      }
+      return [stripZeros(q.join("")), stripZeros(rem)];
+    }
+
+    function divideScaled(a, b, revealDepth) {
+      if (b.digits === "0") {
+        if (a.digits === "0") return ["INDETERMINATE_ZERO", "indeterminate", "ZERO/ZERO", 0, false, "ratio cannot resolve through a Zero denominator"];
+        return ["FORBIDDEN", "undefined", "DENOM_ZERO", 0, false, "ratio cannot resolve through a Zero denominator"];
+      }
+      if (a.digits === "0") {
+        return ["RESOLVED", "0", "ZERO", revealDepth, false, "ratio resolves by structural digit revelation"];
+      }
+      const sign = a.sign === b.sign ? 1 : -1;
+      const numerator = a.digits + "0".repeat(b.scale);
+      const denominator = b.digits + "0".repeat(a.scale);
+      let [whole, rem] = divmodAbs(numerator, denominator);
+      const digits = [];
+      let depthUsed = 0;
+      let residualContinues = false;
+      for (let i = 0; i < revealDepth; i++) {
+        if (rem === "0") break;
+        rem = stripZeros(rem + "0");
+        let q;
+        [q, rem] = divmodAbs(rem, denominator);
+        digits.push(q[q.length - 1]);
+        depthUsed++;
+      }
+      while (rem !== "0" && digits.length && new Set(digits).size === 1 && digits[0] === "0" && depthUsed < MAX_REVEAL_DEPTH) {
+        rem = stripZeros(rem + "0");
+        let q;
+        [q, rem] = divmodAbs(rem, denominator);
+        digits.push(q[q.length - 1]);
+        depthUsed++;
+      }
+      if (rem !== "0") residualContinues = true;
+      const frac = digits.join("");
+      let visible, scale;
+      if (frac) {
+        [visible, , , scale] = normalizeScaled(sign, whole + frac, frac.length);
+      } else {
+        [visible, , , scale] = normalizeScaled(sign, whole, 0);
+      }
+      return ["RESOLVED", visible, sign > 0 ? "+" : "-", scale, residualContinues, "ratio resolves by structural digit revelation"];
+    }
+
+    function splitExpression(text) {
+      const raw = String(text).trim();
+      let revealDepth = DEFAULT_REVEAL_DEPTH;
+      const tokens = raw.split(/\s+/).filter(Boolean);
+      const kept = [];
+      let idx = 0;
+      while (idx < tokens.length) {
+        if (tokens[idx].toLowerCase() === "depth" && idx + 1 < tokens.length && /^\d+$/.test(tokens[idx + 1])) {
+          revealDepth = Math.min(parseInt(tokens[idx + 1], 10), MAX_REVEAL_DEPTH);
+          idx += 2;
+        } else if (tokens[idx].toLowerCase() === "show") {
+          idx++;
+        } else {
+          kept.push(tokens[idx]);
+          idx++;
+        }
+      }
+      const s = kept.join("").replace(/\s+/g, "");
+      let best = null;
+      let level = 0;
+      for (let i = 0; i < s.length; i++) {
+        const ch = s[i];
+        if (ch === "(") level++;
+        else if (ch === ")") level--;
+        else if ("+-*/".includes(ch) && level === 0 && i > 0) {
+          const prev = s[i - 1];
+          if ("+-*/(".includes(prev)) continue;
+          best = [s.slice(0, i), ch, s.slice(i + 1)];
+          break;
+        }
+      }
+      if (!best) {
+        for (let i = 0; i < s.length; i++) {
+          const ch = s[i];
+          if ("*/".includes(ch) && i > 0) {
+            best = [s.slice(0, i), ch, s.slice(i + 1)];
+            break;
+          }
+        }
+      }
+      if (!best) {
+        const m = s.match(/^(.+?)([+\-*/])(.+)$/);
+        if (!m) return null;
+        best = [m[1], m[2], m[3]];
+      }
+      const left = parseNumber(best[0]);
+      const right = parseNumber(best[2]);
+      if (!left || !right) return null;
+      const relation = { "+": "MERGE", "-": "REMOVE", "*": "EXPAND", "/": "RATIO" }[best[1]];
+      return { surface: raw, left, right, op: best[1], relation, revealDepth };
+    }
+
+    async function makeResult(relation, state, visible, direction, depthValue, note, expr, residual) {
+      const text = relation + "|" + expr.surface + "|" + state + "|" + visible + "|" + String(expr.revealDepth || "");
+      const steps = {
+        MERGE: ["SVARE receives two direction-aware structures.", "Depth layers are aligned so both structures speak the same unit layer.", "Matching directions merge.", "Opposite directions cancel by structural digit packets.", "The remaining structure reveals the visible value."],
+        REMOVE: ["SVARE receives a source structure and a removal structure.", "Removal reverses the direction of the removed structure.", "Depth layers are aligned before resolution.", "Structures merge or cancel by structural digit packets.", "The remaining directional structure reveals the visible value."],
+        EXPAND: ["SVARE receives packet-ready structures.", "Unsafe raw mark expansion is avoided.", "SVARE preserves structural identity through compressed packets.", "The compressed structure resolves through structural digit packets.", "The visible value is revealed through the resolved packet structure."],
+        RATIO: ["SVARE receives a numerator structure and a denominator structure.", "Decimal surfaces are aligned into equivalent depth structures.", "Whole value is revealed through structural digit packets.", "Residual structure is carried into deeper layers.", "Each permitted depth layer reveals one visible digit."]
+      }[relation];
+      let visibilityNote = "";
+      if (relation === "RATIO" && residual && state === "RESOLVED") {
+        visibilityNote = "This output reflects bounded structural depth. The underlying residual structure continues beyond visible digits. Use 'depth N' to reveal deeper structure.";
+      }
+      return { relation, state, visible, direction, depthValue, note, certificate: await seal(text), steps, visibilityNote };
+    }
+
+    async function resultFor(expr) {
+      const left = expr.left;
+      const right = expr.right;
+      const relation = expr.relation;
+      let visible, sign, digits, scale, note, residual = false;
+      if (relation === "MERGE") {
+        [sign, digits, scale] = addScaled(left, right);
+        [visible, sign, digits, scale] = normalizeScaled(sign, digits, scale);
+        note = "packet structures merge through structural digit resolution";
+      } else if (relation === "REMOVE") {
+        const r = { ...right, sign: -right.sign };
+        [sign, digits, scale] = addScaled(left, r);
+        [visible, sign, digits, scale] = normalizeScaled(sign, digits, scale);
+        note = "packet structures remove through structural digit resolution";
+      } else if (relation === "EXPAND") {
+        sign = left.sign === right.sign ? 1 : -1;
+        digits = multiplyAbs(left.digits, right.digits);
+        scale = left.scale + right.scale;
+        [visible, sign, digits, scale] = normalizeScaled(sign, digits, scale);
+        note = "packet structures expand through structural digit resolution";
+      } else {
+        const [state, v, direction, s, res, n] = divideScaled(left, right, expr.revealDepth);
+        return await makeResult(relation, state, v, direction, s, n, expr, res);
+      }
+      const state = "RESOLVED";
+      const direction = visible === "0" ? "ZERO" : visible.startsWith("-") ? "-" : "+";
+      return await makeResult(relation, state, visible, direction, scale, note, expr, residual);
+    }
+
+    function terminalText(expr, result, displayValue, bounded) {
+      const lines = [];
+      lines.push("Surface expression       : " + expr.surface);
+      if (result.relation === "RATIO") lines.push("Reveal depth             : " + expr.revealDepth);
+      lines.push("SVARE relation            : " + result.relation);
+      lines.push("Resolution state         : " + result.state);
+      lines.push("Visible value            : " + displayValue);
+      lines.push("Direction                : " + result.direction);
+      lines.push("Visible depth            : " + result.depthValue);
+      lines.push("Resolution note          : " + result.note);
+      lines.push("Certificate              : " + result.certificate);
+      lines.push("");
+      lines.push("Resolution Walkthrough");
+      lines.push("------------------------------------------------------------------------");
+      result.steps.forEach((step, i) => lines.push((i + 1) + ". " + step));
+      if (result.visibilityNote || bounded) {
+        lines.push("");
+        lines.push("STRUCTURAL VISIBILITY NOTE");
+        lines.push("------------------------------------------------------------------------");
+        if (result.visibilityNote) {
+          lines.push("This output reflects bounded structural depth.");
+          lines.push("The underlying residual structure continues beyond visible digits.");
+          lines.push("Use:");
+          lines.push("  expression depth N");
+          lines.push("Example:");
+          lines.push("  " + expr.surface.split(" depth ")[0] + " depth 12");
+        }
+        if (bounded) {
+          lines.push("This output is shown in bounded scientific visibility for public demo responsiveness.");
+          lines.push("The underlying structure is resolved internally but not fully displayed.");
+          lines.push("Visible digit limit      : " + MAX_VISIBLE_DIGITS);
+        }
+      }
+      lines.push("");
+      lines.push("FINAL VISIBLE VALUE");
+      lines.push("========================================================================");
+      lines.push("  " + displayValue);
+      lines.push("========================================================================");
+      return lines.join("\n");
+    }
+
+
+    function structureDirection(item) {
+      if (!item || item.digits === "0") return "ZERO";
+      return item.sign < 0 ? "-" : "+";
+    }
+
+    function visibilityFromState(state) {
+      if (state === "RESOLVED") return "visible";
+      if (state === "FORBIDDEN") return "undefined";
+      if (state === "INDETERMINATE_ZERO") return "indeterminate";
+      return "not_visible";
+    }
+
+    function conditionFromState(state) {
+      if (state === "RESOLVED") return "complete AND consistent";
+      if (state === "FORBIDDEN") return "forbidden structure";
+      if (state === "INDETERMINATE_ZERO") return "non-unique zero structure";
+      if (state === "CONFLICT") return "inconsistent";
+      return "incomplete";
+    }
+
+    function setInspectorBlank() {
+      const ids = [
+        "inspectSurface",
+        "inspectRelation",
+        "inspectVisibility",
+        "inspectCondition",
+        "inspectLeftMagnitude",
+        "inspectLeftDepth",
+        "inspectLeftDirection",
+        "inspectRightMagnitude",
+        "inspectRightDepth",
+        "inspectRightDirection"
+      ];
+      ids.forEach(id => document.getElementById(id).textContent = "—");
+    }
+
+    function setInspectorIncomplete(surface) {
+      setInspectorBlank();
+      document.getElementById("inspectSurface").textContent = surface || "—";
+      document.getElementById("inspectVisibility").textContent = "not_visible";
+      document.getElementById("inspectCondition").textContent = "incomplete";
+    }
+
+    function updateInspector(expr, result) {
+      document.getElementById("inspectSurface").textContent = expr.surface;
+      document.getElementById("inspectRelation").textContent = result.relation;
+      document.getElementById("inspectVisibility").textContent = visibilityFromState(result.state);
+      document.getElementById("inspectCondition").textContent = conditionFromState(result.state);
+
+      document.getElementById("inspectLeftMagnitude").textContent = expr.left.digits;
+      document.getElementById("inspectLeftDepth").textContent = expr.left.scale;
+      document.getElementById("inspectLeftDirection").textContent = structureDirection(expr.left);
+
+      document.getElementById("inspectRightMagnitude").textContent = expr.right.digits;
+      document.getElementById("inspectRightDepth").textContent = expr.right.scale;
+      document.getElementById("inspectRightDirection").textContent = structureDirection(expr.right);
+    }
+
+    function resetOutput() {
+      document.getElementById("finalValue").textContent = "—";
+      document.getElementById("state").textContent = "—";
+      document.getElementById("relation").textContent = "—";
+      document.getElementById("direction").textContent = "—";
+      document.getElementById("depth").textContent = "—";
+      document.getElementById("cert").textContent = "—";
+      document.getElementById("mode").textContent = "STRUCTURAL";
+      document.getElementById("note").style.display = "none";
+      document.getElementById("note").textContent = "";
+      document.getElementById("terminal").textContent = "";
+      setInspectorBlank();
+    }
+
+    async function resolveNow() {
+      const input = document.getElementById("expr").value;
+      const expr = splitExpression(input);
+      if (!expr) {
+        resetOutput();
+        document.getElementById("finalValue").textContent = "not_visible";
+        document.getElementById("state").textContent = "INCOMPLETE";
+        document.getElementById("note").style.display = "block";
+        document.getElementById("note").textContent = "Please use one structural relation at a time. Chain expressions such as 1+2+3 are not supported in this Phase I demo.";
+        setInspectorIncomplete(input);
+        return;
+      }
+      const result = await resultFor(expr);
+      const displayValue = formatVisibleOutput(result.visible);
+      const bounded = isBoundedDisplay(result.visible);
+      document.getElementById("finalValue").textContent = displayValue;
+      document.getElementById("state").textContent = result.state;
+      document.getElementById("relation").textContent = result.relation;
+      document.getElementById("direction").textContent = result.direction;
+      document.getElementById("depth").textContent = result.depthValue;
+      document.getElementById("cert").textContent = result.certificate;
+      const note = document.getElementById("note");
+      if (result.visibilityNote || bounded) {
+        const parts = [];
+        if (result.visibilityNote) parts.push("Bounded structural depth: underlying residual structure continues beyond visible digits. Use depth N to reveal deeper structure.");
+        if (bounded) parts.push("Bounded scientific visibility: underlying structure is resolved internally but not fully displayed.");
+        note.textContent = parts.join(" ");
+        note.style.display = "block";
+      } else {
+        note.textContent = "";
+        note.style.display = "none";
+      }
+      document.getElementById("terminal").textContent = terminalText(expr, result, displayValue, bounded);
+      updateInspector(expr, result);
+    }
+
+    document.getElementById("resolve").addEventListener("click", resolveNow);
+    document.getElementById("clear").addEventListener("click", () => {
+      document.getElementById("expr").value = "";
+      resetOutput();
+      document.getElementById("expr").focus();
+    });
+    document.getElementById("expr").addEventListener("keydown", e => {
+      if (e.key === "Enter") resolveNow();
+    });
+    document.querySelectorAll(".chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        document.getElementById("expr").value = chip.textContent;
+        resolveNow();
+      });
+    });
+
+    resolveNow();
+  </script>
+</body>
+</html>
