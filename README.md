@@ -16,7 +16,7 @@
 
 **Reveals correct values without calculation — through structure.**
 
-The ~17.3 KB reference engine that demonstrates:  
+The ~18 KB reference engine that demonstrates:  
 **value correctness does not require arithmetic, calculation, or execution pipelines.**
 
 ---
