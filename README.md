@@ -25,8 +25,6 @@ The ~18 KB reference engine that demonstrates:
 
 Where Structure Resolves and Value Becomes Visible
 
----
-
 SVARE removes computation as a dependency for correctness.
 
 A value does not need to be calculated, executed, or evaluated step-by-step to be correct.
@@ -36,6 +34,30 @@ Value is revealed only when structure uniquely resolves.
 ---
 
 **Deterministic • Structure-Based • No Arithmetic • No Computation • No Order Dependency**
+
+---
+
+## ⚡ Instant Proof
+
+Type this into a classical calculator:
+
+1.0000000000000001 - 1.0000000000000000
+
+Some systems collapse this to:
+0
+
+Others display:
+1e-16
+
+Both are surface representations.
+
+SVARE reveals:
+0.0000000000000001
+
+The full structural residual — not an approximation.
+
+Not because it is "more precise."
+But because it does not make a value visible until the structure is complete and consistent.
 
 ---
 
@@ -512,11 +534,11 @@ No arithmetic, ordering, or execution can alter this.
 
 ## 📊 **Comparison**
 
-| Model                | Computation Required | Structure-Based | Deterministic |
-|----------------------|---------------------|-----------------|---------------|
-| Classical Arithmetic | Yes                 | No              | Conditional   |
-| Floating Point       | Yes                 | Partial         | Conditional   |
-| SVARE               | No                  | Yes             | Yes           |
+| Model                | Computation Required            | Structure-Based | Deterministic |
+|----------------------|--------------------------------|-----------------|---------------|
+| Classical Arithmetic | Yes                            | No              | Conditional   |
+| Floating Point       | Yes                            | Partial         | Conditional   |
+| SVARE                | Not required for correctness   | Yes             | Yes           |
 
 ---
 
