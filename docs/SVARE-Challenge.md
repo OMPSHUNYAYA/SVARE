@@ -17,7 +17,7 @@ and:
 certificate identity depends on structural encoding  
 (canonical same-certificate identity is a future extension)
 
-SVARE demonstrates that value correctness does not require computation as a prerequisite for correctness.  
+SVARE establishes that value correctness does not require computation as a prerequisite or source of truth.
 
 The engine may perform internal resolution steps, but correctness is determined solely by structural completeness and consistency.
 
@@ -28,6 +28,9 @@ The engine may perform internal resolution steps, but correctness is determined 
 "Classical systems" in this document refers to typical floating-point based calculators and default numeric systems.  
 
 High-precision or arbitrary-precision systems may behave differently when explicitly configured.
+
+This is not a benchmark document.
+This is a falsification test for the assumption that computation defines correctness.
 
 ---
 
@@ -69,7 +72,7 @@ All SVARE outputs reflect **structure-preserving resolution**, not approximation
 
 **SVARE:**
 
-→ value preserves full structural contribution of both terms  
+→ visible value preserves full structural contribution of both terms  
 → no precision collapse  
 → no loss of the smaller magnitude component  
 
@@ -83,8 +86,9 @@ All SVARE outputs reflect **structure-preserving resolution**, not approximation
 
 **Classical systems:**
 
-→ `0`  
-→ residual disappears  
+→ `0` (in many systems)  
+→ `1e-16` (in others)  
+→ representation depends on system configuration  
 
 **SVARE:**
 
@@ -104,7 +108,7 @@ All SVARE outputs reflect **structure-preserving resolution**, not approximation
 **Classical systems:**
 
 → rely on defined evaluation rules (even if commutative in this case)  
-→ correctness tied to arithmetic properties, not structural identity  
+→ correctness tied to arithmetic rules (e.g., commutativity), not explicit structural identity 
 
 **SVARE:**
 
@@ -149,8 +153,8 @@ All SVARE outputs reflect **structure-preserving resolution**, not approximation
 **SVARE:**
 
 → structure reflects cancellation explicitly  
-→ preserves directional components before resolution  
-→ preserves direction and balance  
+→ preserves directional structure prior to resolution  
+→ cancellation is structural, not implicit  
 
 ---
 
@@ -235,7 +239,10 @@ SVARE:
 
 - preserves structure  
 - reveals value only when admissible  
-- never forces visibility  
+- never forces visibility
+
+SVARE does not eliminate computation.
+It eliminates its role as the source of correctness.
 
 ---
 
@@ -259,7 +266,7 @@ If none occur, then:
 
 SVARE does not outperform computation by being faster.
 
-It outperforms by not losing structure.
+It outperforms by preserving structure before visibility.
 
 **Value is not computed.**  
 **It is revealed from structure.**
