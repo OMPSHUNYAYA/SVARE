@@ -26,8 +26,8 @@ SVARE determines value from:
 
 - structural resolution  
 
-A value is not computed.  
-It is revealed from structure.
+Value visibility is governed by structure.
+It becomes visible when structure resolves.
 
 ---
 
@@ -90,7 +90,7 @@ that dependency was never fundamental.
 
 SVARE demonstrates:
 
-value correctness does not depend on computation
+value correctness does not depend solely on floating-point computation, evaluation order, or approximation-driven execution behavior.
 
 ---
 
@@ -158,9 +158,17 @@ derivation of value → validation of structure
 
 No.
 
-It is a minimal structural proof that:
+It is a minimal structural proof.
 
-value correctness does not require computation
+Deterministic value admissibility can be governed by:
+
+- structural completeness
+- structural consistency
+
+It does not depend solely on:
+
+- floating-point approximation
+- evaluation-order behavior
 
 ---
 
@@ -224,7 +232,7 @@ Example:
 
 Value is the **visible outcome of a resolved structure**.
 
-It is not produced by computation.
+Its admissibility is not determined by floating-point computation or evaluation-order behavior.
 
 It becomes visible only when:
 
@@ -330,7 +338,7 @@ Not machine execution.
 
 No.
 
-It removes computation as a dependency for correctness.
+It removes floating-point approximation and evaluation-order dependency as requirements for deterministic value admissibility.
 
 ---
 
@@ -338,7 +346,7 @@ It removes computation as a dependency for correctness.
 
 No.
 
-Structure is order-independent.
+Structural admissibility is designed to be independent of evaluation-order behavior.
 
 ---
 
@@ -346,7 +354,7 @@ Structure is order-independent.
 
 No.
 
-Value correctness does not depend on time.
+Value admissibility does not depend on temporal execution sequencing.
 
 ---
 
@@ -408,12 +416,10 @@ A deterministic identity derived from structural encoding.
 
 ### **E4. Why does the certificate matter?**
 
-It proves independence from:
+It demonstrates independence from:
 
-- computation  
-- execution order  
-- representation  
-- numeric system  
+- floating-point approximation behavior
+- evaluation-order dependency
 
 ---
 
@@ -454,7 +460,7 @@ Expected:
 
 To isolate the invariant:
 
-value correctness does not require computation
+deterministic value admissibility can be structurally validated before representation-specific execution behavior becomes relevant.
 
 ---
 
@@ -477,7 +483,7 @@ value = result of computation
 
 To:
 
-value = result of structure  
+value visibility = result of structural resolution
 
 ---
 
@@ -538,9 +544,7 @@ representation mechanism
 
 ### **I2. Role of SVARE**
 
-First visible proof that:
-
-value correctness can exist without computation
+First visible proof that deterministic value admissibility can be governed structurally rather than by floating-point approximation or evaluation-order behavior alone.
 
 ---
 
@@ -564,15 +568,17 @@ value correctness does not require computation
 
 ### **K1. Isn’t this still computation?**
 
-No.
+Internal resolution steps still exist.
 
-Internal steps exist, but:
+SVARE distinguishes between:
 
-`correctness != computation`
+- implementation substrate
+- structural admissibility
+- representational visibility
 
-Correctness depends only on:
+The claim is not that all computation disappears.
 
-`structure_uniquely_resolves = complete AND consistent`
+The claim is that correctness is governed by structural completeness and consistency rather than floating-point approximation or evaluation-order behavior alone.
 
 ---
 
@@ -620,8 +626,7 @@ It is a reference proof.
 
 SVARE is a deterministic structural resolution model where:
 
-value correctness is derived from structure  
-—not computation.
+deterministic value admissibility is governed by structural completeness and consistency rather than floating-point approximation or evaluation-order behavior alone.
 
 It produces identical results for identical structure across systems.
 
