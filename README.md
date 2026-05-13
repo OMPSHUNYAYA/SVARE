@@ -525,7 +525,8 @@ it reveals that correctness was always determined by structure.
 ## 🧪 **Demo**
 
 - [svare_v8_1.py](demo/svare_v8_1.py)  
-- [SVARE_HTML_v8_1.html](demo/SVARE_HTML_v8_1.html)  
+- [SVARE_HTML_v8_1.html](demo/SVARE_HTML_v8_1.html)
+- [SVARE_Deterministic_Structural_Cinema_v8_8.py](concept_demo/SVARE_Deterministic_Structural_Cinema_v8_8.py)
 
 ---
 
