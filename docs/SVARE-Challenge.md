@@ -17,7 +17,17 @@ and:
 certificate identity depends on structural encoding  
 (canonical same-certificate identity is a future extension)
 
-SVARE establishes that value correctness does not require computation as a prerequisite or source of truth.
+SVARE establishes a different correctness model.
+
+Deterministic value admissibility is governed by:
+
+- structural completeness
+- structural consistency
+
+It does not depend solely on:
+
+- floating-point approximation
+- execution-order behavior
 
 The engine may perform internal resolution steps, but correctness is determined solely by structural completeness and consistency.
 
@@ -221,9 +231,9 @@ certificate identity depends on structural encoding
 
 This holds:
 
-- across runs  
-- across machines  
-- across implementations  
+- across repeated runs
+- across equivalent deterministic environments
+- across equivalent structural-resolution conditions
 
 ---
 
@@ -268,5 +278,7 @@ SVARE does not outperform computation by being faster.
 
 It outperforms by preserving structure before visibility.
 
-**Value is not computed.**  
-**It is revealed from structure.**
+Value visibility is governed by structure.
+
+SVARE preserves structural admissibility before representation-specific execution behavior becomes relevant.
+
