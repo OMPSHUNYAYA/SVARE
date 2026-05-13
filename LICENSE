@@ -89,7 +89,7 @@ value correctness = resolve(structure)
 
 Value correctness is a property of structure — independent of arithmetic or execution mechanisms.
 
-Truth is represented by visible value.  
+Structural truth is represented by visible value.  
 Proof is represented by certificate.
 
 Structural proof is expressed as:
@@ -162,8 +162,8 @@ resolve(structure) →
 
 What This Demonstrates
 
-• value correctness without computation  
-• independence from arithmetic execution  
+• value correctness without computation dependency 
+• independence from arithmetic execution as the source of correctness 
 • independence from evaluation order  
 • independence from floating-point approximation  
 • structural resolution governing value visibility  
