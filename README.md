@@ -4,20 +4,33 @@
 
 ---
 
-![SVARE](https://img.shields.io/badge/SVARE-Structural%20Value%20Resolution%20Engine-black) ![Structure-Based](https://img.shields.io/badge/Correctness-Structure%20Based-purple) ![Deterministic](https://img.shields.io/badge/Deterministic-Resolution-green) ![Precision-Preserved](https://img.shields.io/badge/Precision-Preserved-blue)
+![SVARE](https://img.shields.io/badge/SVARE-Structural%20Value%20Resolution%20Engine-black)
+![Structure-Based](https://img.shields.io/badge/Correctness-Structure%20Based-purple)
+![Deterministic](https://img.shields.io/badge/Deterministic-Resolution-green)
+![Precision-Preserved](https://img.shields.io/badge/Precision-Preserved-blue)
 
-![No-Arithmetic](https://img.shields.io/badge/Arithmetic-Not%20Required-lightgrey) ![No-Computation](https://img.shields.io/badge/Computation-Not%20Required-lightgrey) ![No-Evaluation](https://img.shields.io/badge/Evaluation-Not%20Required-lightgrey) ![No-FloatingPoint](https://img.shields.io/badge/Floating--Point-Not%20Required-lightgrey)
+![Exact-Resolution](https://img.shields.io/badge/Resolution-Exact%20Structural-blue)
+![Explicit-States](https://img.shields.io/badge/States-RESOLVED%20%7C%20INCOMPLETE%20%7C%20CONFLICT-orange)
+![No-FloatingPoint](https://img.shields.io/badge/Floating--Point-Not%20Required-lightgrey)
+![Execution-Independent](https://img.shields.io/badge/Execution-Order%20Independent-lightgrey)
 
-![Order-Independent](https://img.shields.io/badge/Order-Independent-lightgrey) ![Python](https://img.shields.io/badge/Python-3.9%2B-blue) ![Reference-Engine](https://img.shields.io/badge/Engine-Reference%20v8.1-blue) ![Open-Standard](https://img.shields.io/badge/Reference-Open%20Standard-blue)
+![Deterministic-Visibility](https://img.shields.io/badge/Visibility-Deterministic-success)
+![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
+![Reference-Engine](https://img.shields.io/badge/Engine-Reference%20v8.1-blue)
+![Open-Standard](https://img.shields.io/badge/Reference-Open%20Standard-blue)
 
 ![SVARE Verify](https://github.com/OMPSHUNYAYA/SVARE/actions/workflows/svare-verify.yml/badge.svg)
 
 ---
 
-**Reveals correct values without calculation — through structure.**
+**Reveals structurally admissible values through deterministic structural resolution.**
 
-The ~18 KB reference engine that demonstrates:  
-**value correctness does not require arithmetic, calculation, or execution pipelines.**
+The ~18 KB reference engine demonstrates that:
+
+- value correctness can be validated structurally
+- admissibility can be determined independently of floating-point approximation
+- incomplete or conflicting structure can safely refuse visibility
+- identical structure produces deterministic outcomes
 
 ---
 
@@ -25,15 +38,15 @@ The ~18 KB reference engine that demonstrates:
 
 Where Structure Resolves and Value Becomes Visible
 
-SVARE removes computation as a dependency for correctness.
+SVARE removes floating-point approximation and execution-order dependency as requirements for deterministic value correctness.
 
-A value does not need to be calculated, executed, or evaluated step-by-step to be correct.
+Value correctness does not depend on floating-point execution behavior, evaluation order, or approximation-driven pipelines.
 
 Value is revealed only when structure uniquely resolves.
 
 ---
 
-**Deterministic • Structure-Based • No Arithmetic • No Computation • No Order Dependency**
+**Deterministic • Structure-Based • Exact Structural Resolution • Explicit Admissibility States • Order-Independent Structural Validation**
 
 ---
 
@@ -63,7 +76,7 @@ But because it does not make a value visible until the structure is complete and
 
 ## ⚡ **The Claim**
 
-A valid value can be determined without arithmetic or computation — when structure is sufficient.
+A valid value can be deterministically resolved from complete AND consistent structure without depending on floating-point approximation, evaluation order, or execution-specific behavior.
 
 ---
 
@@ -101,8 +114,13 @@ When structure uniquely resolves, value becomes visible — deterministically an
 
 ---
 
-This is not a faster calculator.  
-This is removal of what was never fundamental to value correctness.
+This is not a faster calculator.
+
+SVARE isolates a different layer:
+
+structural admissibility and deterministic value visibility.
+
+The reference engine demonstrates that deterministic correctness can be governed by structural completeness and consistency rather than floating-point execution behavior alone.
 
 ---
 
@@ -135,9 +153,9 @@ The system collapses to the same classical truth.
 
 ---
 
-## 🌍 **Civilizational Impact**
+## 🌍 **Structural Shift**
 
-From computation to structural truth.
+From approximation-driven evaluation toward explicit structural admissibility and deterministic value visibility.
 
 Traditional systems inherit:  
 Approximation • Rounding • Execution dependency  
@@ -148,11 +166,16 @@ Determinism • Precision • Structural clarity
 This is not an optimization.  
 This is the removal of a non-fundamental dependency.
 
-Value was never created by computation.  
-It is determined by structure.
+SVARE distinguishes between:
 
-Computation may reveal value.  
-It does not create correctness.
+- structural correctness
+- representational visibility
+- execution substrate
+
+The reference engine demonstrates that correctness can be validated structurally before representation-specific execution details become relevant.
+
+Computation may still participate in realization and visibility.
+SVARE isolates the structural conditions that govern admissibility.
 
 ---
 
@@ -173,10 +196,46 @@ It does not create or determine correctness.
 
 **This is the key distinction:**
 
-Traditional systems: value = result of computation  
-SVARE: value = result of resolved structure  
+Traditional systems often treat correctness as emerging from execution and evaluation.
+
+SVARE isolates a different perspective:
+
+`value_visibility = resolve(structure)`
+
+where structural completeness and consistency govern admissibility before representation-specific execution behavior becomes relevant.
 
 The reference implementation includes internal steps for practicality, but those steps do not define truth — structure does.
+
+---
+
+## ⚠️ **Boundary Clarification (Important)**
+
+SVARE is not a claim that all computation disappears.
+
+The reference implementation still performs:
+
+- parsing
+- normalization
+- exact digit manipulation
+- deterministic rule application
+- structural resolution steps
+
+These are computational processes in an implementation sense.
+
+The distinction made by SVARE is narrower and more precise:
+
+- floating-point approximation is not required
+- evaluation-order dependency is not required
+- correctness is governed by structural admissibility conditions
+- incomplete or conflicting structure safely prevents visibility
+
+SVARE therefore operates primarily as:
+
+- a deterministic structural validation model
+- an explicit admissibility-state system
+- a precision-preserving structural resolution engine
+
+rather than a claim that all forms of computation are eliminated.
 
 ---
 
@@ -209,16 +268,17 @@ SVARE operates only at the Structure Layer.
 
 ---
 
-## 🔍 **Truth vs Computation**
+## 🔍 **Structural Correctness vs Execution**
 
-SVARE determines value truth, not calculation.
+SVARE focuses on:
 
-It establishes whether a value is structurally valid.
+- structural admissibility
+- deterministic visibility
+- explicit incompleteness handling
+- conflict-safe resolution
 
-Computation may exist.  
-It is not the source of correctness.
-
-Value is determined by structure.
+The implementation may still perform internal evaluation steps.
+However, those steps do not override structural validity conditions.
 
 ---
 
@@ -241,7 +301,7 @@ certificate identity depends on structural encoding
 
 ---
 
-If none occur, computation is not fundamental.
+If none occur, deterministic correctness depends fundamentally on structural validity conditions — not merely on floating-point execution behavior.
 
 ---
 
@@ -286,16 +346,19 @@ It is preserved by:
 
 ---
 
-## ⚡ **The One-Line Breakthrough**
+## ⚡ **The One-Line Insight**
 
-Value does not require computation — when structure is sufficient.
+Deterministic value visibility can be governed by structural completeness and consistency rather than floating-point approximation or execution-order behavior.
 
 ---
 
 ## ⚡ **The Core Truth**
 
-`value != computation`  
-`value = resolve(structure)`
+`value_visibility = resolve(structure)`
+
+where:
+
+`structure_uniquely_resolves = complete AND consistent`
 
 ---
 
@@ -544,23 +607,27 @@ No arithmetic, ordering, or execution can alter this.
 
 ## 🧠 **Critical Insight**
 
-System does not:
+The reference engine still performs internal evaluation and exact symbolic-style resolution steps.
 
-- calculate  
-- evaluate  
-- approximate  
+Its distinguishing property is not the elimination of all computation.
 
-It resolves structure.
+Its distinguishing property is:
+
+- deterministic structural admissibility
+- explicit incompleteness handling
+- conflict-safe visibility
+- precision-preserving resolution
+- execution-independent structural validation
 
 ---
 
 ## 🌌 **Why This Is Bigger Than It Looks**
 
-Minimal proof that value correctness can be structurally resolved before computation becomes necessary:
+Minimal proof that deterministic value visibility can be structurally validated independently of floating-point approximation and execution-order dependency:
 
-- value correctness does not require computation  
-- precision does not require floating-point systems  
-- truth exists before execution  
+- deterministic correctness can be structurally validated  
+- precision can be preserved without floating-point approximation  
+- admissibility can be determined independently of execution-order behavior
 
 ---
 
@@ -656,6 +723,7 @@ Licensed under **CC BY-NC 4.0**
 | Domain extensions         | Finance, scientific systems, verification                                   | Open      |
 | Formal verification       | Lightweight proof of resolution kernel correctness                          | Research  |
 | Language bindings         | Python package, WebAssembly, Rust port                                      | Future    |
+| Structural decidability bounds | Explicit admissibility boundaries for hierarchical and graph-based structures | Research |
 
 ---
 
@@ -724,13 +792,14 @@ SVARE answers:
 
 ## 🧭 **Final Statement**
 
-Computation did not create value.  
-Arithmetic did not create value.  
-Execution did not create value.
+SVARE distinguishes between:
 
-Value is not computed.  
-It is revealed by structure.
+- structural admissibility
+- representational realization
+- execution substrate
 
-When structure is complete and consistent, value becomes visible — deterministically, reproducibly, and independently of how it was calculated.
+The reference engine demonstrates that deterministic value visibility can be governed by structural completeness and consistency before execution-specific approximation behavior becomes relevant.
+
+When structure uniquely resolves, value becomes visible deterministically and reproducibly.
 
 **This is SVARE.**
