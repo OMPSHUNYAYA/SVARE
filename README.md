@@ -19,8 +19,6 @@
 ![Reference-Engine](https://img.shields.io/badge/Engine-Reference%20v8.1-blue)
 ![Open-Standard](https://img.shields.io/badge/Reference-Open%20Standard-blue)
 
-![SVARE Verify](https://github.com/OMPSHUNYAYA/SVARE/actions/workflows/svare-verify.yml/badge.svg)
-
 ---
 
 **Reveals structurally admissible values through deterministic structural resolution.**
