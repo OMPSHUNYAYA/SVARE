@@ -77,12 +77,12 @@ Thus:
 certificate identity depends on structural encoding  
 (canonical same-certificate identity is a future extension)
 
-Resolution does not depend on:
+Resolution correctness does not depend on:
 
-- computation  
+- floating-point approximation  
 - evaluation sequence  
-- numeric approximation  
-- execution pipeline  
+- execution-order dependency  
+- approximation-driven execution behavior  
 
 It depends only on structural equality.
 
@@ -221,7 +221,7 @@ Correctness exists independently of computation as a requirement for value truth
 
 The reference implementation performs internal evaluation to resolve structure.
 
-However, this evaluation is not computation in the classical sense and is not the source of correctness.
+However, this evaluation is not treated as the source of correctness.
 
 Correctness is determined solely by structural sufficiency:
 
