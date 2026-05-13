@@ -47,7 +47,7 @@ then computation is not defining correctness — structure is.
 ## 🔍 **What to Observe**
 
 - Value is revealed directly from structure — not from computation  
-- No arithmetic execution is required  
+- No arithmetic execution is required as the source of correctness  
 - No floating-point approximation is required  
 - No evaluation order is required  
 
@@ -89,7 +89,7 @@ No computation dependency
 
 SVARE shows that a value system can:
 
-- determine value without computation  
+- determine value admissibility without floating-point dependency 
 - operate without arithmetic execution  
 - operate without evaluation pipelines  
 - preserve precision without floating-point dependency  
@@ -239,7 +239,7 @@ python demo/svare_v8_1.py
 Only structurally valid value becomes visible.
 
 No arithmetic required.  
-No computation required.  
+No computation dependency for correctness. 
 No evaluation order required.
 
 ---
@@ -340,7 +340,7 @@ if structure satisfies all conditions:
 else:  
     value remains absent  
 
-No computation is required for correctness.
+No computation dependency is required for correctness.
 
 ---
 
@@ -411,7 +411,9 @@ certificate identity depends on structural encoding
 
 SVARE demonstrates that value correctness can be determined deterministically from complete and consistent structure.
 
-It produces identical value (and resolution state) for identical structure, without requiring arithmetic, computation, or evaluation pipelines.
+It produces identical value (and resolution state) for identical structure.
+
+Correctness does not depend on floating-point approximation, evaluation-order dependency, or execution-specific behavior as the source of truth.
 
 Certificate identity depends on structural encoding.  
 Canonical same-certificate identity is a future extension.
