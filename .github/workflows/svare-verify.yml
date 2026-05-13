@@ -30,6 +30,7 @@ jobs:
               "LICENSE",
               "demo/svare_v8_1.py",
               "demo/SVARE_HTML_v8_1.html",
+              "concept_demo/SVARE_Deterministic_Structural_Cinema_v8_8.py",
               "docs/Quickstart.md",
               "docs/FAQ.md",
               "docs/Proof-Sketch.md",
@@ -53,7 +54,7 @@ jobs:
           print("Required repository files verified.")
           PY
 
-      - name: Verify frozen SHA256 hashes if present
+      - name: Verify frozen SHA256 hashes
         shell: bash
         run: |
           python - <<'PY'
@@ -86,8 +87,8 @@ jobs:
               match = re.search(pattern, freeze_text, re.IGNORECASE)
 
               if not match:
-                  print(f"WARNING: No frozen SHA256 entry found for {label}; skipping hash check.")
-                  continue
+                  print(f"ERROR: No frozen SHA256 entry found for {label}.")
+                  sys.exit(1)
 
               expected = match.group(2).lower()
               actual = sha256_file(path).lower()
@@ -101,8 +102,9 @@ jobs:
               print(f"Hash verified for {label}: {actual}")
               checked += 1
 
-          if checked == 0:
-              print("WARNING: No hash entries matched. File existence and runtime checks will still run.")
+          if checked != len(targets):
+              print("ERROR: Not all frozen demo hashes were checked.")
+              sys.exit(1)
 
           print("Frozen SHA256 verification completed.")
           PY
@@ -242,7 +244,7 @@ jobs:
           print("HTML demo structural hooks verified.")
           PY
 
-      - name: Verify README contains core SVARE claims
+      - name: Verify README contains current SVARE claims
         shell: bash
         run: |
           python - <<'PY'
@@ -256,9 +258,9 @@ jobs:
               "Correctness Without Computation",
               "value_visible iff structure_uniquely_resolves",
               "structure_uniquely_resolves = complete AND consistent",
-              "correctness = resolve(structure)",
-              "value != computation",
-              "value = resolve(structure)",
+              "value_visibility = resolve(structure)",
+              "Computation may reveal value",
+              "It does not create or determine correctness",
               "SVARE Challenge",
               "demo/svare_v8_1.py",
               "VERIFY/FREEZE_DEMO_SHA256.txt",
