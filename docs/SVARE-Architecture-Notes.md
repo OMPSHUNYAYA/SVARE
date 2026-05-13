@@ -19,7 +19,7 @@ value correctness is derived from structure
 
 It enables systems to:
 
-- determine value truth without computation  
+- determine value correctness structurally 
 - avoid false value under incomplete structure  
 - prevent unsafe value under conflicting structure  
 - produce deterministic and reproducible value outcomes  
@@ -94,7 +94,7 @@ Outputs:
 - `INCOMPLETE`  
 - `CONFLICT`  
 
-This layer is **computation-independent**.
+This layer is independent of floating-point approximation and evaluation-order dependency as sources of correctness.
 
 ---
 
@@ -168,7 +168,7 @@ Absence of value indicates structural non-resolution.
 
 Value is the visible outcome of a structure that uniquely resolves.
 
-It is not produced by computation.  
+Its correctness is not determined by computation. 
 It becomes visible only when structure uniquely resolves.
 
 ---
@@ -333,7 +333,7 @@ Certificate identity depends on structural encoding
 Convergence is:
 
 - deterministic  
-- computation-independent  
+- structurally governed
 
 ---
 
@@ -378,7 +378,7 @@ SVARE shifts system design from:
 
 ## **12. What This Architecture Enables**
 
-- computation-independent correctness  
+- structurally governed correctness 
 - deterministic value validation  
 - safe absence under incomplete structure  
 - conflict-safe resolution  
@@ -421,4 +421,6 @@ Correctness remains preserved by structure.
 
 SVARE defines a structural value architecture in which:
 
-value correctness emerges deterministically from complete and consistent structure — independent of arithmetic, computation, evaluation pipelines, or execution order — while ensuring that incomplete structure produces no value and conflicting structure produces no arbitrary value.
+value correctness emerges deterministically from complete and consistent structure.
+
+Correctness does not depend on floating-point approximation, evaluation-order dependency, or execution pipelines as sources of truth.
