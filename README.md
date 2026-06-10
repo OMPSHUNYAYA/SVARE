@@ -712,7 +712,6 @@ Canonical identity is a future extension.
 
 ### **Framework**
 
-- [SVARE Framework Document](docs/SVARE_v.1.3.pdf)  
 - [SVARE Architecture Notes](docs/SVARE-Architecture-Notes.md)  
 - [Dependency Elimination Framework](docs/Dependency-Elimination-Framework.png)  
 - [Shunyaya Structural Stack](docs/Shunyaya-Structural-Stack.png)  
