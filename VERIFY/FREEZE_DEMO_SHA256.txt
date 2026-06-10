@@ -1,12 +1,35 @@
 SVARE — Hash Freeze (SHA256)
 
-These hashes define the frozen demo artifacts for SVARE v8_1.
+SVARE v9_9 — Current Public Release
+
+demo_extension\svare_v9_9.py
+
+SHA256: b0a04028c7531929354e4491c7af39c789fadc94d350c322147077c2027b4603
+
+demo_extension\SVARE_HTML_v9_9.html
+
+SHA256: 125540378c0e1600ff32814a81a900b2ee80dcdf0ba15bcb725361ca41b1a7d3
+
+---
+
+SVARE v8_1 — Historical Reference Release
 
 demo\svare_v8_1.py
+
 SHA256: 6efad28201ce096badd0ec4226383ade9def2e02177e7bd0423f2f158ff34d7f
 
 demo\SVARE_HTML_v8_1.html
+
 SHA256: d00f9d202a58f9f04669409d7e8e82adf176e0dce4397ed657f886900c1a0641
 
+---
+
 same file -> same hash
+
 different file -> different hash
+
+hash identity verifies frozen release artifacts
+
+v8_1 hashes remain unchanged as historical freeze records
+
+v9_9 hashes define the current public release artifacts
