@@ -90,9 +90,13 @@ Defined by:
 
 Outputs:
 
-- `RESOLVED`  
-- `INCOMPLETE`  
-- `CONFLICT`  
+- `RESOLVED`
+- `FORBIDDEN`
+- `INDETERMINATE_ZERO`
+- `INCOMPLETE`
+- `CONFLICT`
+
+These represent explicit structural resolution states in SVARE v9.9.
 
 This layer is independent of floating-point approximation and evaluation-order dependency as sources of correctness.
 
@@ -226,7 +230,17 @@ It excludes:
 
 `normalized_value = normalize(Value)`
 
-`certificate = hash(normalized_value)`
+Certificate generation in SVARE v9.9 incorporates:
+
+- version
+- structural encoding
+- resolution state
+- visible value
+- visibility depth
+
+Certificate identity depends on structural encoding and resolved outcome.
+
+Canonical same-certificate identity is a future extension.
 
 ---
 
@@ -387,11 +401,10 @@ SVARE shifts system design from:
 
 ---
 
-## **13. Architectural Boundaries (Phase I)**
+## **13. Architectural Boundaries (Current Reference Model v9.9)**
 
-SVARE Phase I does NOT:
+The current SVARE v9.9 reference model does NOT:
 
-- support chained structural resolution  
 - handle multi-step dependency propagation  
 - implement symbolic algebra systems  
 - perform cross-domain structural composition  
