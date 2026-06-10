@@ -202,7 +202,7 @@ This includes:
 
 - That the reference engine performs zero internal work  
 - That it replaces all arithmetic systems or calculators  
-- That it supports chained expressions or symbolic algebra in Phase I  
+- That it supports symbolic algebra, equation solving, or calculus  
 - That it is ready for safety-critical or financial deployment without further validation  
 
 **Key distinction:**
@@ -360,35 +360,127 @@ Value admissibility does not depend on temporal execution sequencing.
 
 ## **SECTION D — Resolution States**
 
-### **D1. Visible states**
+### **D1. What resolution states exist in SVARE v9.9?**
 
-- RESOLVED  
-- INCOMPLETE  
-- CONFLICT  
+SVARE v9.9 exposes five explicit resolution states:
+
+- RESOLVED
+- FORBIDDEN
+- INDETERMINATE_ZERO
+- INCOMPLETE
+- CONFLICT
 
 ---
 
-### **D2. Visibility rule**
+### **D2. What is RESOLVED?**
+
+RESOLVED means:
+
+- structure is complete
+- structure is consistent
+- value becomes visible
+
+---
+
+### **D3. What is FORBIDDEN?**
+
+FORBIDDEN means:
+
+- structure resolves to an invalid operation
+- value must not be exposed
+
+Example:
+
+`2 / (3 - 3)`
+
+Result:
+
+`FORBIDDEN`
+
+`undefined`
+
+---
+
+### **D4. What is INDETERMINATE_ZERO?**
+
+INDETERMINATE_ZERO means:
+
+- Zero divided by Zero structure
+- value cannot be uniquely resolved
+
+Example:
+
+`0 / 0`
+
+Result:
+
+`INDETERMINATE_ZERO`
+
+`indeterminate`
+
+---
+
+### **D5. What is INCOMPLETE?**
+
+INCOMPLETE means:
+
+- structure is insufficient
+- required structure is missing
+
+Example:
+
+`(1 + 2`
+
+Result:
+
+`INCOMPLETE`
+
+`not_visible`
+
+---
+
+### **D6. What is CONFLICT?**
+
+CONFLICT means:
+
+- structure is internally inconsistent
+- deterministic resolution cannot be established
+
+No value becomes visible.
+
+---
+
+### **D7. Visibility rule**
 
 `value_visible iff structure_uniquely_resolves`
 
+where:
+
+`structure_uniquely_resolves = complete AND consistent`
+
 ---
 
-### **D3. Why is absence important?**
+### **D8. Why is absence important?**
 
 Absence prevents false value.
 
----
-
-### **D4. Why is INCOMPLETE important?**
-
-Because incomplete structure must not produce incorrect value.
+SVARE never forces visibility when structure does not uniquely resolve.
 
 ---
 
-### **D5. Why is CONFLICT important?**
+### **D9. Why are explicit states important?**
 
-Because conflicting structure must not produce arbitrary value.
+Because different structural conditions should not collapse into the same outcome.
+
+SVARE distinguishes between:
+
+- incomplete structure
+- conflicting structure
+- forbidden structure
+- indeterminate structure
+- resolved structure
+
+Each state carries a different structural meaning.
 
 ---
 
@@ -398,19 +490,37 @@ Because conflicting structure must not produce arbitrary value.
 
 Yes.
 
+Identical structural encoding always produces:
+
+- identical visible value
+- identical resolution state
+- identical certificate
+
 ---
 
 ### **E2. Will independent systems agree?**
 
 Yes.
 
+For identical structural encoding:
+
 `S1 = S2 -> Value1 = Value2`
+
+and
+
+`Certificate1 = Certificate2`
 
 ---
 
 ### **E3. What is the certificate?**
 
 A deterministic identity derived from structural encoding.
+
+The certificate represents:
+
+- structural identity
+- structural resolution path
+- deterministic reproducibility
 
 ---
 
@@ -420,56 +530,142 @@ It demonstrates independence from:
 
 - floating-point approximation behavior
 - evaluation-order dependency
+- implementation-specific execution behavior
 
 ---
 
 ### **E5. Reproducibility guarantee**
 
-`python svare_v8_1.py "2 / 3 depth 8"`
+Run the same expression multiple times:
+
+```
+python demo_extension/svare_v9_9.py "1 + 2 + 3"
+```
 
 Expected:
 
-- identical visible value  
-- identical certificate (for identical structural encoding)  
-- identical resolution state  
+- identical visible value
+- identical resolution state
+- identical certificate
+- identical structural tree
 
 ---
 
-## **SECTION F — Phase Scope (Critical)**
+### **E6. Do equivalent expressions always share the same certificate?**
 
-### **F1. What is covered in Phase I?**
+Not necessarily.
 
-- single-operation structural resolution  
-- numeric value visibility  
-- deterministic resolution states  
-- decimal depth interpretation  
-- direction interpretation  
+Example:
 
----
+`5 + 2`
 
-### **F2. What is NOT covered?**
+`2 + 5`
 
-- chained expressions  
-- nested evaluation trees  
-- symbolic algebra  
-- cross-domain composition  
+Expected:
 
----
+- same visible value
 
-### **F3. Why is chain not supported?**
+Certificates may differ because certificate identity currently depends on structural encoding.
 
-To isolate the invariant:
-
-deterministic value admissibility can be structurally validated before representation-specific execution behavior becomes relevant.
+Canonical same-certificate identity across equivalent structures is a future extension.
 
 ---
 
-### **F4. Future phases**
+### **E7. What is the deterministic invariant?**
 
-- chained structural resolution  
-- hierarchical graphs  
-- object structures  
-- system-level resolution  
+`same structure -> same value`
+
+`same structure -> same resolution state`
+
+`same structure -> same certificate`
+
+for identical structural encoding.
+
+---
+
+## **SECTION F — Current Scope (v9.9)**
+
+### **F1. What is covered in SVARE v9.9?**
+
+- expression-tree resolution
+- chained expressions
+- grouped expressions
+- nested expressions
+- unary sign handling
+- deterministic structural certificates
+- visibility-layer control
+- recurring visibility
+- scientific visibility for large structures
+- explicit resolution states
+
+---
+
+### **F2. What expression forms are supported?**
+
+Examples:
+
+`1 + 2 + 3`
+
+`(1 + 2) * 3`
+
+`2 * (3 + 4 * (5 - 2))`
+
+`(2 / 3) + (1 / 6)`
+
+---
+
+### **F3. What does expression-tree resolution mean?**
+
+SVARE resolves structures through parent-child relationships.
+
+Child structures resolve first.
+
+Parent structures resolve afterward.
+
+The final visible value appears only after the complete tree resolves.
+
+---
+
+### **F4. What remains outside current scope?**
+
+- symbolic algebra
+- equation solving
+- calculus
+- graph reasoning
+- variable substitution systems
+- domain-specific structural engines
+
+---
+
+### **F5. What changed from v8.1?**
+
+SVARE v8.1 demonstrated:
+
+- single structural relations
+
+SVARE v9.9 demonstrates:
+
+- complete expression trees
+
+The structural invariant remains unchanged:
+
+`same structure -> same value`
+
+Only the visible structural scope expands.
+
+---
+
+### **F6. Future directions**
+
+Possible future directions include:
+
+- structural graphs
+- hierarchical object structures
+- canonical value identity
+- domain-specific structural engines
+- formal verification layers
+
+These are exploratory and not required by the current reference implementation.
 
 ---
 
@@ -537,7 +733,8 @@ representation mechanism
 - SLANG → no execution  
 - STIME → no time  
 - STINT → no connectivity  
-- STILE → no communication  
+- STILE → no communication
+- STRAL → no traversal
 - SVARE → no computation  
 
 ---
