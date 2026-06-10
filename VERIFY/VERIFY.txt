@@ -1,49 +1,78 @@
 SVARE Verification — Structural Value Resolution Engine
 
-1. Open the reference demonstration
+1. Open the current reference demonstration
 
 Option A (recommended)
-python svare_v8_1.py
+
+python demo_extension/svare_v9_9.py
 
 Option B (single expression)
-python svare_v8_1.py "2 / 3 depth 8"
+
+python demo_extension/svare_v9_9.py "1 + 2 + 3"
+
+---
 
 2. Observe
 
 deterministic structural value resolution
-no floating-point arithmetic dependency
-no rounding dependency
-no execution-order dependency
+
+expression-tree resolution
+
+structural node inspection
+
+visibility-layer control
+
+scientific visibility for large structures
+
+no floating-point arithmetic dependency as the source of correctness
+
+no rounding dependency as the source of correctness
+
+no execution-order dependency as the source of correctness
+
 no external libraries
-value is not computed — it is revealed through structure
-evaluation does not determine correctness (only structural sufficiency does)
+
+value is revealed through structure
+
+evaluation does not determine correctness
+
+structural sufficiency determines correctness
+
+---
 
 3. Expected baseline states
 
 resolved (valid structure)
 
-  resolution: RESOLVED  
-  visible_value: <value>  
-  direction: + | - | ZERO  
-  depth: <scale>  
-  certificate: <stable hash>  
+resolution: RESOLVED
+
+visible_value: <value>
+
+direction: <direction>
+
+certificate: <stable hash>
 
 forbidden (invalid denominator)
 
-  resolution: FORBIDDEN  
-  visible_value: undefined  
-  reason: DENOM_ZERO  
+resolution: FORBIDDEN
 
-indeterminate (0 / 0)
+visible_value: undefined
 
-  resolution: INDETERMINATE_ZERO  
-  visible_value: indeterminate  
-  reason: ZERO/ZERO  
+reason: DENOM_ZERO
 
-incomplete (invalid input)
+incomplete (invalid structure)
 
-  resolution: INCOMPLETE  
-  visible_value: not_visible  
+resolution: INCOMPLETE
+
+visible_value: not_visible
+
+conflict (structurally inconsistent)
+
+resolution: CONFLICT
+
+visible_value: not_visible
+
+---
 
 4. Structural resolution rule
 
@@ -51,210 +80,305 @@ structure_uniquely_resolves = complete AND consistent
 
 value_visible iff structure_uniquely_resolves
 
+---
+
 5. Expected behavior
 
-valid structure        -> RESOLVED     -> value visible
-invalid denominator    -> FORBIDDEN    -> no value
-indeterminate form     -> INDETERMINATE_ZERO
-invalid syntax         -> INCOMPLETE   -> no value
+valid structure -> RESOLVED -> value visible
+
+invalid denominator -> FORBIDDEN -> no value
+
+invalid syntax -> INCOMPLETE -> no value
+
+structural inconsistency -> CONFLICT -> no value
 
 identical input structure -> identical value + identical resolution state
+
 certificate identity depends on identical structural encoding
+
+---
 
 6. Verify determinism
 
 Run the same input twice:
 
-python svare_v8_1.py "5 + 2"
-python svare_v8_1.py "5 + 2"
+python demo_extension/svare_v9_9.py "1 + 2 + 3"
+
+python demo_extension/svare_v9_9.py "1 + 2 + 3"
 
 Expected:
+
 same visible value
-same certificate (for identical structural encoding)
+
+same certificate
+
+same resolution state
 
 Confirm:
 
 same input structure -> same result -> same certificate
-canonical same-certificate identity across equivalent surfaces is a future extension
+
+canonical same-certificate identity across equivalent structures is a future extension
+
+---
 
 6A. Verify full invariant
 
 For identical inputs:
 
 resolution identical
+
 visible_value identical
-certificate identical (for identical structural encoding)
 
-7. Verify representative outputs
+certificate identical
 
-Example cases
+---
 
-  5 + 2  
-  -7 - 9  
-  -7 * -8  
-  2 / 3 depth 8  
-  9 / 0  
-  0 / 0  
+7. Verify expression-tree resolution
+
+Examples:
+
+1 + 2 + 3
+
+(1 + 2) * 3
+
+2 * (3 + 4 * (5 - 2))
+
+(2 / 3) + (1 / 6)
 
 Expected:
 
-valid
+6
 
-  resolution: RESOLVED  
-  visible_value: <correct value>  
-  certificate: <stable>  
+9
 
-division by zero
+30
 
-  resolution: FORBIDDEN  
-  visible_value: undefined  
+0.833333333333333333
 
-zero / zero
+Tree nodes should resolve from leaves toward the root.
 
-  resolution: INDETERMINATE_ZERO  
-  visible_value: indeterminate  
+---
 
-7A. Structural Truth vs Numerical Approximation
+8. Verify structural tree inspection
 
-Compare with typical floating-point systems:
+Expected node types:
+
+VALUE
+
+GROUP
+
+MERGE
+
+REMOVE
+
+EXPAND
+
+RATIO
+
+DIRECTION
+
+Tree output should expose the structural resolution path.
+
+---
+
+9. Verify visibility layers
+
+depth 12 (2 / 3)
+
+Expected:
+
+0.666666666666
+
+depth 24 (2 / 3)
+
+Expected:
+
+0.666666666666666666666666
+
+Observation:
+
+visibility controls revelation
+
+visibility does not alter structural resolution
+
+---
+
+10. Verify structural truth versus numerical approximation
 
 Example:
 
-1.0000000000000001 - 1.0000000000000000
+((1.0000000000000001 - 1.0000000000000000) * 10) + 5
 
 Expected:
 
-SVARE:
+5.000000000000001
 
-preserves structural distinction
+Observation:
 
-Typical floating-point:
+numeric systems may collapse structural distinctions
 
-may collapse to 0
-
-Observation
-numeric systems may approximate or collapse
 SVARE preserves structural identity
 
-Conclusion
+Conclusion:
+
 value != computation
+
 value = resolve(structure)
 
-8. Verify distinct proof identities
+---
 
-Different expressions:
-
-5 + 2
-5 + 3
-
-Expected:
-different certificate may appear because surface identity is part of structural encoding
-
-Confirm:
-
-different input structure -> certificate may differ
-
-9. Verify incomplete safety
+11. Verify incomplete safety
 
 Invalid input:
 
-5 + 
+(1 + 2
 
 Expected:
+
 resolution: INCOMPLETE
+
 visible_value: not_visible
 
-10. Verify forbidden safety
+---
 
-9 / 0
+12. Verify forbidden safety
+
+2 / (3 - 3)
 
 Expected:
+
 resolution: FORBIDDEN
+
 visible_value: undefined
 
-11. Verify indeterminate handling
+---
+
+12A. Verify indeterminate handling
+
 0 / 0
 
 Expected:
+
 resolution: INDETERMINATE_ZERO
+
 visible_value: indeterminate
 
-12. Verify value consistency under equivalent structure
+---
 
-Equivalent expressions:
+13. Verify value consistency under equivalent visible value
+
+Expressions:
 
 5 + 2
+
 2 + 5
 
 Expected:
+
 same visible value
 
 Note:
-Certificates may differ when the surface expression differs.
-This is expected because the certificate includes expression identity.
 
-13. Verify structural transitions
+Certificates may differ when structural encoding differs.
+
+Same visible value does not always mean same structural certificate.
+
+---
+
+14. Verify structural transitions
 
 Change input:
 
-5 + 2  -> RESOLVED
-5 +    -> INCOMPLETE
-9 / 0  -> FORBIDDEN
+1 + 2 + 3 -> RESOLVED
+
+(1 + 2 -> INCOMPLETE
+
+2 / (3 - 3) -> FORBIDDEN
 
 Expected:
-state changes strictly follow structure
 
-14. Verify bounded visibility
+state transitions follow structure
 
-Large value:
+---
 
-22 * 999999999999999999999999999999
+15. Verify scientific visibility
+
+Expression:
+
+88888888888888889999999929*23-29
 
 Expected:
-scientific format applied
+
+scientific visibility displayed automatically
+
 structure preserved internally
 
-15. Verify file identity
-certutil -hashfile svare_v8_1.py SHA256
+---
+
+16. Verify file identity
+
+certutil -hashfile demo_extension\svare_v9_9.py SHA256
+
+certutil -hashfile demo_extension\SVARE_HTML_v9_9.html SHA256
 
 Note:
+
 file hash = file identity
+
 certificate = structural resolution artifact
 
-Note:
-FORBIDDEN and INDETERMINATE_ZERO are implementation-level resolution states
-that refine the INCOMPLETE/CONFLICT boundary for numeric domains.
-The core structural model remains:
-RESOLVED, INCOMPLETE, CONFLICT.
+---
 
-16. Structural resolution model
+17. Structural resolution model
+
 resolve(structure) ->
 
-RESOLVED              if structure valid
-FORBIDDEN             if invalid operation
-INDETERMINATE_ZERO    if undefined form
-INCOMPLETE            if structure insufficient
+RESOLVED if structure valid
 
-17. Core invariant
+FORBIDDEN if invalid operation
+
+INDETERMINATE_ZERO if unresolved Zero divided by Zero structure
+
+INCOMPLETE if structure insufficient
+
+CONFLICT if structure inconsistent
+
+---
+
+18. Core invariant
 
 value correctness = resolve(structure)
 
 value_visible iff structure_uniquely_resolves
 
-18. Confirm
+---
 
-identical input structure → identical value
-identical input structure → identical certificate (for identical structural encoding)
-canonical certificate identity across equivalent surfaces is a future extension
-no floating-point dependency
-no rounding dependency
-no execution-order dependency
-no external computation required
+19. Confirm
+
+identical input structure -> identical value
+
+identical input structure -> identical certificate
+(for identical structural encoding)
+
+no floating-point dependency as the source of correctness
+
+no rounding dependency as the source of correctness
+
+no execution-order dependency as the source of correctness
+
 invalid structure does not produce value
+
+---
 
 Result
 
-Deterministic structural value resolution confirmed for SVARE.
+Deterministic structural value resolution confirmed for SVARE v9.9.
 
-Value correctness emerges from structure —
-not from floating-point arithmetic, rounding, execution order, or computation flow.
+Value correctness emerges from complete and consistent structure.
+
+Structural expression trees resolve deterministically.
+
+Visibility controls revelation.
+
+Structure determines correctness.
