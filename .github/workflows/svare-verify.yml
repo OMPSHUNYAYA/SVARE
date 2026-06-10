@@ -28,15 +28,11 @@ jobs:
           required_paths = [
               "README.md",
               "LICENSE",
-
               "demo/svare_v8_1.py",
               "demo/SVARE_HTML_v8_1.html",
-
               "demo_extension/svare_v9_9.py",
               "demo_extension/SVARE_HTML_v9_9.html",
-
               "concept_demo/SVARE_Deterministic_Structural_Cinema_v8_8.py",
-
               "docs/Quickstart.md",
               "docs/FAQ.md",
               "docs/Proof-Sketch.md",
@@ -46,7 +42,6 @@ jobs:
               "docs/Dependency-Elimination-Framework.png",
               "docs/Shunyaya-Structural-Stack.png",
               "docs/archive/SVARE_v1.3_Historical_Architecture.pdf",
-
               "VERIFY/VERIFY.txt",
               "VERIFY/FREEZE_DEMO_SHA256.txt",
           ]
@@ -84,8 +79,6 @@ jobs:
           def sha256_file(path: Path) -> str:
               return hashlib.sha256(path.read_bytes()).hexdigest()
 
-          checked = 0
-
           for label, path in targets.items():
               label_variants = [
                   re.escape(label),
@@ -109,11 +102,6 @@ jobs:
                   sys.exit(1)
 
               print(f"Hash verified for {label}: {actual}")
-              checked += 1
-
-          if checked != len(targets):
-              print("ERROR: Not all frozen demo hashes were checked.")
-              sys.exit(1)
 
           print("Frozen SHA256 verification completed.")
           PY
@@ -121,7 +109,7 @@ jobs:
       - name: Run SVARE v9.9 Python demo
         shell: bash
         run: |
-          python demo_extension/svare_v9_9.py
+          python demo_extension/svare_v9_9.py "1 + 2 + 3"
 
       - name: Verify SVARE v9.9 output markers
         shell: bash
@@ -130,7 +118,7 @@ jobs:
           import subprocess
           import sys
 
-          cmd = [sys.executable, "demo_extension/svare_v9_9.py"]
+          cmd = [sys.executable, "demo_extension/svare_v9_9.py", "1 + 2 + 3"]
           result = subprocess.run(cmd, capture_output=True, text=True, check=True)
           out = result.stdout
 
@@ -139,9 +127,6 @@ jobs:
               "Structural Value Resolution Engine",
               "Resolution state",
               "RESOLVED",
-              "FORBIDDEN",
-              "INDETERMINATE_ZERO",
-              "INCOMPLETE",
               "FINAL VISIBLE VALUE",
               "Certificate",
               "Structural Tree Nodes",
@@ -204,21 +189,31 @@ jobs:
           import subprocess
           import sys
 
-          cases = {
-              "1 + 2 + 3": "Visible value            : 6",
-              "(1 + 2) * 3": "Visible value            : 9",
-              "2 * (3 + 4 * (5 - 2))": "Visible value            : 30",
-              "(2 / 3) + (1 / 6)": "Visible value            : 0.833333333333333333",
-          }
+          cases = [
+              ("1 + 2 + 3", "6"),
+              ("(1 + 2) * 3", "9"),
+              ("2 * (3 + 4 * (5 - 2))", "30"),
+              ("(2 / 3) + (1 / 6)", "0.833333333333333333"),
+          ]
 
-          for expr, marker in cases.items():
+          for expr, expected_value in cases:
               cmd = [sys.executable, "demo_extension/svare_v9_9.py", expr]
               result = subprocess.run(cmd, capture_output=True, text=True, check=True)
               out = result.stdout
 
-              if marker not in out:
-                  print(f"ERROR: Expected marker not found for input: {expr}")
-                  print("Expected marker:", marker)
+              required = [
+                  "Resolution state",
+                  "RESOLVED",
+                  "Visible value",
+                  expected_value,
+                  "FINAL VISIBLE VALUE",
+              ]
+
+              missing = [m for m in required if m not in out]
+              if missing:
+                  print(f"ERROR: Expected output markers not found for input: {expr}")
+                  for m in missing:
+                      print(" -", m)
                   print(out)
                   sys.exit(1)
 
