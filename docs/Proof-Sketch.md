@@ -383,14 +383,14 @@ Thus:
 
 ---
 
-## **14. Canonical Value Identity — Future Direction**
+## **14. Canonical Value Identity — Future Extension**
 
 Different valid structures may represent the same value:
 
 `STATE_A -> VALUE_X`  
 `STATE_B -> VALUE_X`
 
-In Phase I:
+In the current reference implementation:
 
 These may produce identical visible values,  
 but certificate identity depends on structural encoding.
@@ -446,21 +446,31 @@ This proof sketch establishes that SVARE has the following properties:
 
 ---
 
-## **Scope Note — Phase I**
+## **Scope Note — Current Reference Model (v9.9)**
 
-This proof sketch applies to the SVARE Phase I reference model.
+This proof sketch applies to the current SVARE v9.9 reference model.
+
+The proof covers:
+
+- expression-tree resolution
+- chained expressions
+- grouped expressions
+- nested expressions
+- deterministic resolution states
+- structural certificates
+- visibility-layer control
 
 It does not include:
 
-- chained structural resolution  
-- multi-step dependency propagation  
-- symbolic algebra systems  
-- hierarchical structural graphs  
+- symbolic algebra systems
+- equation solving
+- calculus
+- hierarchical structural graphs
+- canonical value identity
 
 It demonstrates:
 
-that value correctness can be derived from structure  
-without relying on computation, arithmetic execution, or evaluation pipelines.
+that deterministic value admissibility can be governed by structural completeness and consistency before representation-specific execution behavior becomes relevant.
 
 ---
 
