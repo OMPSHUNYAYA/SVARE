@@ -2,12 +2,9 @@
 
 **Structural Value Resolution Engine (SVARE) — Correctness Without Computation**
 
-**Deterministic • Structure-Based • No Arithmetic • No Computation • No Order Dependency**
+**Current Public Release: SVARE v9.9**
 
-Removes dependency on:  
-arithmetic → computation → evaluation → floating-point systems  
-
-Yet value correctness remains.
+**Deterministic • Structure-Based • Expression-Tree Resolution • Explicit States • No Floating-Point Dependency**
 
 ---
 
@@ -25,49 +22,65 @@ If correctness remains after removing a dependency, that dependency was never fu
 
 ## 🧠 **Practical Interpretation**
 
-Use existing systems to represent numbers.  
+Use existing systems to represent numbers.
 
-Use SVARE to determine whether a value is structurally correct.
+Use SVARE to determine whether a value is structurally admissible.
+
+SVARE v9.9 resolves complete structural expression trees.
 
 ---
 
 ## ⚡ **30-Second Proof**
 
-Run the reference demonstration:
+Run the current reference demonstration:
 
 ```
-python demo/svare_v8_1.py
+python demo_extension/svare_v9_9.py
 ```
 
-If the same structure produces the same value across runs,  
-then computation is not defining correctness — structure is.
+Run a single expression:
+
+```
+python demo_extension/svare_v9_9.py "1 + 2 + 3"
+```
+
+Run a nested expression tree:
+
+```
+python demo_extension/svare_v9_9.py "2 * (3 + 4 * (5 - 2))"
+```
+
+If the same structural encoding produces the same value across runs, then computation is not defining correctness — structure is.
 
 ---
 
 ## 🔍 **What to Observe**
 
-- Value is revealed directly from structure — not from computation  
-- No arithmetic execution is required as the source of correctness  
-- No floating-point approximation is required  
-- No evaluation order is required  
-
-- Incomplete structure produces no value (`INCOMPLETE`)  
-- Conflicting structure produces no value (`CONFLICT`)  
-- Complete structure produces deterministic value (`RESOLVED`)  
-
-- Identical structure produces identical value  
-- Certificate identity depends on structural encoding  
-  (canonical identity is a future extension)
+- value is revealed from structure
+- expression trees resolve deterministically
+- child nodes resolve before parent nodes
+- no floating-point approximation is required as the source of correctness
+- no evaluation-order dependency is required as the source of correctness
+- incomplete structure produces no value (`INCOMPLETE`)
+- forbidden structure produces no value (`FORBIDDEN`)
+- indeterminate Zero structure produces no ordinary value (`INDETERMINATE_ZERO`)
+- conflicting structure produces no value (`CONFLICT`)
+- complete structure produces deterministic value (`RESOLVED`)
+- identical structural encoding produces identical value
+- certificate identity depends on structural encoding
+- canonical same-certificate identity is a future extension
 
 ---
 
 ## 🔬 **Resolution Function**
 
-`resolve(structure)` →
+`resolve(structure) ->`
 
-- `RESOLVED`, if structure uniquely resolves  
-- `INCOMPLETE`, if structure is incomplete  
-- `CONFLICT`, if structure is inconsistent  
+- `RESOLVED`, if structure uniquely resolves
+- `FORBIDDEN`, if structure contains an invalid operation
+- `INDETERMINATE_ZERO`, if Zero divided by Zero cannot uniquely resolve
+- `INCOMPLETE`, if structure is incomplete
+- `CONFLICT`, if structure is inconsistent
 
 where:
 
@@ -77,11 +90,13 @@ where:
 
 ## 🧠 **Conclusion**
 
-Different execution  
-Same structure  
-No computation dependency  
+Different execution
 
-→ Same value (and resolution state)
+Same structure
+
+No computation dependency as the source of correctness
+
+→ same value and same resolution state
 
 ---
 
@@ -89,15 +104,18 @@ No computation dependency
 
 SVARE shows that a value system can:
 
-- determine value admissibility without floating-point dependency 
-- operate without arithmetic execution  
-- operate without evaluation pipelines  
-- preserve precision without floating-point dependency  
-- reveal only structurally valid value  
-- remain silent when structure is incomplete  
-- produce deterministic value outcomes  
+- determine value admissibility without floating-point dependency
+- resolve expression trees structurally
+- operate without arithmetic execution as the source of correctness
+- operate without evaluation pipelines as the source of correctness
+- preserve precision without floating-point approximation
+- reveal only structurally valid value
+- remain silent when structure is incomplete
+- refuse value when structure is forbidden or conflicting
+- produce deterministic value outcomes
 
-`value != computation`  
+`value != computation`
+
 `value = resolve(structure)`
 
 ---
@@ -110,7 +128,8 @@ SVARE shows that a value system can:
 
 Value correctness exists independently of computation.
 
-Computation may reveal value.  
+Computation may reveal value.
+
 It does not determine it.
 
 ---
@@ -119,12 +138,11 @@ It does not determine it.
 
 The reference demonstration may perform internal evaluation.
 
-However, this evaluation is not computation in the classical sense — it is structural resolution.
+However, this evaluation is not the source of correctness.
 
-Computation may exist as an implementation detail, but it is not the source of correctness.
+Computation may exist as an implementation detail, but it is not the source of value truth.
 
-Correctness is determined solely by structural sufficiency —  
-not by arithmetic execution, evaluation pipelines, or numeric procedures.
+Correctness is determined solely by structural sufficiency.
 
 Evaluation functions only as a resolution substrate.
 
@@ -132,19 +150,11 @@ Evaluation functions only as a resolution substrate.
 
 ## 🔍 **Structural Value Model**
 
-A value is not produced through calculation.  
+A value is not produced through calculation.
+
 It is revealed through structure.
 
 Calculation is one way to reach value — not the source of its correctness.
-
-**Example structure:**
-
-- magnitude = 5  
-- depth = 0  
-- direction = +  
-- conflict = False  
-
-→ value becomes visible
 
 Resolution occurs only when structure is complete AND consistent.
 
@@ -152,11 +162,11 @@ Resolution occurs only when structure is complete AND consistent.
 
 ## 📌 **Note**
 
-Inputs represent structural conditions — not calculation steps.
+Inputs represent structural conditions through ordinary expressions.
 
-They define admissible value.
+They define admissible structure.
 
-No evaluation sequence or computation pipeline is required.
+No floating-point execution behavior is required as the source of correctness.
 
 ---
 
@@ -164,11 +174,13 @@ No evaluation sequence or computation pipeline is required.
 
 SVARE does not:
 
-- perform arithmetic computation  
-- execute evaluation pipelines  
-- depend on floating-point systems  
-- require ordered evaluation  
-- force value when structure is incomplete  
+- replace all arithmetic systems
+- act as a production calculator
+- provide symbolic algebra
+- solve equations
+- provide calculus, logarithmic, trigonometric, or graphing functions
+- certify financial, scientific, or safety-critical systems
+- force value when structure is incomplete, forbidden, indeterminate, or conflicting
 
 ---
 
@@ -176,20 +188,26 @@ SVARE does not:
 
 SVARE:
 
-- evaluates structure deterministically  
-- reveals only valid value  
-- supports incomplete structure safely  
-- prevents arbitrary value under conflict  
-- ensures identical outcomes for identical structure  
+- resolves structure deterministically
+- supports expression-tree resolution in v9.9
+- supports chained expressions
+- supports grouped expressions
+- supports nested expressions
+- supports unary signs
+- reveals only valid value
+- supports incomplete structure safely
+- prevents arbitrary value under conflict
+- preserves deterministic certificates for identical structural encoding
+- ensures identical outcomes for identical structure
 
 ---
 
 ## ⚙️ **Minimum Requirements**
 
-- Python 3.9+  
-- Standard library only  
-- No external dependencies  
-- Runs fully offline  
+- Python 3.9+
+- Standard library only
+- No external dependencies
+- Runs fully offline
 
 ---
 
@@ -198,65 +216,130 @@ SVARE:
 ```
 SVARE/
 
-├── README.md  
-├── LICENSE  
+├── README.md
+├── LICENSE
 
-├── demo/  
-│   ├── svare_v8_1.py  
-│   └── SVARE_HTML_v8_1.html  
+├── demo/
+│   ├── svare_v8_1.py
+│   └── SVARE_HTML_v8_1.html
 
-├── docs/  
-│   ├── FAQ.md  
-│   ├── Proof-Sketch.md  
-│   ├── SVARE-Architecture-Notes.md  
-│   ├── SVARE_v1.3.pdf  
-│   ├── SVARE-Diagram.png  
-│   ├── SVARE-Challenge.md  
-│   ├── Dependency-Elimination-Framework.png  
-│   └── Shunyaya-Structural-Stack.png  
+├── demo_extension/
+│   ├── svare_v9_9.py
+│   └── SVARE_HTML_v9_9.html
 
-└── VERIFY/  
-    ├── VERIFY.txt  
-    └── FREEZE_DEMO_SHA256.txt  
+├── concept_demo/
+│   └── SVARE_Deterministic_Structural_Cinema_v8_8.py
+
+├── docs/
+│   ├── Quickstart.md
+│   ├── FAQ.md
+│   ├── Proof-Sketch.md
+│   ├── SVARE-Architecture-Notes.md
+│   ├── SVARE_v1.3.pdf
+│   ├── SVARE_Diagram.png
+│   ├── SVARE-Challenge.md
+│   ├── Dependency-Elimination-Framework.png
+│   └── Shunyaya-Structural-Stack.png
+
+└── VERIFY/
+    ├── VERIFY.txt
+    └── FREEZE_DEMO_SHA256.txt
 ```
 
 ---
 
-## ⚡ **Run Again (Determinism Check)**
+## ⚡ **Run Again — Determinism Check**
 
 ```
-python demo/svare_v8_1.py
+python demo_extension/svare_v9_9.py "1 + 2 + 3"
 ```
+
+```
+python demo_extension/svare_v9_9.py "1 + 2 + 3"
+```
+
+Expected:
+
+- identical value
+- identical resolution state
+- identical certificate
+- identical structural tree
 
 ---
 
 ## ✅ **Expected Behavior**
 
-- Complete structure → value visible (`RESOLVED`)  
-- Incomplete structure → no value (`INCOMPLETE`)  
-- Conflicting structure → no value (`CONFLICT`)  
+- Complete structure → value visible (`RESOLVED`)
+- Invalid denominator → no ordinary value (`FORBIDDEN`)
+- Zero divided by Zero → indeterminate value (`INDETERMINATE_ZERO`)
+- Incomplete structure → no value (`INCOMPLETE`)
+- Conflicting structure → no value (`CONFLICT`)
 
 Only structurally valid value becomes visible.
 
-No arithmetic required.  
-No computation dependency for correctness. 
-No evaluation order required.
+No floating-point approximation is required as the source of correctness.
+
+No evaluation-order behavior is required as the source of correctness.
 
 ---
 
-## 🔁 **Determinism Check**
-
-Run multiple times:
+## 🔁 **Representative Tests**
 
 ```
-python demo/svare_v8_1.py
+python demo_extension/svare_v9_9.py "1 + 2 + 3"
 ```
 
 Expected:
 
-- identical value  
-- identical resolution state  
-- identical certificate (for identical structural encoding)
+`6`
+
+```
+python demo_extension/svare_v9_9.py "(1 + 2) * 3"
+```
+
+Expected:
+
+`9`
+
+```
+python demo_extension/svare_v9_9.py "2 * (3 + 4 * (5 - 2))"
+```
+
+Expected:
+
+`30`
+
+```
+python demo_extension/svare_v9_9.py "(2 / 3) + (1 / 6)"
+```
+
+Expected:
+
+`0.833333333333333333`
+
+```
+python demo_extension/svare_v9_9.py "2 / (3 - 3)"
+```
+
+Expected:
+
+`FORBIDDEN`
+
+```
+python demo_extension/svare_v9_9.py "0 / 0"
+```
+
+Expected:
+
+`INDETERMINATE_ZERO`
+
+```
+python demo_extension/svare_v9_9.py "(1 + 2"
+```
+
+Expected:
+
+`INCOMPLETE`
 
 ---
 
@@ -268,11 +351,10 @@ Final outcome depends only on:
 
 Not on:
 
-- computation  
-- arithmetic  
-- evaluation order  
-- floating-point systems  
-- execution timing  
+- computation as source of correctness
+- arithmetic execution as source of correctness
+- floating-point systems as source of correctness
+- execution timing
 
 ---
 
@@ -280,11 +362,13 @@ Not on:
 
 `same structure -> same value`
 
-certificate identity depends on structural encoding  
-(canonical same-certificate identity is a future extension)
+certificate identity depends on structural encoding
 
-Value represents structural truth.  
-Certificate provides reproducible proof derived from that structure.
+canonical same-certificate identity is a future extension
+
+Value represents structural truth.
+
+Certificate provides reproducible proof derived from structural encoding.
 
 ---
 
@@ -292,42 +376,49 @@ Certificate provides reproducible proof derived from that structure.
 
 `normalized_value = normalize(value)`
 
-`certificate = hash(normalized_value)`
+Certificate generation in SVARE v9.9 incorporates:
 
-Normalization ensures:
+- version
+- structural encoding
+- resolution state
+- visible value
+- visibility depth
 
-- consistent value representation  
-- reduced formatting variance  
+Normalization helps reduce formatting variance.
 
-Note: certificate identity still depends on structural encoding (not fully canonical in Phase I).
+Certificate identity depends on structural encoding and the resolved outcome in v9.9.
 
 Thus:
 
-`same structure -> same normalized value -> same certificate`
+`same structural encoding -> same value -> same certificate`
+
+for identical resolution conditions.
 
 ---
 
 ## 🔁 **Cross-System Determinism**
 
-Given identical structure:
+Given identical structural encoding:
 
 `S1 = S2 -> Value1 = Value2 -> Certificate1 = Certificate2`
 
 This ensures:
 
-- reproducibility  
-- independent agreement  
-- deterministic value  
+- reproducibility
+- independent agreement
+- deterministic value
 
 ---
 
 ## ⚡ **Structural Behavior**
 
-Condition               Result  
-----------------------  -----------------------------  
-structure resolved      value visible (RESOLVED)  
-structure incomplete    no value (INCOMPLETE)  
-structure inconsistent  no value (CONFLICT)  
+Condition               Result
+----------------------  -----------------------------
+structure resolved      value visible (`RESOLVED`)
+invalid operation       no ordinary value (`FORBIDDEN`)
+Zero divided by Zero    indeterminate (`INDETERMINATE_ZERO`)
+structure incomplete    no value (`INCOMPLETE`)
+structure inconsistent  no value (`CONFLICT`)
 
 ---
 
@@ -335,10 +426,13 @@ structure inconsistent  no value (CONFLICT)
 
 For each structural condition:
 
-if structure satisfies all conditions:  
-    value becomes visible  
-else:  
-    value remains absent  
+if structure satisfies all conditions:
+
+    value becomes visible
+
+else:
+
+    value remains absent or structurally refused
 
 No computation dependency is required for correctness.
 
@@ -346,20 +440,20 @@ No computation dependency is required for correctness.
 
 ## 📌 **What SVARE Proves**
 
-- value correctness without computation  
-- value correctness without arithmetic  
-- value correctness without evaluation pipelines  
-- deterministic value from structure alone  
+- value correctness without computation dependency
+- value correctness without floating-point dependency
+- value correctness without evaluation-order dependency
+- deterministic value from structure
 
 ---
 
 ## 🌍 **Real-World Implications**
 
-- high-precision numeric systems  
-- financial validation systems  
-- scientific verification systems  
-- deep decimal accuracy systems  
-- future structure-first computation systems  
+- high-precision numeric systems
+- financial validation systems
+- scientific verification systems
+- deep decimal accuracy systems
+- future structure-first computation systems
 
 ---
 
@@ -367,18 +461,21 @@ No computation dependency is required for correctness.
 
 **Immediate**
 
-- validation layers  
-- value correctness checks  
+- validation layers
+- value correctness checks
+- deterministic reproducibility tests
 
 **Intermediate**
 
-- precision-critical systems  
-- deterministic verification systems  
+- precision-critical systems
+- deterministic verification systems
+- structural expression validation
 
 **Advanced**
 
-- structure-first computation models  
-- cross-domain structural systems  
+- structure-first computation models
+- cross-domain structural systems
+- canonical structural certificates
 
 ---
 
@@ -386,11 +483,13 @@ No computation dependency is required for correctness.
 
 SVARE does not claim:
 
-- replacement of all arithmetic systems  
-- elimination of computation engines  
-- full symbolic algebra capability  
-- support for chained expressions in Phase I  
-- proof of physical measurement systems  
+- replacement of all arithmetic systems
+- elimination of all internal implementation work
+- full symbolic algebra capability
+- equation solving
+- trigonometric, logarithmic, or calculus functions
+- proof of physical measurement systems
+- safety-critical deployment readiness
 
 It introduces a different correctness model.
 
@@ -402,18 +501,22 @@ It introduces a different correctness model.
 
 `structure_A = structure_B -> value must match`
 
-certificate identity depends on structural encoding  
-(canonical same-certificate identity is a future extension)
+certificate identity depends on structural encoding
+
+canonical same-certificate identity is a future extension
 
 ---
 
 # ⭐ **Final Summary**
 
-SVARE demonstrates that value correctness can be determined deterministically from complete and consistent structure.
+SVARE v9.9 demonstrates that value correctness can be determined deterministically from complete and consistent structure.
 
-It produces identical value (and resolution state) for identical structure.
+It extends SVARE from single structural relations to structural expression trees.
+
+It produces identical value, resolution state, and certificate for identical structural encoding.
 
 Correctness does not depend on floating-point approximation, evaluation-order dependency, or execution-specific behavior as the source of truth.
 
-Certificate identity depends on structural encoding.  
+Certificate identity depends on structural encoding.
+
 Canonical same-certificate identity is a future extension.
