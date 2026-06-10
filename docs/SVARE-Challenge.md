@@ -133,20 +133,28 @@ All SVARE outputs reflect **structure-preserving resolution**, not approximation
 
 **Expression:**
 
-`2 / 3 depth 8`
-
-(depth is an explicit structural parameter controlling visible precision)
+`2 / 3`
 
 **Classical systems:**
 
 → approximated decimal  
-→ rounding applied  
+→ finite visible precision  
+→ rounding depends on representation rules  
 
-**SVARE:**
+**SVARE v9.9:**
 
-→ repeating structure preserved up to specified depth  
-→ no hidden rounding  
-→ precision controlled explicitly by structural depth  
+→ recurring structure remains visible  
+→ visibility depth is explicit and user-controlled  
+→ no hidden precision loss beyond the chosen visibility depth  
+→ structural recurrence remains observable
+
+**Observation:**
+
+Visibility depth controls what is shown.
+
+Depth is a structural property.
+
+Depth is not merely the number of displayed decimal digits.
 
 ---
 
@@ -217,6 +225,38 @@ contradictory structure definitions
 → preserves depth and direction before visibility  
 → resolves the value without rejecting the input  
 → visible value reflects the resolved structural contribution  
+
+---
+
+## **Case 9 — Explicit Structural Resolution States**
+
+**Expressions:**
+
+`2 / (3 - 3)`
+
+`0 / 0`
+
+`(1 + 2`
+
+**Classical systems:**
+
+→ error  
+→ exception  
+→ implementation-specific handling  
+
+**SVARE v9.9:**
+
+`2 / (3 - 3)` → `FORBIDDEN`
+
+`0 / 0` → `INDETERMINATE_ZERO`
+
+`(1 + 2` → `INCOMPLETE`
+
+**Observation:**
+
+Different structural conditions produce different explicit resolution states.
+
+Structural non-resolution is not collapsed into a generic error.
 
 ---
 
