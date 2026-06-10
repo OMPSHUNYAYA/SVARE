@@ -28,18 +28,25 @@ jobs:
           required_paths = [
               "README.md",
               "LICENSE",
+
               "demo/svare_v8_1.py",
               "demo/SVARE_HTML_v8_1.html",
+
+              "demo_extension/svare_v9_9.py",
+              "demo_extension/SVARE_HTML_v9_9.html",
+
               "concept_demo/SVARE_Deterministic_Structural_Cinema_v8_8.py",
+
               "docs/Quickstart.md",
               "docs/FAQ.md",
               "docs/Proof-Sketch.md",
               "docs/SVARE-Architecture-Notes.md",
               "docs/SVARE-Challenge.md",
-              "docs/SVARE_v.1.3.pdf",
               "docs/SVARE_Diagram.png",
               "docs/Dependency-Elimination-Framework.png",
               "docs/Shunyaya-Structural-Stack.png",
+              "docs/archive/SVARE_v1.3_Historical_Architecture.pdf",
+
               "VERIFY/VERIFY.txt",
               "VERIFY/FREEZE_DEMO_SHA256.txt",
           ]
@@ -66,6 +73,8 @@ jobs:
           freeze_path = Path("VERIFY/FREEZE_DEMO_SHA256.txt")
 
           targets = {
+              "demo_extension/svare_v9_9.py": Path("demo_extension/svare_v9_9.py"),
+              "demo_extension/SVARE_HTML_v9_9.html": Path("demo_extension/SVARE_HTML_v9_9.html"),
               "demo/svare_v8_1.py": Path("demo/svare_v8_1.py"),
               "demo/SVARE_HTML_v8_1.html": Path("demo/SVARE_HTML_v8_1.html"),
           }
@@ -109,32 +118,33 @@ jobs:
           print("Frozen SHA256 verification completed.")
           PY
 
-      - name: Run SVARE Python demo
+      - name: Run SVARE v9.9 Python demo
         shell: bash
         run: |
-          python demo/svare_v8_1.py
+          python demo_extension/svare_v9_9.py
 
-      - name: Verify SVARE output markers
+      - name: Verify SVARE v9.9 output markers
         shell: bash
         run: |
           python - <<'PY'
           import subprocess
           import sys
 
-          cmd = [sys.executable, "demo/svare_v8_1.py"]
+          cmd = [sys.executable, "demo_extension/svare_v9_9.py"]
           result = subprocess.run(cmd, capture_output=True, text=True, check=True)
           out = result.stdout
 
           required_markers = [
-              "SVARE v8.1",
+              "SVARE v9.9",
               "Structural Value Resolution Engine",
-              "value_visible iff structure_uniquely_resolves",
               "Resolution state",
               "RESOLVED",
               "FORBIDDEN",
               "INDETERMINATE_ZERO",
+              "INCOMPLETE",
               "FINAL VISIBLE VALUE",
               "Certificate",
+              "Structural Tree Nodes",
           ]
 
           missing = [marker for marker in required_markers if marker not in out]
@@ -146,7 +156,7 @@ jobs:
               print(out)
               sys.exit(1)
 
-          print("SVARE output markers verified.")
+          print("SVARE v9.9 output markers verified.")
           PY
 
       - name: Verify deterministic single-input output
@@ -156,7 +166,7 @@ jobs:
           import subprocess
           import sys
 
-          cmd = [sys.executable, "demo/svare_v8_1.py", "5 + 2"]
+          cmd = [sys.executable, "demo_extension/svare_v9_9.py", "1 + 2 + 3"]
 
           result1 = subprocess.run(cmd, capture_output=True, text=True, check=True)
           result2 = subprocess.run(cmd, capture_output=True, text=True, check=True)
@@ -166,13 +176,14 @@ jobs:
               sys.exit(1)
 
           required = [
-              "Surface expression",
-              "5 + 2",
+              "SVARE v9.9",
               "Resolution state",
               "RESOLVED",
               "Visible value",
-              "7",
+              "6",
               "Certificate",
+              "Structural Tree Nodes",
+              "MERGE",
           ]
 
           missing = [m for m in required if m not in result1.stdout]
@@ -186,7 +197,7 @@ jobs:
           print("Deterministic single-input output verified.")
           PY
 
-      - name: Verify SVARE edge states
+      - name: Verify expression-tree examples
         shell: bash
         run: |
           python - <<'PY'
@@ -194,13 +205,44 @@ jobs:
           import sys
 
           cases = {
-              "9 / 0": "FORBIDDEN",
-              "0 / 0": "INDETERMINATE_ZERO",
-              "2 / 3 depth 8": "RESOLVED",
+              "1 + 2 + 3": "Visible value            : 6",
+              "(1 + 2) * 3": "Visible value            : 9",
+              "2 * (3 + 4 * (5 - 2))": "Visible value            : 30",
+              "(2 / 3) + (1 / 6)": "Visible value            : 0.833333333333333333",
           }
 
           for expr, marker in cases.items():
-              cmd = [sys.executable, "demo/svare_v8_1.py", expr]
+              cmd = [sys.executable, "demo_extension/svare_v9_9.py", expr]
+              result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+              out = result.stdout
+
+              if marker not in out:
+                  print(f"ERROR: Expected marker not found for input: {expr}")
+                  print("Expected marker:", marker)
+                  print(out)
+                  sys.exit(1)
+
+              print(f"Verified expression tree: {expr}")
+
+          print("Expression-tree examples verified.")
+          PY
+
+      - name: Verify SVARE v9.9 edge states
+        shell: bash
+        run: |
+          python - <<'PY'
+          import subprocess
+          import sys
+
+          cases = {
+              "2 / (3 - 3)": "FORBIDDEN",
+              "0 / 0": "INDETERMINATE_ZERO",
+              "(1 + 2": "INCOMPLETE",
+              "depth 24 (2 / 3)": "RESOLVED",
+          }
+
+          for expr, marker in cases.items():
+              cmd = [sys.executable, "demo_extension/svare_v9_9.py", expr]
               result = subprocess.run(cmd, capture_output=True, text=True, check=True)
               out = result.stdout
 
@@ -211,27 +253,30 @@ jobs:
 
               print(f"Verified {expr}: {marker}")
 
-          print("SVARE edge states verified.")
+          print("SVARE v9.9 edge states verified.")
           PY
 
-      - name: Verify HTML demo contains expected structural hooks
+      - name: Verify HTML v9.9 demo contains expected structural hooks
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
           import sys
 
-          text = Path("demo/SVARE_HTML_v8_1.html").read_text(encoding="utf-8")
+          text = Path("demo_extension/SVARE_HTML_v9_9.html").read_text(encoding="utf-8")
 
           required_snippets = [
-              "SVARE",
-              "Structural Value Resolution",
+              "SVARE v9.9",
+              "Structural Value Resolution Engine",
               "value_visible iff structure_uniquely_resolves",
               "RESOLVED",
               "INCOMPLETE",
               "CONFLICT",
               "FORBIDDEN",
               "INDETERMINATE_ZERO",
+              "Expression",
+              "Structure Inspector",
+              "Decimal Visibility Limit",
           ]
 
           missing = [snippet for snippet in required_snippets if snippet not in text]
@@ -241,7 +286,7 @@ jobs:
                   print(" -", snippet)
               sys.exit(1)
 
-          print("HTML demo structural hooks verified.")
+          print("HTML v9.9 demo structural hooks verified.")
           PY
 
       - name: Verify README contains current SVARE claims
@@ -256,13 +301,15 @@ jobs:
           required_snippets = [
               "Structural Value Resolution Engine",
               "Correctness Without Computation",
+              "SVARE v9.9",
+              "structural expression-tree resolver",
               "value_visible iff structure_uniquely_resolves",
               "structure_uniquely_resolves = complete AND consistent",
               "value_visibility = resolve(structure)",
               "Computation may reveal value",
               "It does not create or determine correctness",
               "SVARE Challenge",
-              "demo/svare_v8_1.py",
+              "demo_extension/svare_v9_9.py",
               "VERIFY/FREEZE_DEMO_SHA256.txt",
           ]
 
