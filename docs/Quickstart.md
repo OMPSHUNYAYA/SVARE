@@ -235,11 +235,13 @@ SVARE/
 │   ├── FAQ.md
 │   ├── Proof-Sketch.md
 │   ├── SVARE-Architecture-Notes.md
-│   ├── SVARE_v1.3.pdf
 │   ├── SVARE_Diagram.png
 │   ├── SVARE-Challenge.md
 │   ├── Dependency-Elimination-Framework.png
-│   └── Shunyaya-Structural-Stack.png
+│   ├── Shunyaya-Structural-Stack.png
+│   │
+│   └── archive/
+│       └── SVARE_v1.3_Historical_Architecture.pdf
 
 └── VERIFY/
     ├── VERIFY.txt
