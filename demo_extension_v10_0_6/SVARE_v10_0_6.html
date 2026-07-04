@@ -1,0 +1,3276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SVARE v10.0.6 — Exact and Scientific Resolution</title>
+<style>
+:root{--bg:#070b12;--panel:#101826;--panel2:#0b1322;--text:#f4f7fb;--muted:#aab7c8;--line:#293a55;--accent:#80ead0;--accent2:#9eb9ff;--warn:#ffd166;--bad:#ff9aa8;--good:#93f0bd;--mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;--font:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 9% 0%,rgba(157,184,255,.17),transparent 32%),radial-gradient(circle at 100% 0%,rgba(128,234,208,.12),transparent 29%),linear-gradient(180deg,#070b12,#0b1220);color:var(--text);font-family:var(--font);padding:14px}.wrap{max-width:1180px;margin:0 auto}.topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin:2px 0 12px}.brand{font-size:clamp(1rem,2.1vw,1.35rem);font-weight:900;letter-spacing:.05em}.edition{text-align:right}.edition strong{display:block;font-size:clamp(.78rem,1.45vw,1rem)}.edition span{color:var(--muted);font-size:.78rem}.hero{display:grid;grid-template-columns:minmax(320px,.9fr) minmax(360px,1.1fr);gap:12px}.card{background:rgba(16,24,38,.93);border:1px solid var(--line);border-radius:22px;box-shadow:0 18px 60px rgba(0,0,0,.27);padding:16px}.input-card{display:grid;gap:11px;align-content:start}label,.k{color:var(--warn);font-size:.72rem;font-weight:950;letter-spacing:.09em;text-transform:uppercase}textarea{width:100%;min-height:76px;max-height:260px;resize:none;overflow:hidden;border-radius:16px;border:1px solid #344b6d;background:#050913;color:var(--text);padding:15px 14px;font-size:1.04rem;line-height:1.45;outline:none;font-family:var(--mono);overflow-wrap:anywhere}textarea:focus,select:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(157,184,255,.14)}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}button{border:0;border-radius:999px;padding:11px 15px;font-weight:900;cursor:pointer;color:#07111f;background:linear-gradient(135deg,var(--accent2),var(--accent));box-shadow:0 7px 0 rgba(0,0,0,.28),0 14px 26px rgba(0,0,0,.22);transition:transform .08s ease,box-shadow .08s ease,filter .08s ease}button:hover{filter:brightness(1.05)}button:active{transform:translateY(4px) scale(.985);box-shadow:0 2px 0 rgba(0,0,0,.36),inset 0 4px 10px rgba(0,0,0,.24)}button.secondary{color:var(--text);background:#172338;border:1px solid var(--line)}select{appearance:none;border:1px solid #334765;border-radius:999px;background:#050913;color:var(--text);font-family:var(--mono);font-weight:900;padding:9px 30px 9px 12px;outline:none}.precision{margin-left:auto;display:flex;align-items:center;gap:7px;color:var(--muted);font-size:.76rem;font-weight:800}.small-note{color:var(--muted);font-size:.79rem;line-height:1.5}.examples{border-top:1px solid rgba(128,234,208,.22);padding-top:12px}.examples summary{cursor:pointer;color:var(--muted);font-weight:850}.chips{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}.chip{border:1px solid var(--line);background:#0c1423;color:#dce7f7;border-radius:13px;padding:9px 10px;font-size:.76rem;line-height:1.35;font-family:var(--mono);cursor:pointer;overflow-wrap:anywhere}.chip:hover{border-color:var(--accent);background:#101b2d}.output{display:grid;gap:10px}.primary{background:linear-gradient(135deg,rgba(128,234,208,.14),rgba(157,184,255,.1)),#09101d;border:1px solid #2c4767;border-radius:18px;padding:14px}.resolved-value{font-family:var(--mono);font-size:clamp(1.35rem,3vw,1.95rem);font-weight:900;letter-spacing:-.02em;line-height:1.12;overflow-wrap:anywhere;margin-top:7px}.resolved-meta{color:var(--muted);font-size:.78rem;line-height:1.4;margin-top:7px}.exact-panel{margin-top:14px;padding-top:13px;border-top:1px solid rgba(157,184,255,.24)}.exact-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.exact-form{font-family:var(--mono);font-size:1rem;color:#d9e7fa;line-height:1.45;overflow-wrap:anywhere;margin-top:8px}.badge{display:inline-flex;align-items:center;border:1px solid rgba(128,234,208,.38);border-radius:999px;padding:5px 9px;background:rgba(128,234,208,.08);color:var(--good);font-family:var(--mono);font-size:.7rem;font-weight:900;letter-spacing:.05em}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.mini{background:var(--panel2);border:1px solid var(--line);border-radius:15px;padding:10px;min-height:72px}.mini .v{font-family:var(--mono);font-size:.81rem;line-height:1.4;overflow-wrap:anywhere;margin-top:6px}.status-good{color:var(--good)}.status-bad{color:var(--bad)}.note{border:1px solid rgba(255,209,102,.3);background:rgba(255,209,102,.08);color:#ffe9a6;border-radius:15px;padding:10px;font-size:.85rem;line-height:1.5}.section{margin-top:12px}.section-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap;margin-bottom:10px}.section-title{font-weight:900;color:var(--muted)}.section-sub{color:var(--muted);font-size:.77rem}.inspector-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.node-list{display:grid;gap:8px;margin-top:10px}.node{background:#08101d;border:1px solid var(--line);border-radius:14px;padding:10px;font-family:var(--mono);font-size:.78rem;line-height:1.45;overflow-wrap:anywhere}.lower{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}details.card{padding:12px}summary{cursor:pointer;color:var(--muted);font-weight:850}pre{white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0 0;font-family:var(--mono);font-size:.79rem;line-height:1.5;color:#d9e7fa}.footer{text-align:center;color:var(--muted);font-size:.8rem;padding:15px 0 4px}.selftest{margin-top:10px;display:none}.selftest.show{display:block}.pass{color:var(--good)}.fail{color:var(--bad)}@media(max-width:900px){.hero,.lower{grid-template-columns:1fr}.grid,.inspector-grid{grid-template-columns:1fr 1fr}.chips{grid-template-columns:1fr}.precision{margin-left:0}}@media(max-width:560px){.topbar{display:block}.edition{text-align:left;margin-top:5px}.grid,.inspector-grid{grid-template-columns:1fr}body{padding:9px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<div class="topbar"><div class="brand">SVARE</div><div class="edition"><strong>Exact and Scientific Resolution</strong><span>v10.0.6 · standalone browser release</span></div></div>
+<section class="hero">
+<div class="card input-card">
+<label for="expr">Expression</label>
+<textarea id="expr" spellcheck="false">1.0000000000000001 - 1</textarea>
+<div class="row"><button id="resolve">Resolve</button><button id="clear" class="secondary">Clear</button><button id="copyValue" class="secondary">Copy value</button><button id="copyExact" class="secondary">Copy exact</button><button id="copyReceipt" class="secondary">Copy receipt</button><button id="download" class="secondary">Download JSON</button><div class="precision"><span>Significant digits</span><select id="precision"><option>12</option><option>18</option><option selected>30</option><option>48</option><option>72</option></select></div></div>
+<div class="small-note">The resolved decimal is shown prominently for immediate use. The exact mathematical form remains authoritative and defines the semantic certificate. Decimal precision affects only the display receipt.</div>
+<details class="examples" open><summary>Examples</summary><div class="chips">
+<div class="chip">1.0000000000000001 - 1</div><div class="chip">sin(pi/6) + cos(pi) + sqrt(2) + ln(2)</div><div class="chip">tan(pi/2)</div><div class="chip">sqrt(81) + abs(-9)</div><div class="chip">sin(pi/6) + cos(pi)</div><div class="chip">sin(deg(90)) + tan(pi/4)</div><div class="chip">sqrt(2) + ln(2)</div><div class="chip">log10(1000) + log(81,3)</div><div class="chip">asin(1/2) + atan(1)</div><div class="chip">exp(ln(7))</div><div class="chip">ln(-1)</div><div class="chip">gcd(84,30,18)</div><div class="chip">sqrt(2)^2</div><div class="chip">pi - pi</div><div class="chip">1/3</div><div class="chip">-3 % 2</div><div class="chip">-2^2</div><div class="chip">2^20 + 1/7</div><div class="chip">9^9^9</div>
+</div></details>
+</div>
+<div class="card output">
+<div class="primary"><div class="k">Resolved value</div><div id="resolvedValue" class="resolved-value">—</div><div id="resolvedMeta" class="resolved-meta">—</div><div class="exact-panel"><div class="exact-head"><div id="formLabel" class="k">Exact mathematical form</div><span id="exactBadge" class="badge">—</span></div><div id="exactValue" class="exact-form">—</div></div></div>
+<div class="grid"><div class="mini"><div class="k">State</div><div id="state" class="v">—</div></div><div class="mini"><div class="k">Resolution class</div><div id="class" class="v">—</div></div><div class="mini"><div class="k">Precision</div><div id="digits" class="v">—</div></div><div class="mini"><div class="k">Structure SHA-256</div><div id="structCert" class="v">—</div></div><div class="mini"><div class="k">Semantic SHA-256</div><div id="semanticCert" class="v">—</div></div><div class="mini"><div class="k">Display receipt</div><div id="displayCert" class="v">—</div></div></div>
+<div id="note" class="note">—</div>
+</div>
+</section>
+<section class="card section"><div class="section-head"><div class="section-title">Structure Inspector</div><div class="section-sub">Surface → normalized structure → exact semantic value → optional decimal display</div></div><div class="inspector-grid"><div class="mini"><div class="k">Surface</div><div id="surface" class="v">—</div></div><div class="mini"><div class="k">Canonical structure</div><div id="structure" class="v">—</div></div><div class="mini"><div class="k">Canonical semantic</div><div id="semantic" class="v">—</div></div><div class="mini"><div class="k">Certificate policy</div><div class="v">Exact identity excludes display precision</div></div></div><div id="nodes" class="node-list"></div></section>
+<section class="lower"><details class="card" open><summary>Resolution receipt</summary><pre id="receipt"></pre></details><details class="card"><summary>Function registry</summary><pre id="registry"></pre></details></section>
+<section class="card section"><div class="row"><button id="selfTest" class="secondary">Run release self-test</button><span class="small-note">Validates exact arithmetic, symbolic scientific functions, explicit limits, domain refusal, operator semantics, and semantic equivalence.</span></div><pre id="selfTestOutput" class="selftest"></pre></section>
+<div class="footer">SVARE v10.0.6 · exact rational core · exact symbolic scientific layer · deterministic offline certificates</div>
+</main>
+<script>/* decimal.js v10.6.0 | Copyright (c) 2025 Michael Mclaughlin | MIT License | https://github.com/MikeMcl/decimal.js */
+!function(n){"use strict";
+/*!
+   *  decimal.js v10.6.0
+   *  An arbitrary-precision Decimal type for JavaScript.
+   *  https://github.com/MikeMcl/decimal.js
+   *  Copyright (c) 2025 Michael Mclaughlin <M8ch88l@gmail.com>
+   *  MIT Licence
+   */var e,i,t,r,s=9e15,o=1e9,u="0123456789abcdef",c="2.3025850929940456840179914546843642076011014886287729760333279009675726096773524802359972050895982983419677840422862486334095254650828067566662873690987816894829072083255546808437998948262331985283935053089653777326288461633662222876982198867465436674744042432743651550489343149393914796194044002221051017141748003688084012647080685567743216228355220114804663715659121373450747856947683463616792101806445070648000277502684916746550586856935673420670581136429224554405758925724208241314695689016758940256776311356919292033376587141660230105703089634572075440370847469940168269282808481184289314848524948644871927809676271275775397027668605952496716674183485704422507197965004714951050492214776567636938662976979522110718264549734772662425709429322582798502585509785265383207606726317164309505995087807523710333101197857547331541421808427543863591778117054309827482385045648019095610299291824318237525357709750539565187697510374970888692180205189339507238539205144634197265287286965110862571492198849978748873771345686209167058",f="3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337867831652712019091456485669234603486104543266482133936072602491412737245870066063155881748815209209628292540917153643678925903600113305305488204665213841469519415116094330572703657595919530921861173819326117931051185480744623799627495673518857527248912279381830119491298336733624406566430860213949463952247371907021798609437027705392171762931767523846748184676694051320005681271452635608277857713427577896091736371787214684409012249534301465495853710507922796892589235420199561121290219608640344181598136297747713099605187072113499999983729780499510597317328160963185950244594553469083026425223082533446850352619311881710100031378387528865875332083814206171776691473035982534904287554687311595628638823537875937519577818577805321712268066130019278766111959092164201989380952572010654858632789",a={precision:20,rounding:4,modulo:1,toExpNeg:-7,toExpPos:21,minE:-s,maxE:s,crypto:!1},l=!0,d="[DecimalError] ",h=d+"Invalid argument: ",p=d+"Precision limit exceeded",g=d+"crypto unavailable",m="[object Decimal]",w=Math.floor,v=Math.pow,N=/^0b([01]+(\.[01]*)?|\.[01]+)(p[+-]?\d+)?$/i,b=/^0x([0-9a-f]+(\.[0-9a-f]*)?|\.[0-9a-f]+)(p[+-]?\d+)?$/i,E=/^0o([0-7]+(\.[0-7]*)?|\.[0-7]+)(p[+-]?\d+)?$/i,x=/^(\d+(\.\d*)?|\.\d+)(e[+-]?\d+)?$/i,y=1e7,M=c.length-1,q=f.length-1,O={toStringTag:m};function D(n){var e,i,t,r=n.length-1,s="",o=n[0];if(r>0){for(s+=o,e=1;e<r;e++)(i=7-(t=n[e]+"").length)&&(s+=k(i)),s+=t;(i=7-(t=(o=n[e])+"").length)&&(s+=k(i))}else if(0===o)return"0";for(;o%10==0;)o/=10;return s+o}function F(n,e,i){if(n!==~~n||n<e||n>i)throw Error(h+n)}function S(n,e,i,t){var r,s,o,u;for(s=n[0];s>=10;s/=10)--e;return--e<0?(e+=7,r=0):(r=Math.ceil((e+1)/7),e%=7),s=v(10,7-e),u=n[r]%s|0,null==t?e<3?(0==e?u=u/100|0:1==e&&(u=u/10|0),o=i<4&&99999==u||i>3&&49999==u||5e4==u||0==u):o=(i<4&&u+1==s||i>3&&u+1==s/2)&&(n[r+1]/s/100|0)==v(10,e-2)-1||(u==s/2||0==u)&&!(n[r+1]/s/100|0):e<4?(0==e?u=u/1e3|0:1==e?u=u/100|0:2==e&&(u=u/10|0),o=(t||i<4)&&9999==u||!t&&i>3&&4999==u):o=((t||i<4)&&u+1==s||!t&&i>3&&u+1==s/2)&&(n[r+1]/s/1e3|0)==v(10,e-3)-1,o}function A(n,e,i){for(var t,r,s=[0],o=0,c=n.length;o<c;){for(r=s.length;r--;)s[r]*=e;for(s[0]+=u.indexOf(n.charAt(o++)),t=0;t<s.length;t++)s[t]>i-1&&(void 0===s[t+1]&&(s[t+1]=0),s[t+1]+=s[t]/i|0,s[t]%=i)}return s.reverse()}O.absoluteValue=O.abs=function(){var n=new this.constructor(this);return n.s<0&&(n.s=1),P(n)},O.ceil=function(){return P(new this.constructor(this),this.e+1,2)},O.clampedTo=O.clamp=function(n,e){var i=this,t=i.constructor;if(n=new t(n),e=new t(e),!n.s||!e.s)return new t(NaN);if(n.gt(e))throw Error(h+e);return i.cmp(n)<0?n:i.cmp(e)>0?e:new t(i)},O.comparedTo=O.cmp=function(n){var e,i,t,r,s=this,o=s.d,u=(n=new s.constructor(n)).d,c=s.s,f=n.s;if(!o||!u)return c&&f?c!==f?c:o===u?0:!o^c<0?1:-1:NaN;if(!o[0]||!u[0])return o[0]?c:u[0]?-f:0;if(c!==f)return c;if(s.e!==n.e)return s.e>n.e^c<0?1:-1;for(e=0,i=(t=o.length)<(r=u.length)?t:r;e<i;++e)if(o[e]!==u[e])return o[e]>u[e]^c<0?1:-1;return t===r?0:t>r^c<0?1:-1},O.cosine=O.cos=function(){var n,e,i=this,t=i.constructor;return i.d?i.d[0]?(n=t.precision,e=t.rounding,t.precision=n+Math.max(i.e,i.sd())+7,t.rounding=1,i=function(n,e){var i,t,r;if(e.isZero())return e;t=e.d.length,t<32?r=(1/z(4,i=Math.ceil(t/3))).toString():(i=16,r="2.3283064365386962890625e-10");n.precision+=i,e=J(n,1,e.times(r),new n(1));for(var s=i;s--;){var o=e.times(e);e=o.times(o).minus(o).times(8).plus(1)}return n.precision-=i,e}(t,G(t,i)),t.precision=n,t.rounding=e,P(2==r||3==r?i.neg():i,n,e,!0)):new t(1):new t(NaN)},O.cubeRoot=O.cbrt=function(){var n,e,i,t,r,s,o,u,c,f,a=this,d=a.constructor;if(!a.isFinite()||a.isZero())return new d(a);for(l=!1,(s=a.s*v(a.s*a,1/3))&&Math.abs(s)!=1/0?t=new d(s.toString()):(i=D(a.d),(s=((n=a.e)-i.length+1)%3)&&(i+=1==s||-2==s?"0":"00"),s=v(i,1/3),n=w((n+1)/3)-(n%3==(n<0?-1:2)),(t=new d(i=s==1/0?"5e"+n:(i=s.toExponential()).slice(0,i.indexOf("e")+1)+n)).s=a.s),o=(n=d.precision)+3;;)if(f=(c=(u=t).times(u).times(u)).plus(a),t=Z(f.plus(a).times(u),f.plus(c),o+2,1),D(u.d).slice(0,o)===(i=D(t.d)).slice(0,o)){if("9999"!=(i=i.slice(o-3,o+1))&&(r||"4999"!=i)){+i&&(+i.slice(1)||"5"!=i.charAt(0))||(P(t,n+1,1),e=!t.times(t).times(t).eq(a));break}if(!r&&(P(u,n+1,0),u.times(u).times(u).eq(a))){t=u;break}o+=4,r=1}return l=!0,P(t,n,d.rounding,e)},O.decimalPlaces=O.dp=function(){var n,e=this.d,i=NaN;if(e){if(i=7*((n=e.length-1)-w(this.e/7)),n=e[n])for(;n%10==0;n/=10)i--;i<0&&(i=0)}return i},O.dividedBy=O.div=function(n){return Z(this,new this.constructor(n))},O.dividedToIntegerBy=O.divToInt=function(n){var e=this.constructor;return P(Z(this,new e(n),0,1,1),e.precision,e.rounding)},O.equals=O.eq=function(n){return 0===this.cmp(n)},O.floor=function(){return P(new this.constructor(this),this.e+1,3)},O.greaterThan=O.gt=function(n){return this.cmp(n)>0},O.greaterThanOrEqualTo=O.gte=function(n){var e=this.cmp(n);return 1==e||0===e},O.hyperbolicCosine=O.cosh=function(){var n,e,i,t,r,s=this,o=s.constructor,u=new o(1);if(!s.isFinite())return new o(s.s?1/0:NaN);if(s.isZero())return u;i=o.precision,t=o.rounding,o.precision=i+Math.max(s.e,s.sd())+4,o.rounding=1,(r=s.d.length)<32?e=(1/z(4,n=Math.ceil(r/3))).toString():(n=16,e="2.3283064365386962890625e-10"),s=J(o,1,s.times(e),new o(1),!0);for(var c,f=n,a=new o(8);f--;)c=s.times(s),s=u.minus(c.times(a.minus(c.times(a))));return P(s,o.precision=i,o.rounding=t,!0)},O.hyperbolicSine=O.sinh=function(){var n,e,i,t,r=this,s=r.constructor;if(!r.isFinite()||r.isZero())return new s(r);if(e=s.precision,i=s.rounding,s.precision=e+Math.max(r.e,r.sd())+4,s.rounding=1,(t=r.d.length)<3)r=J(s,2,r,r,!0);else{n=(n=1.4*Math.sqrt(t))>16?16:0|n,r=J(s,2,r=r.times(1/z(5,n)),r,!0);for(var o,u=new s(5),c=new s(16),f=new s(20);n--;)o=r.times(r),r=r.times(u.plus(o.times(c.times(o).plus(f))))}return s.precision=e,s.rounding=i,P(r,e,i,!0)},O.hyperbolicTangent=O.tanh=function(){var n,e,i=this,t=i.constructor;return i.isFinite()?i.isZero()?new t(i):(n=t.precision,e=t.rounding,t.precision=n+7,t.rounding=1,Z(i.sinh(),i.cosh(),t.precision=n,t.rounding=e)):new t(i.s)},O.inverseCosine=O.acos=function(){var n=this,e=n.constructor,i=n.abs().cmp(1),t=e.precision,r=e.rounding;return-1!==i?0===i?n.isNeg()?L(e,t,r):new e(0):new e(NaN):n.isZero()?L(e,t+4,r).times(.5):(e.precision=t+6,e.rounding=1,n=new e(1).minus(n).div(n.plus(1)).sqrt().atan(),e.precision=t,e.rounding=r,n.times(2))},O.inverseHyperbolicCosine=O.acosh=function(){var n,e,i=this,t=i.constructor;return i.lte(1)?new t(i.eq(1)?0:NaN):i.isFinite()?(n=t.precision,e=t.rounding,t.precision=n+Math.max(Math.abs(i.e),i.sd())+4,t.rounding=1,l=!1,i=i.times(i).minus(1).sqrt().plus(i),l=!0,t.precision=n,t.rounding=e,i.ln()):new t(i)},O.inverseHyperbolicSine=O.asinh=function(){var n,e,i=this,t=i.constructor;return!i.isFinite()||i.isZero()?new t(i):(n=t.precision,e=t.rounding,t.precision=n+2*Math.max(Math.abs(i.e),i.sd())+6,t.rounding=1,l=!1,i=i.times(i).plus(1).sqrt().plus(i),l=!0,t.precision=n,t.rounding=e,i.ln())},O.inverseHyperbolicTangent=O.atanh=function(){var n,e,i,t,r=this,s=r.constructor;return r.isFinite()?r.e>=0?new s(r.abs().eq(1)?r.s/0:r.isZero()?r:NaN):(n=s.precision,e=s.rounding,t=r.sd(),Math.max(t,n)<2*-r.e-1?P(new s(r),n,e,!0):(s.precision=i=t-r.e,r=Z(r.plus(1),new s(1).minus(r),i+n,1),s.precision=n+4,s.rounding=1,r=r.ln(),s.precision=n,s.rounding=e,r.times(.5))):new s(NaN)},O.inverseSine=O.asin=function(){var n,e,i,t,r=this,s=r.constructor;return r.isZero()?new s(r):(e=r.abs().cmp(1),i=s.precision,t=s.rounding,-1!==e?0===e?((n=L(s,i+4,t).times(.5)).s=r.s,n):new s(NaN):(s.precision=i+6,s.rounding=1,r=r.div(new s(1).minus(r.times(r)).sqrt().plus(1)).atan(),s.precision=i,s.rounding=t,r.times(2)))},O.inverseTangent=O.atan=function(){var n,e,i,t,r,s,o,u,c,f=this,a=f.constructor,d=a.precision,h=a.rounding;if(f.isFinite()){if(f.isZero())return new a(f);if(f.abs().eq(1)&&d+4<=q)return(o=L(a,d+4,h).times(.25)).s=f.s,o}else{if(!f.s)return new a(NaN);if(d+4<=q)return(o=L(a,d+4,h).times(.5)).s=f.s,o}for(a.precision=u=d+10,a.rounding=1,n=i=Math.min(28,u/7+2|0);n;--n)f=f.div(f.times(f).plus(1).sqrt().plus(1));for(l=!1,e=Math.ceil(u/7),t=1,c=f.times(f),o=new a(f),r=f;-1!==n;)if(r=r.times(c),s=o.minus(r.div(t+=2)),r=r.times(c),void 0!==(o=s.plus(r.div(t+=2))).d[e])for(n=e;o.d[n]===s.d[n]&&n--;);return i&&(o=o.times(2<<i-1)),l=!0,P(o,a.precision=d,a.rounding=h,!0)},O.isFinite=function(){return!!this.d},O.isInteger=O.isInt=function(){return!!this.d&&w(this.e/7)>this.d.length-2},O.isNaN=function(){return!this.s},O.isNegative=O.isNeg=function(){return this.s<0},O.isPositive=O.isPos=function(){return this.s>0},O.isZero=function(){return!!this.d&&0===this.d[0]},O.lessThan=O.lt=function(n){return this.cmp(n)<0},O.lessThanOrEqualTo=O.lte=function(n){return this.cmp(n)<1},O.logarithm=O.log=function(n){var e,i,t,r,s,o,u,c,f=this,a=f.constructor,d=a.precision,h=a.rounding;if(null==n)n=new a(10),e=!0;else{if(i=(n=new a(n)).d,n.s<0||!i||!i[0]||n.eq(1))return new a(NaN);e=n.eq(10)}if(i=f.d,f.s<0||!i||!i[0]||f.eq(1))return new a(i&&!i[0]?-1/0:1!=f.s?NaN:i?0:1/0);if(e)if(i.length>1)s=!0;else{for(r=i[0];r%10==0;)r/=10;s=1!==r}if(l=!1,o=V(f,u=d+5),t=e?_(a,u+10):V(n,u),S((c=Z(o,t,u,1)).d,r=d,h))do{if(o=V(f,u+=10),t=e?_(a,u+10):V(n,u),c=Z(o,t,u,1),!s){+D(c.d).slice(r+1,r+15)+1==1e14&&(c=P(c,d+1,0));break}}while(S(c.d,r+=10,h));return l=!0,P(c,d,h)},O.minus=O.sub=function(n){var e,i,t,r,s,o,u,c,f,a,d,h,p=this,g=p.constructor;if(n=new g(n),!p.d||!n.d)return p.s&&n.s?p.d?n.s=-n.s:n=new g(n.d||p.s!==n.s?p:NaN):n=new g(NaN),n;if(p.s!=n.s)return n.s=-n.s,p.plus(n);if(f=p.d,h=n.d,u=g.precision,c=g.rounding,!f[0]||!h[0]){if(h[0])n.s=-n.s;else{if(!f[0])return new g(3===c?-0:0);n=new g(p)}return l?P(n,u,c):n}if(i=w(n.e/7),a=w(p.e/7),f=f.slice(),s=a-i){for((d=s<0)?(e=f,s=-s,o=h.length):(e=h,i=a,o=f.length),s>(t=Math.max(Math.ceil(u/7),o)+2)&&(s=t,e.length=1),e.reverse(),t=s;t--;)e.push(0);e.reverse()}else{for((d=(t=f.length)<(o=h.length))&&(o=t),t=0;t<o;t++)if(f[t]!=h[t]){d=f[t]<h[t];break}s=0}for(d&&(e=f,f=h,h=e,n.s=-n.s),o=f.length,t=h.length-o;t>0;--t)f[o++]=0;for(t=h.length;t>s;){if(f[--t]<h[t]){for(r=t;r&&0===f[--r];)f[r]=y-1;--f[r],f[t]+=y}f[t]-=h[t]}for(;0===f[--o];)f.pop();for(;0===f[0];f.shift())--i;return f[0]?(n.d=f,n.e=T(f,i),l?P(n,u,c):n):new g(3===c?-0:0)},O.modulo=O.mod=function(n){var e,i=this,t=i.constructor;return n=new t(n),!i.d||!n.s||n.d&&!n.d[0]?new t(NaN):!n.d||i.d&&!i.d[0]?P(new t(i),t.precision,t.rounding):(l=!1,9==t.modulo?(e=Z(i,n.abs(),0,3,1)).s*=n.s:e=Z(i,n,0,t.modulo,1),e=e.times(n),l=!0,i.minus(e))},O.naturalExponential=O.exp=function(){return B(this)},O.naturalLogarithm=O.ln=function(){return V(this)},O.negated=O.neg=function(){var n=new this.constructor(this);return n.s=-n.s,P(n)},O.plus=O.add=function(n){var e,i,t,r,s,o,u,c,f,a,d=this,h=d.constructor;if(n=new h(n),!d.d||!n.d)return d.s&&n.s?d.d||(n=new h(n.d||d.s===n.s?d:NaN)):n=new h(NaN),n;if(d.s!=n.s)return n.s=-n.s,d.minus(n);if(f=d.d,a=n.d,u=h.precision,c=h.rounding,!f[0]||!a[0])return a[0]||(n=new h(d)),l?P(n,u,c):n;if(s=w(d.e/7),t=w(n.e/7),f=f.slice(),r=s-t){for(r<0?(i=f,r=-r,o=a.length):(i=a,t=s,o=f.length),r>(o=(s=Math.ceil(u/7))>o?s+1:o+1)&&(r=o,i.length=1),i.reverse();r--;)i.push(0);i.reverse()}for((o=f.length)-(r=a.length)<0&&(r=o,i=a,a=f,f=i),e=0;r;)e=(f[--r]=f[r]+a[r]+e)/y|0,f[r]%=y;for(e&&(f.unshift(e),++t),o=f.length;0==f[--o];)f.pop();return n.d=f,n.e=T(f,t),l?P(n,u,c):n},O.precision=O.sd=function(n){var e,i=this;if(void 0!==n&&n!==!!n&&1!==n&&0!==n)throw Error(h+n);return i.d?(e=U(i.d),n&&i.e+1>e&&(e=i.e+1)):e=NaN,e},O.round=function(){var n=this,e=n.constructor;return P(new e(n),n.e+1,e.rounding)},O.sine=O.sin=function(){var n,e,i=this,t=i.constructor;return i.isFinite()?i.isZero()?new t(i):(n=t.precision,e=t.rounding,t.precision=n+Math.max(i.e,i.sd())+7,t.rounding=1,i=function(n,e){var i,t=e.d.length;if(t<3)return e.isZero()?e:J(n,2,e,e);i=(i=1.4*Math.sqrt(t))>16?16:0|i,e=e.times(1/z(5,i)),e=J(n,2,e,e);for(var r,s=new n(5),o=new n(16),u=new n(20);i--;)r=e.times(e),e=e.times(s.plus(r.times(o.times(r).minus(u))));return e}(t,G(t,i)),t.precision=n,t.rounding=e,P(r>2?i.neg():i,n,e,!0)):new t(NaN)},O.squareRoot=O.sqrt=function(){var n,e,i,t,r,s,o=this,u=o.d,c=o.e,f=o.s,a=o.constructor;if(1!==f||!u||!u[0])return new a(!f||f<0&&(!u||u[0])?NaN:u?o:1/0);for(l=!1,0==(f=Math.sqrt(+o))||f==1/0?(((e=D(u)).length+c)%2==0&&(e+="0"),f=Math.sqrt(e),c=w((c+1)/2)-(c<0||c%2),t=new a(e=f==1/0?"5e"+c:(e=f.toExponential()).slice(0,e.indexOf("e")+1)+c)):t=new a(f.toString()),i=(c=a.precision)+3;;)if(t=(s=t).plus(Z(o,s,i+2,1)).times(.5),D(s.d).slice(0,i)===(e=D(t.d)).slice(0,i)){if("9999"!=(e=e.slice(i-3,i+1))&&(r||"4999"!=e)){+e&&(+e.slice(1)||"5"!=e.charAt(0))||(P(t,c+1,1),n=!t.times(t).eq(o));break}if(!r&&(P(s,c+1,0),s.times(s).eq(o))){t=s;break}i+=4,r=1}return l=!0,P(t,c,a.rounding,n)},O.tangent=O.tan=function(){var n,e,i=this,t=i.constructor;return i.isFinite()?i.isZero()?new t(i):(n=t.precision,e=t.rounding,t.precision=n+10,t.rounding=1,(i=i.sin()).s=1,i=Z(i,new t(1).minus(i.times(i)).sqrt(),n+10,0),t.precision=n,t.rounding=e,P(2==r||4==r?i.neg():i,n,e,!0)):new t(NaN)},O.times=O.mul=function(n){var e,i,t,r,s,o,u,c,f,a=this,d=a.constructor,h=a.d,p=(n=new d(n)).d;if(n.s*=a.s,!(h&&h[0]&&p&&p[0]))return new d(!n.s||h&&!h[0]&&!p||p&&!p[0]&&!h?NaN:h&&p?0*n.s:n.s/0);for(i=w(a.e/7)+w(n.e/7),(c=h.length)<(f=p.length)&&(s=h,h=p,p=s,o=c,c=f,f=o),s=[],t=o=c+f;t--;)s.push(0);for(t=f;--t>=0;){for(e=0,r=c+t;r>t;)u=s[r]+p[t]*h[r-t-1]+e,s[r--]=u%y|0,e=u/y|0;s[r]=(s[r]+e)%y|0}for(;!s[--o];)s.pop();return e?++i:s.shift(),n.d=s,n.e=T(s,i),l?P(n,d.precision,d.rounding):n},O.toBinary=function(n,e){return K(this,2,n,e)},O.toDecimalPlaces=O.toDP=function(n,e){var i=this,t=i.constructor;return i=new t(i),void 0===n?i:(F(n,0,o),void 0===e?e=t.rounding:F(e,0,8),P(i,n+i.e+1,e))},O.toExponential=function(n,e){var i,t=this,r=t.constructor;return void 0===n?i=R(t,!0):(F(n,0,o),void 0===e?e=r.rounding:F(e,0,8),i=R(t=P(new r(t),n+1,e),!0,n+1)),t.isNeg()&&!t.isZero()?"-"+i:i},O.toFixed=function(n,e){var i,t,r=this,s=r.constructor;return void 0===n?i=R(r):(F(n,0,o),void 0===e?e=s.rounding:F(e,0,8),i=R(t=P(new s(r),n+r.e+1,e),!1,n+t.e+1)),r.isNeg()&&!r.isZero()?"-"+i:i},O.toFraction=function(n){var e,i,t,r,s,o,u,c,f,a,d,p,g=this,m=g.d,w=g.constructor;if(!m)return new w(g);if(f=i=new w(1),t=c=new w(0),o=(s=(e=new w(t)).e=U(m)-g.e-1)%7,e.d[0]=v(10,o<0?7+o:o),null==n)n=s>0?e:f;else{if(!(u=new w(n)).isInt()||u.lt(f))throw Error(h+u);n=u.gt(e)?s>0?e:f:u}for(l=!1,u=new w(D(m)),a=w.precision,w.precision=s=7*m.length*2;d=Z(u,e,0,1,1),1!=(r=i.plus(d.times(t))).cmp(n);)i=t,t=r,r=f,f=c.plus(d.times(r)),c=r,r=e,e=u.minus(d.times(r)),u=r;return r=Z(n.minus(i),t,0,1,1),c=c.plus(r.times(f)),i=i.plus(r.times(t)),c.s=f.s=g.s,p=Z(f,t,s,1).minus(g).abs().cmp(Z(c,i,s,1).minus(g).abs())<1?[f,t]:[c,i],w.precision=a,l=!0,p},O.toHexadecimal=O.toHex=function(n,e){return K(this,16,n,e)},O.toNearest=function(n,e){var i=this,t=i.constructor;if(i=new t(i),null==n){if(!i.d)return i;n=new t(1),e=t.rounding}else{if(n=new t(n),void 0===e?e=t.rounding:F(e,0,8),!i.d)return n.s?i:n;if(!n.d)return n.s&&(n.s=i.s),n}return n.d[0]?(l=!1,i=Z(i,n,0,e,1).times(n),l=!0,P(i)):(n.s=i.s,i=n),i},O.toNumber=function(){return+this},O.toOctal=function(n,e){return K(this,8,n,e)},O.toPower=O.pow=function(n){var e,i,t,r,s,o,u=this,c=u.constructor,f=+(n=new c(n));if(!(u.d&&n.d&&u.d[0]&&n.d[0]))return new c(v(+u,f));if((u=new c(u)).eq(1))return u;if(t=c.precision,s=c.rounding,n.eq(1))return P(u,t,s);if((e=w(n.e/7))>=n.d.length-1&&(i=f<0?-f:f)<=9007199254740991)return r=C(c,u,i,t),n.s<0?new c(1).div(r):P(r,t,s);if((o=u.s)<0){if(e<n.d.length-1)return new c(NaN);if(1&n.d[e]||(o=1),0==u.e&&1==u.d[0]&&1==u.d.length)return u.s=o,u}return(e=0!=(i=v(+u,f))&&isFinite(i)?new c(i+"").e:w(f*(Math.log("0."+D(u.d))/Math.LN10+u.e+1)))>c.maxE+1||e<c.minE-1?new c(e>0?o/0:0):(l=!1,c.rounding=u.s=1,i=Math.min(12,(e+"").length),(r=B(n.times(V(u,t+i)),t)).d&&S((r=P(r,t+5,1)).d,t,s)&&(e=t+10,+D((r=P(B(n.times(V(u,e+i)),e),e+5,1)).d).slice(t+1,t+15)+1==1e14&&(r=P(r,t+1,0))),r.s=o,l=!0,c.rounding=s,P(r,t,s))},O.toPrecision=function(n,e){var i,t=this,r=t.constructor;return void 0===n?i=R(t,t.e<=r.toExpNeg||t.e>=r.toExpPos):(F(n,1,o),void 0===e?e=r.rounding:F(e,0,8),i=R(t=P(new r(t),n,e),n<=t.e||t.e<=r.toExpNeg,n)),t.isNeg()&&!t.isZero()?"-"+i:i},O.toSignificantDigits=O.toSD=function(n,e){var i=this.constructor;return void 0===n?(n=i.precision,e=i.rounding):(F(n,1,o),void 0===e?e=i.rounding:F(e,0,8)),P(new i(this),n,e)},O.toString=function(){var n=this,e=n.constructor,i=R(n,n.e<=e.toExpNeg||n.e>=e.toExpPos);return n.isNeg()&&!n.isZero()?"-"+i:i},O.truncated=O.trunc=function(){return P(new this.constructor(this),this.e+1,1)},O.valueOf=O.toJSON=function(){var n=this,e=n.constructor,i=R(n,n.e<=e.toExpNeg||n.e>=e.toExpPos);return n.isNeg()?"-"+i:i};var Z=function(){function n(n,e,i){var t,r=0,s=n.length;for(n=n.slice();s--;)t=n[s]*e+r,n[s]=t%i|0,r=t/i|0;return r&&n.unshift(r),n}function e(n,e,i,t){var r,s;if(i!=t)s=i>t?1:-1;else for(r=s=0;r<i;r++)if(n[r]!=e[r]){s=n[r]>e[r]?1:-1;break}return s}function t(n,e,i,t){for(var r=0;i--;)n[i]-=r,r=n[i]<e[i]?1:0,n[i]=r*t+n[i]-e[i];for(;!n[0]&&n.length>1;)n.shift()}return function(r,s,o,u,c,f){var a,l,d,h,p,g,m,v,N,b,E,x,M,q,O,D,F,S,A,Z,R=r.constructor,T=r.s==s.s?1:-1,_=r.d,L=s.d;if(!(_&&_[0]&&L&&L[0]))return new R(r.s&&s.s&&(_?!L||_[0]!=L[0]:L)?_&&0==_[0]||!L?0*T:T/0:NaN);for(f?(p=1,l=r.e-s.e):(f=y,p=7,l=w(r.e/p)-w(s.e/p)),A=L.length,F=_.length,b=(N=new R(T)).d=[],d=0;L[d]==(_[d]||0);d++);if(L[d]>(_[d]||0)&&l--,null==o?(q=o=R.precision,u=R.rounding):q=c?o+(r.e-s.e)+1:o,q<0)b.push(1),g=!0;else{if(q=q/p+2|0,d=0,1==A){for(h=0,L=L[0],q++;(d<F||h)&&q--;d++)O=h*f+(_[d]||0),b[d]=O/L|0,h=O%L|0;g=h||d<F}else{for((h=f/(L[0]+1)|0)>1&&(L=n(L,h,f),_=n(_,h,f),A=L.length,F=_.length),D=A,x=(E=_.slice(0,A)).length;x<A;)E[x++]=0;(Z=L.slice()).unshift(0),S=L[0],L[1]>=f/2&&++S;do{h=0,(a=e(L,E,A,x))<0?(M=E[0],A!=x&&(M=M*f+(E[1]||0)),(h=M/S|0)>1?(h>=f&&(h=f-1),1==(a=e(m=n(L,h,f),E,v=m.length,x=E.length))&&(h--,t(m,A<v?Z:L,v,f))):(0==h&&(a=h=1),m=L.slice()),(v=m.length)<x&&m.unshift(0),t(E,m,x,f),-1==a&&(a=e(L,E,A,x=E.length))<1&&(h++,t(E,A<x?Z:L,x,f)),x=E.length):0===a&&(h++,E=[0]),b[d++]=h,a&&E[0]?E[x++]=_[D]||0:(E=[_[D]],x=1)}while((D++<F||void 0!==E[0])&&q--);g=void 0!==E[0]}b[0]||b.shift()}if(1==p)N.e=l,i=g;else{for(d=1,h=b[0];h>=10;h/=10)d++;N.e=d+l*p-1,P(N,c?o+N.e+1:o,u,g)}return N}}();function P(n,e,i,t){var r,s,o,u,c,f,a,d,h,p=n.constructor;n:if(null!=e){if(!(d=n.d))return n;for(r=1,u=d[0];u>=10;u/=10)r++;if((s=e-r)<0)s+=7,o=e,c=(a=d[h=0])/v(10,r-o-1)%10|0;else if((h=Math.ceil((s+1)/7))>=(u=d.length)){if(!t)break n;for(;u++<=h;)d.push(0);a=c=0,r=1,o=(s%=7)-7+1}else{for(a=u=d[h],r=1;u>=10;u/=10)r++;c=(o=(s%=7)-7+r)<0?0:a/v(10,r-o-1)%10|0}if(t=t||e<0||void 0!==d[h+1]||(o<0?a:a%v(10,r-o-1)),f=i<4?(c||t)&&(0==i||i==(n.s<0?3:2)):c>5||5==c&&(4==i||t||6==i&&(s>0?o>0?a/v(10,r-o):0:d[h-1])%10&1||i==(n.s<0?8:7)),e<1||!d[0])return d.length=0,f?(e-=n.e+1,d[0]=v(10,(7-e%7)%7),n.e=-e||0):d[0]=n.e=0,n;if(0==s?(d.length=h,u=1,h--):(d.length=h+1,u=v(10,7-s),d[h]=o>0?(a/v(10,r-o)%v(10,o)|0)*u:0),f)for(;;){if(0==h){for(s=1,o=d[0];o>=10;o/=10)s++;for(o=d[0]+=u,u=1;o>=10;o/=10)u++;s!=u&&(n.e++,d[0]==y&&(d[0]=1));break}if(d[h]+=u,d[h]!=y)break;d[h--]=0,u=1}for(s=d.length;0===d[--s];)d.pop()}return l&&(n.e>p.maxE?(n.d=null,n.e=NaN):n.e<p.minE&&(n.e=0,n.d=[0])),n}function R(n,e,i){if(!n.isFinite())return $(n);var t,r=n.e,s=D(n.d),o=s.length;return e?(i&&(t=i-o)>0?s=s.charAt(0)+"."+s.slice(1)+k(t):o>1&&(s=s.charAt(0)+"."+s.slice(1)),s=s+(n.e<0?"e":"e+")+n.e):r<0?(s="0."+k(-r-1)+s,i&&(t=i-o)>0&&(s+=k(t))):r>=o?(s+=k(r+1-o),i&&(t=i-r-1)>0&&(s=s+"."+k(t))):((t=r+1)<o&&(s=s.slice(0,t)+"."+s.slice(t)),i&&(t=i-o)>0&&(r+1===o&&(s+="."),s+=k(t))),s}function T(n,e){var i=n[0];for(e*=7;i>=10;i/=10)e++;return e}function _(n,e,i){if(e>M)throw l=!0,i&&(n.precision=i),Error(p);return P(new n(c),e,1,!0)}function L(n,e,i){if(e>q)throw Error(p);return P(new n(f),e,i,!0)}function U(n){var e=n.length-1,i=7*e+1;if(e=n[e]){for(;e%10==0;e/=10)i--;for(e=n[0];e>=10;e/=10)i++}return i}function k(n){for(var e="";n--;)e+="0";return e}function C(n,e,i,t){var r,s=new n(1),o=Math.ceil(t/7+4);for(l=!1;;){if(i%2&&Q((s=s.times(e)).d,o)&&(r=!0),0===(i=w(i/2))){i=s.d.length-1,r&&0===s.d[i]&&++s.d[i];break}Q((e=e.times(e)).d,o)}return l=!0,s}function I(n){return 1&n.d[n.d.length-1]}function H(n,e,i){for(var t,r,s=new n(e[0]),o=0;++o<e.length;){if(!(r=new n(e[o])).s){s=r;break}((t=s.cmp(r))===i||0===t&&s.s===i)&&(s=r)}return s}function B(n,e){var i,t,r,s,o,u,c,f=0,a=0,d=0,h=n.constructor,p=h.rounding,g=h.precision;if(!n.d||!n.d[0]||n.e>17)return new h(n.d?n.d[0]?n.s<0?0:1/0:1:n.s?n.s<0?0:n:NaN);for(null==e?(l=!1,c=g):c=e,u=new h(.03125);n.e>-2;)n=n.times(u),d+=5;for(c+=t=Math.log(v(2,d))/Math.LN10*2+5|0,i=s=o=new h(1),h.precision=c;;){if(s=P(s.times(n),c,1),i=i.times(++a),D((u=o.plus(Z(s,i,c,1))).d).slice(0,c)===D(o.d).slice(0,c)){for(r=d;r--;)o=P(o.times(o),c,1);if(null!=e)return h.precision=g,o;if(!(f<3&&S(o.d,c-t,p,f)))return P(o,h.precision=g,p,l=!0);h.precision=c+=10,i=s=u=new h(1),a=0,f++}o=u}}function V(n,e){var i,t,r,s,o,u,c,f,a,d,h,p=1,g=n,m=g.d,w=g.constructor,v=w.rounding,N=w.precision;if(g.s<0||!m||!m[0]||!g.e&&1==m[0]&&1==m.length)return new w(m&&!m[0]?-1/0:1!=g.s?NaN:m?0:g);if(null==e?(l=!1,a=N):a=e,w.precision=a+=10,t=(i=D(m)).charAt(0),!(Math.abs(s=g.e)<15e14))return f=_(w,a+2,N).times(s+""),g=V(new w(t+"."+i.slice(1)),a-10).plus(f),w.precision=N,null==e?P(g,N,v,l=!0):g;for(;t<7&&1!=t||1==t&&i.charAt(1)>3;)t=(i=D((g=g.times(n)).d)).charAt(0),p++;for(s=g.e,t>1?(g=new w("0."+i),s++):g=new w(t+"."+i.slice(1)),d=g,c=o=g=Z(g.minus(1),g.plus(1),a,1),h=P(g.times(g),a,1),r=3;;){if(o=P(o.times(h),a,1),D((f=c.plus(Z(o,new w(r),a,1))).d).slice(0,a)===D(c.d).slice(0,a)){if(c=c.times(2),0!==s&&(c=c.plus(_(w,a+2,N).times(s+""))),c=Z(c,new w(p),a,1),null!=e)return w.precision=N,c;if(!S(c.d,a-10,v,u))return P(c,w.precision=N,v,l=!0);w.precision=a+=10,f=o=g=Z(d.minus(1),d.plus(1),a,1),h=P(g.times(g),a,1),r=u=1}c=f,r+=2}}function $(n){return String(n.s*n.s/0)}function j(n,e){var i,t,r;for((i=e.indexOf("."))>-1&&(e=e.replace(".","")),(t=e.search(/e/i))>0?(i<0&&(i=t),i+=+e.slice(t+1),e=e.substring(0,t)):i<0&&(i=e.length),t=0;48===e.charCodeAt(t);t++);for(r=e.length;48===e.charCodeAt(r-1);--r);if(e=e.slice(t,r)){if(r-=t,n.e=i=i-t-1,n.d=[],t=(i+1)%7,i<0&&(t+=7),t<r){for(t&&n.d.push(+e.slice(0,t)),r-=7;t<r;)n.d.push(+e.slice(t,t+=7));t=7-(e=e.slice(t)).length}else t-=r;for(;t--;)e+="0";n.d.push(+e),l&&(n.e>n.constructor.maxE?(n.d=null,n.e=NaN):n.e<n.constructor.minE&&(n.e=0,n.d=[0]))}else n.e=0,n.d=[0];return n}function W(n,i){var t,r,s,o,u,c,f,a,d;if(i.indexOf("_")>-1){if(i=i.replace(/(\d)_(?=\d)/g,"$1"),x.test(i))return j(n,i)}else if("Infinity"===i||"NaN"===i)return+i||(n.s=NaN),n.e=NaN,n.d=null,n;if(b.test(i))t=16,i=i.toLowerCase();else if(N.test(i))t=2;else{if(!E.test(i))throw Error(h+i);t=8}for((o=i.search(/p/i))>0?(f=+i.slice(o+1),i=i.substring(2,o)):i=i.slice(2),u=(o=i.indexOf("."))>=0,r=n.constructor,u&&(o=(c=(i=i.replace(".","")).length)-o,s=C(r,new r(t),o,2*o)),o=d=(a=A(i,t,y)).length-1;0===a[o];--o)a.pop();return o<0?new r(0*n.s):(n.e=T(a,d),n.d=a,l=!1,u&&(n=Z(n,s,4*c)),f&&(n=n.times(Math.abs(f)<54?v(2,f):e.pow(2,f))),l=!0,n)}function J(n,e,i,t,r){var s,o,u,c,f=n.precision,a=Math.ceil(f/7);for(l=!1,c=i.times(i),u=new n(t);;){if(o=Z(u.times(c),new n(e++*e++),f,1),u=r?t.plus(o):t.minus(o),t=Z(o.times(c),new n(e++*e++),f,1),void 0!==(o=u.plus(t)).d[a]){for(s=a;o.d[s]===u.d[s]&&s--;);if(-1==s)break}s=u,u=t,t=o,o=s}return l=!0,o.d.length=a+1,o}function z(n,e){for(var i=n;--e;)i*=n;return i}function G(n,e){var i,t=e.s<0,s=L(n,n.precision,1),o=s.times(.5);if((e=e.abs()).lte(o))return r=t?4:1,e;if((i=e.divToInt(s)).isZero())r=t?3:2;else{if((e=e.minus(i.times(s))).lte(o))return r=I(i)?t?2:3:t?4:1,e;r=I(i)?t?1:4:t?3:2}return e.minus(s).abs()}function K(n,e,t,r){var s,c,f,a,l,d,h,p,g,m=n.constructor,w=void 0!==t;if(w?(F(t,1,o),void 0===r?r=m.rounding:F(r,0,8)):(t=m.precision,r=m.rounding),n.isFinite()){for(w?(s=2,16==e?t=4*t-3:8==e&&(t=3*t-2)):s=e,(f=(h=R(n)).indexOf("."))>=0&&(h=h.replace(".",""),(g=new m(1)).e=h.length-f,g.d=A(R(g),10,s),g.e=g.d.length),c=l=(p=A(h,10,s)).length;0==p[--l];)p.pop();if(p[0]){if(f<0?c--:((n=new m(n)).d=p,n.e=c,p=(n=Z(n,g,t,r,0,s)).d,c=n.e,d=i),f=p[t],a=s/2,d=d||void 0!==p[t+1],d=r<4?(void 0!==f||d)&&(0===r||r===(n.s<0?3:2)):f>a||f===a&&(4===r||d||6===r&&1&p[t-1]||r===(n.s<0?8:7)),p.length=t,d)for(;++p[--t]>s-1;)p[t]=0,t||(++c,p.unshift(1));for(l=p.length;!p[l-1];--l);for(f=0,h="";f<l;f++)h+=u.charAt(p[f]);if(w){if(l>1)if(16==e||8==e){for(f=16==e?4:3,--l;l%f;l++)h+="0";for(l=(p=A(h,s,e)).length;!p[l-1];--l);for(f=1,h="1.";f<l;f++)h+=u.charAt(p[f])}else h=h.charAt(0)+"."+h.slice(1);h=h+(c<0?"p":"p+")+c}else if(c<0){for(;++c;)h="0"+h;h="0."+h}else if(++c>l)for(c-=l;c--;)h+="0";else c<l&&(h=h.slice(0,c)+"."+h.slice(c))}else h=w?"0p+0":"0";h=(16==e?"0x":2==e?"0b":8==e?"0o":"")+h}else h=$(n);return n.s<0?"-"+h:h}function Q(n,e){if(n.length>e)return n.length=e,!0}function X(n){return new this(n).abs()}function Y(n){return new this(n).acos()}function nn(n){return new this(n).acosh()}function en(n,e){return new this(n).plus(e)}function tn(n){return new this(n).asin()}function rn(n){return new this(n).asinh()}function sn(n){return new this(n).atan()}function on(n){return new this(n).atanh()}function un(n,e){n=new this(n),e=new this(e);var i,t=this.precision,r=this.rounding,s=t+4;return n.s&&e.s?n.d||e.d?!e.d||n.isZero()?(i=e.s<0?L(this,t,r):new this(0)).s=n.s:!n.d||e.isZero()?(i=L(this,s,1).times(.5)).s=n.s:e.s<0?(this.precision=s,this.rounding=1,i=this.atan(Z(n,e,s,1)),e=L(this,s,1),this.precision=t,this.rounding=r,i=n.s<0?i.minus(e):i.plus(e)):i=this.atan(Z(n,e,s,1)):(i=L(this,s,1).times(e.s>0?.25:.75)).s=n.s:i=new this(NaN),i}function cn(n){return new this(n).cbrt()}function fn(n){return P(n=new this(n),n.e+1,2)}function an(n,e,i){return new this(n).clamp(e,i)}function ln(n){if(!n||"object"!=typeof n)throw Error(d+"Object expected");var e,i,t,r=!0===n.defaults,u=["precision",1,o,"rounding",0,8,"toExpNeg",-s,0,"toExpPos",0,s,"maxE",0,s,"minE",-s,0,"modulo",0,9];for(e=0;e<u.length;e+=3)if(i=u[e],r&&(this[i]=a[i]),void 0!==(t=n[i])){if(!(w(t)===t&&t>=u[e+1]&&t<=u[e+2]))throw Error(h+i+": "+t);this[i]=t}if(i="crypto",r&&(this[i]=a[i]),void 0!==(t=n[i])){if(!0!==t&&!1!==t&&0!==t&&1!==t)throw Error(h+i+": "+t);if(t){if("undefined"==typeof crypto||!crypto||!crypto.getRandomValues&&!crypto.randomBytes)throw Error(g);this[i]=!0}else this[i]=!1}return this}function dn(n){return new this(n).cos()}function hn(n){return new this(n).cosh()}function pn(n,e){return new this(n).div(e)}function gn(n){return new this(n).exp()}function mn(n){return P(n=new this(n),n.e+1,3)}function wn(){var n,e,i=new this(0);for(l=!1,n=0;n<arguments.length;)if((e=new this(arguments[n++])).d)i.d&&(i=i.plus(e.times(e)));else{if(e.s)return l=!0,new this(1/0);i=e}return l=!0,i.sqrt()}function vn(n){return n instanceof e||n&&n.toStringTag===m||!1}function Nn(n){return new this(n).ln()}function bn(n,e){return new this(n).log(e)}function En(n){return new this(n).log(2)}function xn(n){return new this(n).log(10)}function yn(){return H(this,arguments,-1)}function Mn(){return H(this,arguments,1)}function qn(n,e){return new this(n).mod(e)}function On(n,e){return new this(n).mul(e)}function Dn(n,e){return new this(n).pow(e)}function Fn(n){var e,i,t,r,s=0,u=new this(1),c=[];if(void 0===n?n=this.precision:F(n,1,o),t=Math.ceil(n/7),this.crypto)if(crypto.getRandomValues)for(e=crypto.getRandomValues(new Uint32Array(t));s<t;)(r=e[s])>=429e7?e[s]=crypto.getRandomValues(new Uint32Array(1))[0]:c[s++]=r%1e7;else{if(!crypto.randomBytes)throw Error(g);for(e=crypto.randomBytes(t*=4);s<t;)(r=e[s]+(e[s+1]<<8)+(e[s+2]<<16)+((127&e[s+3])<<24))>=214e7?crypto.randomBytes(4).copy(e,s):(c.push(r%1e7),s+=4);s=t/4}else for(;s<t;)c[s++]=1e7*Math.random()|0;for(n%=7,(t=c[--s])&&n&&(r=v(10,7-n),c[s]=(t/r|0)*r);0===c[s];s--)c.pop();if(s<0)i=0,c=[0];else{for(i=-1;0===c[0];i-=7)c.shift();for(t=1,r=c[0];r>=10;r/=10)t++;t<7&&(i-=7-t)}return u.e=i,u.d=c,u}function Sn(n){return P(n=new this(n),n.e+1,this.rounding)}function An(n){return(n=new this(n)).d?n.d[0]?n.s:0*n.s:n.s||NaN}function Zn(n){return new this(n).sin()}function Pn(n){return new this(n).sinh()}function Rn(n){return new this(n).sqrt()}function Tn(n,e){return new this(n).sub(e)}function _n(){var n=0,e=arguments,i=new this(e[n]);for(l=!1;i.s&&++n<e.length;)i=i.plus(e[n]);return l=!0,P(i,this.precision,this.rounding)}function Ln(n){return new this(n).tan()}function Un(n){return new this(n).tanh()}function kn(n){return P(n=new this(n),n.e+1,1)}e=function n(e){var i,t,r;function s(n){var e,i,t,r=this;if(!(r instanceof s))return new s(n);if(r.constructor=s,vn(n))return r.s=n.s,void(l?!n.d||n.e>s.maxE?(r.e=NaN,r.d=null):n.e<s.minE?(r.e=0,r.d=[0]):(r.e=n.e,r.d=n.d.slice()):(r.e=n.e,r.d=n.d?n.d.slice():n.d));if("number"===(t=typeof n)){if(0===n)return r.s=1/n<0?-1:1,r.e=0,void(r.d=[0]);if(n<0?(n=-n,r.s=-1):r.s=1,n===~~n&&n<1e7){for(e=0,i=n;i>=10;i/=10)e++;return void(l?e>s.maxE?(r.e=NaN,r.d=null):e<s.minE?(r.e=0,r.d=[0]):(r.e=e,r.d=[n]):(r.e=e,r.d=[n]))}return 0*n!=0?(n||(r.s=NaN),r.e=NaN,void(r.d=null)):j(r,n.toString())}if("string"===t)return 45===(i=n.charCodeAt(0))?(n=n.slice(1),r.s=-1):(43===i&&(n=n.slice(1)),r.s=1),x.test(n)?j(r,n):W(r,n);if("bigint"===t)return n<0?(n=-n,r.s=-1):r.s=1,j(r,n.toString());throw Error(h+n)}if(s.prototype=O,s.ROUND_UP=0,s.ROUND_DOWN=1,s.ROUND_CEIL=2,s.ROUND_FLOOR=3,s.ROUND_HALF_UP=4,s.ROUND_HALF_DOWN=5,s.ROUND_HALF_EVEN=6,s.ROUND_HALF_CEIL=7,s.ROUND_HALF_FLOOR=8,s.EUCLID=9,s.config=s.set=ln,s.clone=n,s.isDecimal=vn,s.abs=X,s.acos=Y,s.acosh=nn,s.add=en,s.asin=tn,s.asinh=rn,s.atan=sn,s.atanh=on,s.atan2=un,s.cbrt=cn,s.ceil=fn,s.clamp=an,s.cos=dn,s.cosh=hn,s.div=pn,s.exp=gn,s.floor=mn,s.hypot=wn,s.ln=Nn,s.log=bn,s.log10=xn,s.log2=En,s.max=yn,s.min=Mn,s.mod=qn,s.mul=On,s.pow=Dn,s.random=Fn,s.round=Sn,s.sign=An,s.sin=Zn,s.sinh=Pn,s.sqrt=Rn,s.sub=Tn,s.sum=_n,s.tan=Ln,s.tanh=Un,s.trunc=kn,void 0===e&&(e={}),e&&!0!==e.defaults)for(r=["precision","rounding","toExpNeg","toExpPos","maxE","minE","modulo","crypto"],i=0;i<r.length;)e.hasOwnProperty(t=r[i++])||(e[t]=this[t]);return s.config(e),s}(a),e.prototype.constructor=e,e.default=e.Decimal=e,c=new e(c),f=new e(f),"function"==typeof define&&define.amd?define(function(){return e}):"undefined"!=typeof module&&module.exports?("function"==typeof Symbol&&"symbol"==typeof Symbol.iterator&&(O[Symbol.for("nodejs.util.inspect.custom")]=O.toString,O[Symbol.toStringTag]="Decimal"),module.exports=e):(n||(n="undefined"!=typeof self&&self&&self.self==self?self:window),t=n.Decimal,e.noConflict=function(){return n.Decimal=t,e},n.Decimal=e)}(this);
+</script>
+<script>
+const VERSION = "10.0.6";
+const DEFAULT_PRECISION = 30;
+const CANONICALIZATION_VERSION = "2";
+const SEMANTIC_RULES_VERSION = "2";
+const CERTIFICATE_SCHEMA_VERSION = "2";
+const RESOURCE_POLICY_VERSION = "2";
+
+const LIMITS = Object.freeze({
+  max_input_characters: 10000,
+  max_token_count: 512,
+  max_nesting_depth: 128,
+  max_ast_nodes: 512,
+  max_operation_budget: 4096,
+  max_literal_digits: 4000,
+  max_literal_exponent_abs: 50000,
+  max_exact_result_digits: 50000,
+});
+
+const CONFORMANCE_VECTOR_SCHEMA_VERSION = "2";
+const CONFORMANCE_VECTOR_SHA256 = "76e1fff4dee7fe2361d5d2a869f589e6f413049df3cf394544e371669fb48f69";
+const CONFORMANCE_VECTORS = [
+  {
+    "id": "exact_decimal_residual",
+    "expression": "1.0000000000000001 - 1",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "1/10000000000000000",
+      "decimal_approximation": "0.0000000000000001",
+      "display_value": "0.0000000000000001",
+      "display_mathematical_form": "1/10000000000000000",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "SUB(RAT(10000000000000001/10000000000000000),RAT(1/1))",
+      "semantic_canonical": "RAT(1/10000000000000000)",
+      "structure_certificate_sha256": "cb99f47d9c94bfe859cfea4c1ec5c6b721c8f0c92d2c3dbae46c9b5f29f66878",
+      "semantic_certificate_sha256": "226d801fab1ba990899e2004f827b14eca7952d0915a15d85362e00380c58321",
+      "display_receipt_sha256": "c119552c418f0d5be2f4df351f20286b52fdc78e3decff94501cf131e16bed58",
+      "error_code": null
+    }
+  },
+  {
+    "id": "exact_integer_sqrt",
+    "expression": "sqrt(81)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "9",
+      "decimal_approximation": "9",
+      "display_value": "9",
+      "display_mathematical_form": "9",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_SQRT(RAT(81/1))",
+      "semantic_canonical": "RAT(9/1)",
+      "structure_certificate_sha256": "d3bf92c5306e815041da878f03e82ba833ad71a0f3b9dc5adc1afff12c1e2e74",
+      "semantic_certificate_sha256": "a8e18d18dd1d8246d6e4972bed6edb3e6ac105b5ef84d8113d3b05a5594d10a6",
+      "display_receipt_sha256": "e1f95ec0606063b3f9bec44b172b9be93f7e89fbbc281153231f70e242746913",
+      "error_code": null
+    }
+  },
+  {
+    "id": "symbolic_sqrt",
+    "expression": "sqrt(2)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_SYMBOLIC",
+      "resolution_class": "EXACT_SYMBOLIC",
+      "display_kind": "APPROXIMATE_SYMBOLIC",
+      "exact_value": "sqrt(2)",
+      "decimal_approximation": "1.41421356237309504880168872421",
+      "display_value": "≈ 1.41421356237309504880168872421",
+      "display_mathematical_form": "sqrt(2)",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_SQRT(RAT(2/1))",
+      "semantic_canonical": "SQRT(RAT(2/1))",
+      "structure_certificate_sha256": "782cb9854390963f9c14640396d4cd44c1a376d23b010467a025508636d86d1f",
+      "semantic_certificate_sha256": "ae0edd959b1504c3c2cbe40f106ae167688c55d7cc64f1f3a290b2fe37a8004f",
+      "display_receipt_sha256": "95afc70308d2d53cdd88d6cfa40160d2c0f7469b7e64ec2710723d00e499125a",
+      "error_code": null
+    }
+  },
+  {
+    "id": "sqrt_squared_identity",
+    "expression": "sqrt(2)^2",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "2",
+      "decimal_approximation": "2",
+      "display_value": "2",
+      "display_mathematical_form": "2",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "POW(CALL_SQRT(RAT(2/1)),RAT(2/1))",
+      "semantic_canonical": "RAT(2/1)",
+      "structure_certificate_sha256": "59a5ad03f4d198752402826997e601ff5aafaeeb1d5de6b0a1124d1e5e50da55",
+      "semantic_certificate_sha256": "bd09ae09776bfd0376ac1de59e0ba8209249d307a0346a7cbae59ecd7edd5e17",
+      "display_receipt_sha256": "47e1693b908fbe62f52fcb4b202ec4452e51321c4a771f47c61f4a459e04fc4b",
+      "error_code": null
+    }
+  },
+  {
+    "id": "common_angle_sine",
+    "expression": "sin(pi/6)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "1/2",
+      "decimal_approximation": "0.5",
+      "display_value": "0.5",
+      "display_mathematical_form": "1/2",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_SIN(DIV(PI,RAT(6/1)))",
+      "semantic_canonical": "RAT(1/2)",
+      "structure_certificate_sha256": "5d71e579d8b48a75741773255d23845318b45e0776cd827d1ee8075db7ea1af1",
+      "semantic_certificate_sha256": "ebb862b282b5ce44909f76f40e1146f26a9dddec4af97303276015454c580ada",
+      "display_receipt_sha256": "fd75ee05ad4eb3bfd399f1c246b5170c1abe86bf4de8e43da88ad816f365ffab",
+      "error_code": null
+    }
+  },
+  {
+    "id": "common_angle_cosine",
+    "expression": "cos(pi)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "-1",
+      "decimal_approximation": "-1",
+      "display_value": "-1",
+      "display_mathematical_form": "-1",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_COS(PI)",
+      "semantic_canonical": "RAT(-1/1)",
+      "structure_certificate_sha256": "cbd7d58f93e74e17d12f950b56f1ef0f46354a11eaa924bc56d838107c02c435",
+      "semantic_certificate_sha256": "ecd638e867610f01fe6b5e9fab0fd8b3a5afbd24936a7bf0ab1c08175939e2bc",
+      "display_receipt_sha256": "ec2c7fc8400ec7295dfb8a3373b28e8b5c443a338f4779d88e7c3841b28f8993",
+      "error_code": null
+    }
+  },
+  {
+    "id": "common_angle_tangent",
+    "expression": "tan(pi/4)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "1",
+      "decimal_approximation": "1",
+      "display_value": "1",
+      "display_mathematical_form": "1",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_TAN(DIV(PI,RAT(4/1)))",
+      "semantic_canonical": "RAT(1/1)",
+      "structure_certificate_sha256": "f1f89df383361c9ad259b20bb8efe8e93ca32e6f09426075dffccb8cc2814992",
+      "semantic_certificate_sha256": "7198cb7eb85ee7cee6bb638c0c547e07d3584a899a66429d5519bd90b7295d9e",
+      "display_receipt_sha256": "e8c568efa244891d52a1b165fa80cba7caa2cc401fec7be14a5d746e871540d2",
+      "error_code": null
+    }
+  },
+  {
+    "id": "tangent_singularity",
+    "expression": "tan(pi/2)",
+    "precision": 30,
+    "expected": {
+      "state": "SINGULAR",
+      "resolution_class": "REFUSED",
+      "display_kind": "UNDEFINED",
+      "exact_value": null,
+      "decimal_approximation": null,
+      "display_value": "undefined",
+      "display_mathematical_form": "tan(pi/2)",
+      "display_form_label": "Evaluated expression",
+      "structure_canonical": "CALL_TAN(DIV(PI,RAT(2/1)))",
+      "semantic_canonical": "SINGULAR",
+      "structure_certificate_sha256": "d5a1152e21f00280ea24a4aa968fec21a82954c248568e427879a5e5ca946e00",
+      "semantic_certificate_sha256": "30570f99898d09cffb504b4f2ae48bbb68b37cd703a7b222c3551af9db8d0a36",
+      "display_receipt_sha256": "23f424fa75a16f508640b9c889ed33f1a238aea32e2ed6e65f638ba0b0be06d0",
+      "error_code": null
+    }
+  },
+  {
+    "id": "nested_domain_refusal",
+    "expression": "sqrt(ln(1/2))",
+    "precision": 30,
+    "expected": {
+      "state": "FORBIDDEN",
+      "resolution_class": "REFUSED",
+      "display_kind": "UNDEFINED",
+      "exact_value": null,
+      "decimal_approximation": null,
+      "display_value": "undefined",
+      "display_mathematical_form": "sqrt(ln(1/2))",
+      "display_form_label": "Evaluated expression",
+      "structure_canonical": "CALL_SQRT(CALL_LN(DIV(RAT(1/1),RAT(2/1))))",
+      "semantic_canonical": "FORBIDDEN",
+      "structure_certificate_sha256": "8ecbc1081dd26482cca2dc5c625a0555ccd8569ed440f9117b178d609d072eb7",
+      "semantic_certificate_sha256": "8d3bf4e97e5575ff1bce337df08d2396052ba19bd52bd840581a9ce548d74543",
+      "display_receipt_sha256": "15675748763c5f96c50786b1d68a1331c98e922fa30ce29747f8e1bb14c890a6",
+      "error_code": null
+    }
+  },
+  {
+    "id": "base10_log_identity",
+    "expression": "log10(1000)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "3",
+      "decimal_approximation": "3",
+      "display_value": "3",
+      "display_mathematical_form": "3",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_LOG10(RAT(1000/1))",
+      "semantic_canonical": "RAT(3/1)",
+      "structure_certificate_sha256": "3edd3bda55673b01436878cd0ea3ad41a546aaa24d2d61491ade4031bcd218bf",
+      "semantic_certificate_sha256": "a558959295a11cc93b6356f0617867b5f4ad9ff155f31f37d4a67f75dbae914f",
+      "display_receipt_sha256": "6bdffa3f1cd0629102a73f3982f4c93043707a7178f0720d81fc47e68ed41570",
+      "error_code": null
+    }
+  },
+  {
+    "id": "natural_log_identity",
+    "expression": "ln(e)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "1",
+      "decimal_approximation": "1",
+      "display_value": "1",
+      "display_mathematical_form": "1",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_LN(E)",
+      "semantic_canonical": "RAT(1/1)",
+      "structure_certificate_sha256": "25d953237e079b49b5321be0ce9152e95dd2fbc5ac87570c917e914903915abf",
+      "semantic_certificate_sha256": "7198cb7eb85ee7cee6bb638c0c547e07d3584a899a66429d5519bd90b7295d9e",
+      "display_receipt_sha256": "e8c568efa244891d52a1b165fa80cba7caa2cc401fec7be14a5d746e871540d2",
+      "error_code": null
+    }
+  },
+  {
+    "id": "exponential_identity",
+    "expression": "exp(0)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "1",
+      "decimal_approximation": "1",
+      "display_value": "1",
+      "display_mathematical_form": "1",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_EXP(RAT(0/1))",
+      "semantic_canonical": "RAT(1/1)",
+      "structure_certificate_sha256": "ee0ea6e95a998cb7c0239d3e6d1258d8c6c438c40bea709b198222ee1687afc0",
+      "semantic_certificate_sha256": "7198cb7eb85ee7cee6bb638c0c547e07d3584a899a66429d5519bd90b7295d9e",
+      "display_receipt_sha256": "e8c568efa244891d52a1b165fa80cba7caa2cc401fec7be14a5d746e871540d2",
+      "error_code": null
+    }
+  },
+  {
+    "id": "inverse_sine_identity",
+    "expression": "asin(1/2)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_SYMBOLIC",
+      "resolution_class": "EXACT_SYMBOLIC",
+      "display_kind": "APPROXIMATE_SYMBOLIC",
+      "exact_value": "1/6 * pi",
+      "decimal_approximation": "0.523598775598298873077107230547",
+      "display_value": "≈ 0.523598775598298873077107230547",
+      "display_mathematical_form": "1/6 * pi",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_ASIN(DIV(RAT(1/1),RAT(2/1)))",
+      "semantic_canonical": "MUL(RAT(1/6),PI)",
+      "structure_certificate_sha256": "8cd7110cac37ea72ad9a79127e7718d3a99b76561fb3ba60d92b10ff7b24b6b1",
+      "semantic_certificate_sha256": "7f0257dab8aac4dcffbdd09d3082f01694e497407a8fd79509ad9902addaea99",
+      "display_receipt_sha256": "4a6e35fca8f62e8a7c784f6df25bd32b645a0d2ede0f13c01bc81332afcd546d",
+      "error_code": null
+    }
+  },
+  {
+    "id": "inverse_cosine_identity",
+    "expression": "acos(0)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_SYMBOLIC",
+      "resolution_class": "EXACT_SYMBOLIC",
+      "display_kind": "APPROXIMATE_SYMBOLIC",
+      "exact_value": "1/2 * pi",
+      "decimal_approximation": "1.57079632679489661923132169164",
+      "display_value": "≈ 1.57079632679489661923132169164",
+      "display_mathematical_form": "1/2 * pi",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_ACOS(RAT(0/1))",
+      "semantic_canonical": "MUL(RAT(1/2),PI)",
+      "structure_certificate_sha256": "9b09ee9c601ad3c801604a47b76e1ea159abc21d89920b359a0b1213f1cb01a0",
+      "semantic_certificate_sha256": "10e1034407d8036972bcd8028b8adc8246a982e093369e7a4f33d1e59c55b1a2",
+      "display_receipt_sha256": "1e2a45c7a1aa1e13404fcb514495aebaad7da6939f9ea0a345294f657bcfcdc0",
+      "error_code": null
+    }
+  },
+  {
+    "id": "inverse_tangent_identity",
+    "expression": "atan(1)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_SYMBOLIC",
+      "resolution_class": "EXACT_SYMBOLIC",
+      "display_kind": "APPROXIMATE_SYMBOLIC",
+      "exact_value": "1/4 * pi",
+      "decimal_approximation": "0.78539816339744830961566084582",
+      "display_value": "≈ 0.78539816339744830961566084582",
+      "display_mathematical_form": "1/4 * pi",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_ATAN(RAT(1/1))",
+      "semantic_canonical": "MUL(RAT(1/4),PI)",
+      "structure_certificate_sha256": "919b45bb604439c3f3a9e15bb2ca9f1df1389c85972aa71671237d80be6c36ad",
+      "semantic_certificate_sha256": "d612efc6fde0a86ca62a751dc78b51b4a7a77c285a08c6c47c87e27dab256def",
+      "display_receipt_sha256": "4bcac8069808dfae56143f5363ed4e0558e4e061d13197a8335b70ef62f03caa",
+      "error_code": null
+    }
+  },
+  {
+    "id": "degree_conversion",
+    "expression": "sin(deg(90))",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "1",
+      "decimal_approximation": "1",
+      "display_value": "1",
+      "display_mathematical_form": "1",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_SIN(CALL_DEG(RAT(90/1)))",
+      "semantic_canonical": "RAT(1/1)",
+      "structure_certificate_sha256": "0b0fc9529d82e33a1724b09c2c7f8921c7336aed52cd5dd29f3c43a80a2d7f94",
+      "semantic_certificate_sha256": "7198cb7eb85ee7cee6bb638c0c547e07d3584a899a66429d5519bd90b7295d9e",
+      "display_receipt_sha256": "e8c568efa244891d52a1b165fa80cba7caa2cc401fec7be14a5d746e871540d2",
+      "error_code": null
+    }
+  },
+  {
+    "id": "negative_sqrt_refusal",
+    "expression": "sqrt(-1)",
+    "precision": 30,
+    "expected": {
+      "state": "FORBIDDEN",
+      "resolution_class": "REFUSED",
+      "display_kind": "UNDEFINED",
+      "exact_value": null,
+      "decimal_approximation": null,
+      "display_value": "undefined",
+      "display_mathematical_form": "sqrt(-1)",
+      "display_form_label": "Evaluated expression",
+      "structure_canonical": "CALL_SQRT(UNARY_MINUS(RAT(1/1)))",
+      "semantic_canonical": "FORBIDDEN",
+      "structure_certificate_sha256": "fe30828256996c54b3d8f3865ab223c145b794efc101c68bee8d3cf6008b9f7e",
+      "semantic_certificate_sha256": "8d3bf4e97e5575ff1bce337df08d2396052ba19bd52bd840581a9ce548d74543",
+      "display_receipt_sha256": "0f2d5da053534bd6e9756bf4edc821282ee60f96fc089a52ef46a2adcf584ef7",
+      "error_code": null
+    }
+  },
+  {
+    "id": "zero_log_refusal",
+    "expression": "ln(0)",
+    "precision": 30,
+    "expected": {
+      "state": "FORBIDDEN",
+      "resolution_class": "REFUSED",
+      "display_kind": "UNDEFINED",
+      "exact_value": null,
+      "decimal_approximation": null,
+      "display_value": "undefined",
+      "display_mathematical_form": "ln(0)",
+      "display_form_label": "Evaluated expression",
+      "structure_canonical": "CALL_LN(RAT(0/1))",
+      "semantic_canonical": "FORBIDDEN",
+      "structure_certificate_sha256": "e0d72bc2de5384f3930c63c097cdeb43d11c355f72567bb17fe29fb8312e51ac",
+      "semantic_certificate_sha256": "8d3bf4e97e5575ff1bce337df08d2396052ba19bd52bd840581a9ce548d74543",
+      "display_receipt_sha256": "4f9ea0d47aa6800ca5fc1defefa722cd15bdd5d104c64cb4615dee0dab2cd0a9",
+      "error_code": null
+    }
+  },
+  {
+    "id": "inverse_trig_domain_refusal",
+    "expression": "asin(2)",
+    "precision": 30,
+    "expected": {
+      "state": "FORBIDDEN",
+      "resolution_class": "REFUSED",
+      "display_kind": "UNDEFINED",
+      "exact_value": null,
+      "decimal_approximation": null,
+      "display_value": "undefined",
+      "display_mathematical_form": "asin(2)",
+      "display_form_label": "Evaluated expression",
+      "structure_canonical": "CALL_ASIN(RAT(2/1))",
+      "semantic_canonical": "FORBIDDEN",
+      "structure_certificate_sha256": "5b3e8623b950dd7c6313d31bb89d56a85bbf4f2c40d2d239be0645ec4286f953",
+      "semantic_certificate_sha256": "8d3bf4e97e5575ff1bce337df08d2396052ba19bd52bd840581a9ce548d74543",
+      "display_receipt_sha256": "f55b987b1f97fcd7c4f223c2b99a49e94d7fba6784c1d6ad363d40c2d7d8ba16",
+      "error_code": null
+    }
+  },
+  {
+    "id": "division_by_zero",
+    "expression": "1/0",
+    "precision": 30,
+    "expected": {
+      "state": "FORBIDDEN",
+      "resolution_class": "REFUSED",
+      "display_kind": "UNDEFINED",
+      "exact_value": null,
+      "decimal_approximation": null,
+      "display_value": "undefined",
+      "display_mathematical_form": "1/0",
+      "display_form_label": "Evaluated expression",
+      "structure_canonical": "DIV(RAT(1/1),RAT(0/1))",
+      "semantic_canonical": "FORBIDDEN",
+      "structure_certificate_sha256": "1c61be47a3290214c9521304440947d7cbf9172ad5fd1733bd49d1c2de4e8c31",
+      "semantic_certificate_sha256": "8d3bf4e97e5575ff1bce337df08d2396052ba19bd52bd840581a9ce548d74543",
+      "display_receipt_sha256": "6785f8b339a023e090edd56396d134ba31f01c7bd574b34b623e70b1b990b8c1",
+      "error_code": null
+    }
+  },
+  {
+    "id": "indeterminate_zero_division",
+    "expression": "0/0",
+    "precision": 30,
+    "expected": {
+      "state": "INDETERMINATE",
+      "resolution_class": "REFUSED",
+      "display_kind": "INDETERMINATE",
+      "exact_value": null,
+      "decimal_approximation": null,
+      "display_value": "indeterminate",
+      "display_mathematical_form": "0/0",
+      "display_form_label": "Evaluated expression",
+      "structure_canonical": "DIV(RAT(0/1),RAT(0/1))",
+      "semantic_canonical": "INDETERMINATE",
+      "structure_certificate_sha256": "b0e106799b96ac90f9e604f777527275ac0f062cc5a2bc8de43742ada7370199",
+      "semantic_certificate_sha256": "6a8068d8b5bb74c6f628ed69b9f97c76eec5668a2422cd598d4fa84edb4e9f9a",
+      "display_receipt_sha256": "4e6765e5afa1c56de7c94cd280944a8682398d34ae29b3ebc97767dba1efbce7",
+      "error_code": null
+    }
+  },
+  {
+    "id": "incomplete_group",
+    "expression": "(1+2",
+    "precision": 30,
+    "expected": {
+      "state": "INCOMPLETE",
+      "resolution_class": "REFUSED",
+      "display_kind": "INCOMPLETE",
+      "exact_value": null,
+      "decimal_approximation": null,
+      "display_value": "incomplete",
+      "display_mathematical_form": "(1+2",
+      "display_form_label": "Submitted expression",
+      "structure_canonical": "UNRESOLVED",
+      "semantic_canonical": "INCOMPLETE",
+      "structure_certificate_sha256": "0846961325c1c5586c35cc30d24a305fe5404be3ec3977ab9943d71bcfed272e",
+      "semantic_certificate_sha256": "e77e3d61dc7204b1e8a05a7f7a3f7520644f1e6be5ed24f400aa2490d22c59a2",
+      "display_receipt_sha256": "c7ac94e2ed73f5756451ffadff17cbd4f0c677be42b74e412ae67f14f23cb632",
+      "error_code": null
+    }
+  },
+  {
+    "id": "integer_gcd",
+    "expression": "gcd(84,30,18)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "6",
+      "decimal_approximation": "6",
+      "display_value": "6",
+      "display_mathematical_form": "6",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_GCD(RAT(18/1),RAT(30/1),RAT(84/1))",
+      "semantic_canonical": "RAT(6/1)",
+      "structure_certificate_sha256": "ff751983662ca34ac0ccca8210846e9eea4ff7d4b575c3d58f5e4827eeb3256f",
+      "semantic_certificate_sha256": "e352f9887e072d7b5097f29b5288c566ce47bbc974387568b544f27d795d1a26",
+      "display_receipt_sha256": "22d11ed0d67cf6080f6e93408da8d4d7d2fef67fbe6e22ba6ab9fb16ac677ca2",
+      "error_code": null
+    }
+  },
+  {
+    "id": "integer_lcm",
+    "expression": "lcm(6,10,15)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "30",
+      "decimal_approximation": "30",
+      "display_value": "30",
+      "display_mathematical_form": "30",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_LCM(RAT(10/1),RAT(15/1),RAT(6/1))",
+      "semantic_canonical": "RAT(30/1)",
+      "structure_certificate_sha256": "2b320f0a539e4233a072ae7c4651cdad9f42766920832f45953d1ad53ab3658c",
+      "semantic_certificate_sha256": "b8e6099bcf79f345e8c21a3389b9107b403871cf677c04a28be092c25d090d50",
+      "display_receipt_sha256": "afcf092375cec6aa20d5788dddbd885d7544b1d31d09845b9296356e551e61d0",
+      "error_code": null
+    }
+  },
+  {
+    "id": "integer_power",
+    "expression": "2^10",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "1024",
+      "decimal_approximation": "1024",
+      "display_value": "1024",
+      "display_mathematical_form": "1024",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "POW(RAT(2/1),RAT(10/1))",
+      "semantic_canonical": "RAT(1024/1)",
+      "structure_certificate_sha256": "b2c979240758c55f955eef1499b79b5e526c017158f1881ae614612cd14c7cfa",
+      "semantic_certificate_sha256": "d0a8444801f08c4c86cf986cefd5dcf0e30bd80ad48af2a63495050e14f2fb7a",
+      "display_receipt_sha256": "a5df955c0f9615a6dfdec720bf99cf78f936cd147827e05e938dffc21c99b6ac",
+      "error_code": null
+    }
+  },
+  {
+    "id": "right_associative_power",
+    "expression": "2^3^2",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "512",
+      "decimal_approximation": "512",
+      "display_value": "512",
+      "display_mathematical_form": "512",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "POW(RAT(2/1),POW(RAT(3/1),RAT(2/1)))",
+      "semantic_canonical": "RAT(512/1)",
+      "structure_certificate_sha256": "eeb20ffecf6b9560f7bcf65c6fc38a7866b480d08c0160e67909d1b226463d5f",
+      "semantic_certificate_sha256": "093d04f34c0dc1139400eca975f214ead1d2b273b46f0ca5149bebc33c3cac7d",
+      "display_receipt_sha256": "21c2ef7ae4a7dc2bba04c5d2862503f2a517feae1c619abb112cc0931e461370",
+      "error_code": null
+    }
+  },
+  {
+    "id": "unary_minus_precedence",
+    "expression": "-2^2",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "-4",
+      "decimal_approximation": "-4",
+      "display_value": "-4",
+      "display_mathematical_form": "-4",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "UNARY_MINUS(POW(RAT(2/1),RAT(2/1)))",
+      "semantic_canonical": "RAT(-4/1)",
+      "structure_certificate_sha256": "7df462a3e7043a0bfd59eb466ad889c57533461dfb267302b9313cf58c043899",
+      "semantic_certificate_sha256": "b236e27a7bcd8a6bf179ebc9909dbafe5c6d159bcd13f864654899401bafc26d",
+      "display_receipt_sha256": "c7f78f38574a3628a3d937a3288603b717863bb5fb9fc0ee51b99cb9ced37008",
+      "error_code": null
+    }
+  },
+  {
+    "id": "parenthesized_negative_power",
+    "expression": "(-2)^2",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "4",
+      "decimal_approximation": "4",
+      "display_value": "4",
+      "display_mathematical_form": "4",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "POW(UNARY_MINUS(RAT(2/1)),RAT(2/1))",
+      "semantic_canonical": "RAT(4/1)",
+      "structure_certificate_sha256": "76401746ed2971eb16c6b945127a2a001a10af8bd299f006fe2aa3fb8e574b53",
+      "semantic_certificate_sha256": "66fde139e4353c66b4b6bd1e1ea20ae7e88a2f7b4966d6a88b533b294f63f1fb",
+      "display_receipt_sha256": "50c157437cee4b30ba6e066a9ef7e9fcdc66a3b73c497ae27cb9415c814b3cc8",
+      "error_code": null
+    }
+  },
+  {
+    "id": "negative_exponent",
+    "expression": "2^-2",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "1/4",
+      "decimal_approximation": "0.25",
+      "display_value": "0.25",
+      "display_mathematical_form": "1/4",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "POW(RAT(2/1),UNARY_MINUS(RAT(2/1)))",
+      "semantic_canonical": "RAT(1/4)",
+      "structure_certificate_sha256": "59e8674615d365eb49bc3f6032abad5ea5fd4704d8442e3af3e8696c3999ac89",
+      "semantic_certificate_sha256": "0d584fce0bca40c14e1e8dcfb224f1f8184363194501acbb03c3e356e5be415e",
+      "display_receipt_sha256": "3771b8e63f9236f8e0525e22e77acaacc0a3b61a61d59af932f4ce9a0d98a509",
+      "error_code": null
+    }
+  },
+  {
+    "id": "positive_divisor_remainder",
+    "expression": "-3 % 2",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "1",
+      "decimal_approximation": "1",
+      "display_value": "1",
+      "display_mathematical_form": "1",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "MOD(UNARY_MINUS(RAT(3/1)),RAT(2/1))",
+      "semantic_canonical": "RAT(1/1)",
+      "structure_certificate_sha256": "93bab691505b1da5299e9f09b1828fcb385489a73fdfeeb1b58dc8ea6d81159d",
+      "semantic_certificate_sha256": "7198cb7eb85ee7cee6bb638c0c547e07d3584a899a66429d5519bd90b7295d9e",
+      "display_receipt_sha256": "e8c568efa244891d52a1b165fa80cba7caa2cc401fec7be14a5d746e871540d2",
+      "error_code": null
+    }
+  },
+  {
+    "id": "negative_divisor_remainder",
+    "expression": "3 % -2",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "-1",
+      "decimal_approximation": "-1",
+      "display_value": "-1",
+      "display_mathematical_form": "-1",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "MOD(RAT(3/1),UNARY_MINUS(RAT(2/1)))",
+      "semantic_canonical": "RAT(-1/1)",
+      "structure_certificate_sha256": "297380522721d6c49956da6aff89551b215c6ed6993c6ab86bdfe750c6501960",
+      "semantic_certificate_sha256": "ecd638e867610f01fe6b5e9fab0fd8b3a5afbd24936a7bf0ab1c08175939e2bc",
+      "display_receipt_sha256": "ec2c7fc8400ec7295dfb8a3373b28e8b5c443a338f4779d88e7c3841b28f8993",
+      "error_code": null
+    }
+  },
+  {
+    "id": "both_negative_remainder",
+    "expression": "-3 % -2",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "-1",
+      "decimal_approximation": "-1",
+      "display_value": "-1",
+      "display_mathematical_form": "-1",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "MOD(UNARY_MINUS(RAT(3/1)),UNARY_MINUS(RAT(2/1)))",
+      "semantic_canonical": "RAT(-1/1)",
+      "structure_certificate_sha256": "a30bec3025ca86f98d7e39c590d8a7ae5f1aa729bc9f744ea9bdb7b724b309d8",
+      "semantic_certificate_sha256": "ecd638e867610f01fe6b5e9fab0fd8b3a5afbd24936a7bf0ab1c08175939e2bc",
+      "display_receipt_sha256": "ec2c7fc8400ec7295dfb8a3373b28e8b5c443a338f4779d88e7c3841b28f8993",
+      "error_code": null
+    }
+  },
+  {
+    "id": "power_resource_limit",
+    "expression": "9^9^9",
+    "precision": 30,
+    "expected": {
+      "state": "LIMIT_EXCEEDED",
+      "resolution_class": "LIMITED",
+      "display_kind": "LIMIT_EXCEEDED",
+      "exact_value": null,
+      "decimal_approximation": null,
+      "display_value": "limit exceeded",
+      "display_mathematical_form": "9^9^9",
+      "display_form_label": "Submitted expression",
+      "structure_canonical": "POW(RAT(9/1),POW(RAT(9/1),RAT(9/1)))",
+      "semantic_canonical": "LIMIT_EXCEEDED",
+      "structure_certificate_sha256": "e0035344b6528e4b4eb2debf4b24358e0770685ba3c107222ab8d8b3068eaac3",
+      "semantic_certificate_sha256": "00f838d7ebd67d2137d9f41021a0400cbb616682daa8e29919c41347d2adf039",
+      "display_receipt_sha256": "401f9d162b906b27a4a984480379815afa95844d49508f23361bab4ab97202c3",
+      "error_code": "MAX_EXACT_RESULT_DIGITS"
+    }
+  },
+  {
+    "id": "half_even_round_down",
+    "expression": "round(5/2)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "2",
+      "decimal_approximation": "2",
+      "display_value": "2",
+      "display_mathematical_form": "2",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_ROUND(DIV(RAT(5/1),RAT(2/1)))",
+      "semantic_canonical": "RAT(2/1)",
+      "structure_certificate_sha256": "b2da4d797b1730977a5e9df5b3bfc773a5f01d43ffa7d06f743982873830cc1b",
+      "semantic_certificate_sha256": "bd09ae09776bfd0376ac1de59e0ba8209249d307a0346a7cbae59ecd7edd5e17",
+      "display_receipt_sha256": "47e1693b908fbe62f52fcb4b202ec4452e51321c4a771f47c61f4a459e04fc4b",
+      "error_code": null
+    }
+  },
+  {
+    "id": "half_even_round_up",
+    "expression": "round(7/2)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "4",
+      "decimal_approximation": "4",
+      "display_value": "4",
+      "display_mathematical_form": "4",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_ROUND(DIV(RAT(7/1),RAT(2/1)))",
+      "semantic_canonical": "RAT(4/1)",
+      "structure_certificate_sha256": "0ef6bc70abfdcf78886033663f6cd4221f0ac72f76cff34afc976ae6686c7b5c",
+      "semantic_certificate_sha256": "66fde139e4353c66b4b6bd1e1ea20ae7e88a2f7b4966d6a88b533b294f63f1fb",
+      "display_receipt_sha256": "50c157437cee4b30ba6e066a9ef7e9fcdc66a3b73c497ae27cb9415c814b3cc8",
+      "error_code": null
+    }
+  },
+  {
+    "id": "semantic_equivalent_sine_degrees",
+    "expression": "sin(deg(30))",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "1/2",
+      "decimal_approximation": "0.5",
+      "display_value": "0.5",
+      "display_mathematical_form": "1/2",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_SIN(CALL_DEG(RAT(30/1)))",
+      "semantic_canonical": "RAT(1/2)",
+      "structure_certificate_sha256": "3231e54032fbf00a69c9954afd88449d0333d7842bc55cc86f0afdc3e4a62658",
+      "semantic_certificate_sha256": "ebb862b282b5ce44909f76f40e1146f26a9dddec4af97303276015454c580ada",
+      "display_receipt_sha256": "fd75ee05ad4eb3bfd399f1c246b5170c1abe86bf4de8e43da88ad816f365ffab",
+      "error_code": null
+    }
+  },
+  {
+    "id": "semantic_equivalent_fraction",
+    "expression": "1/2",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "1/2",
+      "decimal_approximation": "0.5",
+      "display_value": "0.5",
+      "display_mathematical_form": "1/2",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "DIV(RAT(1/1),RAT(2/1))",
+      "semantic_canonical": "RAT(1/2)",
+      "structure_certificate_sha256": "3f1f77fc711f71ff770967e235dd094f05676037e5c9e65467125a6a6b324920",
+      "semantic_certificate_sha256": "ebb862b282b5ce44909f76f40e1146f26a9dddec4af97303276015454c580ada",
+      "display_receipt_sha256": "fd75ee05ad4eb3bfd399f1c246b5170c1abe86bf4de8e43da88ad816f365ffab",
+      "error_code": null
+    }
+  },
+  {
+    "id": "scientific_resolution_20",
+    "expression": "sin(pi/6) + cos(pi) + sqrt(2) + ln(2)",
+    "precision": 20,
+    "expected": {
+      "state": "RESOLVED_EXACT_SYMBOLIC",
+      "resolution_class": "EXACT_SYMBOLIC",
+      "display_kind": "APPROXIMATE_SYMBOLIC",
+      "exact_value": "ln(2) - 1/2 + sqrt(2)",
+      "decimal_approximation": "1.6073607429330403582",
+      "display_value": "≈ 1.6073607429330403582",
+      "display_mathematical_form": "ln(2) - 1/2 + sqrt(2)",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "ADD(ADD(ADD(CALL_COS(PI),CALL_SIN(DIV(PI,RAT(6/1)))),CALL_SQRT(RAT(2/1))),CALL_LN(RAT(2/1)))",
+      "semantic_canonical": "ADD(LN(RAT(2/1)),RAT(-1/2),SQRT(RAT(2/1)))",
+      "structure_certificate_sha256": "4e1decda8f924cfc8f16285dff84401f656cc006c488f8582ccb56a8daa96572",
+      "semantic_certificate_sha256": "6ce0b774132a3f2498c036b2ba1869bc78de283b48f4b27e528842a2e7191f9f",
+      "display_receipt_sha256": "27d4b6fa663a5751ef238c1fa7fc90f1f02e0e4ab33fcfed8e2a01ba63ad2a5f",
+      "error_code": null
+    }
+  },
+  {
+    "id": "scientific_resolution_30",
+    "expression": "sin(pi/6) + cos(pi) + sqrt(2) + ln(2)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_SYMBOLIC",
+      "resolution_class": "EXACT_SYMBOLIC",
+      "display_kind": "APPROXIMATE_SYMBOLIC",
+      "exact_value": "ln(2) - 1/2 + sqrt(2)",
+      "decimal_approximation": "1.60736074293304035821892084567",
+      "display_value": "≈ 1.60736074293304035821892084567",
+      "display_mathematical_form": "ln(2) - 1/2 + sqrt(2)",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "ADD(ADD(ADD(CALL_COS(PI),CALL_SIN(DIV(PI,RAT(6/1)))),CALL_SQRT(RAT(2/1))),CALL_LN(RAT(2/1)))",
+      "semantic_canonical": "ADD(LN(RAT(2/1)),RAT(-1/2),SQRT(RAT(2/1)))",
+      "structure_certificate_sha256": "4e1decda8f924cfc8f16285dff84401f656cc006c488f8582ccb56a8daa96572",
+      "semantic_certificate_sha256": "6ce0b774132a3f2498c036b2ba1869bc78de283b48f4b27e528842a2e7191f9f",
+      "display_receipt_sha256": "62c7b09e5d5b4297291f4e16a66a0957da7d25dd0fc89c73f1278705e165e513",
+      "error_code": null
+    }
+  },
+  {
+    "id": "scientific_resolution_60",
+    "expression": "sin(pi/6) + cos(pi) + sqrt(2) + ln(2)",
+    "precision": 60,
+    "expected": {
+      "state": "RESOLVED_EXACT_SYMBOLIC",
+      "resolution_class": "EXACT_SYMBOLIC",
+      "display_kind": "APPROXIMATE_SYMBOLIC",
+      "exact_value": "ln(2) - 1/2 + sqrt(2)",
+      "decimal_approximation": "1.60736074293304035821892084566787464664517200973720332729736",
+      "display_value": "≈ 1.60736074293304035821892084566787464664517200973720332729736",
+      "display_mathematical_form": "ln(2) - 1/2 + sqrt(2)",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "ADD(ADD(ADD(CALL_COS(PI),CALL_SIN(DIV(PI,RAT(6/1)))),CALL_SQRT(RAT(2/1))),CALL_LN(RAT(2/1)))",
+      "semantic_canonical": "ADD(LN(RAT(2/1)),RAT(-1/2),SQRT(RAT(2/1)))",
+      "structure_certificate_sha256": "4e1decda8f924cfc8f16285dff84401f656cc006c488f8582ccb56a8daa96572",
+      "semantic_certificate_sha256": "6ce0b774132a3f2498c036b2ba1869bc78de283b48f4b27e528842a2e7191f9f",
+      "display_receipt_sha256": "3b6e6df896ade515fddfd8c8eb46c18bc6d39624f9bbabd9ff7e9a9193549620",
+      "error_code": null
+    }
+  },
+  {
+    "id": "nesting_resource_limit",
+    "expression": "(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((1)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))",
+    "precision": 30,
+    "expected": {
+      "state": "LIMIT_EXCEEDED",
+      "resolution_class": "LIMITED",
+      "display_kind": "LIMIT_EXCEEDED",
+      "exact_value": null,
+      "decimal_approximation": null,
+      "display_value": "limit exceeded",
+      "display_mathematical_form": "(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((1)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))",
+      "display_form_label": "Submitted expression",
+      "structure_canonical": "UNRESOLVED",
+      "semantic_canonical": "LIMIT_EXCEEDED",
+      "structure_certificate_sha256": "0846961325c1c5586c35cc30d24a305fe5404be3ec3977ab9943d71bcfed272e",
+      "semantic_certificate_sha256": "00f838d7ebd67d2137d9f41021a0400cbb616682daa8e29919c41347d2adf039",
+      "display_receipt_sha256": "cacc1d486e1b84e55b9bebc468d4fca0bda617d400d131e3c3c6262a35d660fe",
+      "error_code": "MAX_NESTING_DEPTH"
+    }
+  },
+  {
+    "id": "symbolic_cancel_pi",
+    "expression": "pi - pi",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "0",
+      "decimal_approximation": "0",
+      "display_value": "0",
+      "display_mathematical_form": "0",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "SUB(PI,PI)",
+      "semantic_canonical": "RAT(0/1)",
+      "structure_certificate_sha256": "3800ce17160e097da0e50a31baefaf83a6230b75e6e98ccf53b8e240ef25088b",
+      "semantic_certificate_sha256": "a0d217926a2914fdae3e90f0f8032cae9a8d01abaac348f9c0e7548722b2ca71",
+      "display_receipt_sha256": "3d551070b7bc8fd7eba5cd4b93b1057a92d407b1cdb869a7ca6277bc31ed7c3f",
+      "error_code": null
+    }
+  },
+  {
+    "id": "symbolic_cancel_log",
+    "expression": "ln(2) - ln(2)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "0",
+      "decimal_approximation": "0",
+      "display_value": "0",
+      "display_mathematical_form": "0",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "SUB(CALL_LN(RAT(2/1)),CALL_LN(RAT(2/1)))",
+      "semantic_canonical": "RAT(0/1)",
+      "structure_certificate_sha256": "cdaba95b33eee9b7becf312f3be97f7f7bfd600deffccfd0a641ee22d7139139",
+      "semantic_certificate_sha256": "a0d217926a2914fdae3e90f0f8032cae9a8d01abaac348f9c0e7548722b2ca71",
+      "display_receipt_sha256": "3d551070b7bc8fd7eba5cd4b93b1057a92d407b1cdb869a7ca6277bc31ed7c3f",
+      "error_code": null
+    }
+  },
+  {
+    "id": "symbolic_cancel_multiple",
+    "expression": "pi + e - pi - e",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "0",
+      "decimal_approximation": "0",
+      "display_value": "0",
+      "display_mathematical_form": "0",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "SUB(SUB(ADD(E,PI),PI),E)",
+      "semantic_canonical": "RAT(0/1)",
+      "structure_certificate_sha256": "bd924d42a929185e6aed7c5ca7cfc2db95cd2974f6591603d428017a8f2b16f4",
+      "semantic_certificate_sha256": "a0d217926a2914fdae3e90f0f8032cae9a8d01abaac348f9c0e7548722b2ca71",
+      "display_receipt_sha256": "3d551070b7bc8fd7eba5cd4b93b1057a92d407b1cdb869a7ca6277bc31ed7c3f",
+      "error_code": null
+    }
+  },
+  {
+    "id": "symbolic_coefficient_reduction",
+    "expression": "2*pi - pi",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_SYMBOLIC",
+      "resolution_class": "EXACT_SYMBOLIC",
+      "display_kind": "APPROXIMATE_SYMBOLIC",
+      "exact_value": "pi",
+      "decimal_approximation": "3.14159265358979323846264338328",
+      "display_value": "≈ 3.14159265358979323846264338328",
+      "display_mathematical_form": "pi",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "SUB(MUL(PI,RAT(2/1)),PI)",
+      "semantic_canonical": "PI",
+      "structure_certificate_sha256": "24107e7741649ba651cb28c6fab02753eef5427448d99ba5e1f396b9778df50d",
+      "semantic_certificate_sha256": "82d249cdca7f75f2c2e36c97cc07dde70e0afbe09e02ca33aca5ee7eda3828e2",
+      "display_receipt_sha256": "73c325cdc3512064456b4c924d59d065493203c05b16caf2f25c46fa67eb9a94",
+      "error_code": null
+    }
+  },
+  {
+    "id": "symbolic_coefficient_collection",
+    "expression": "sqrt(2) + sqrt(2)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_SYMBOLIC",
+      "resolution_class": "EXACT_SYMBOLIC",
+      "display_kind": "APPROXIMATE_SYMBOLIC",
+      "exact_value": "2 * sqrt(2)",
+      "decimal_approximation": "2.82842712474619009760337744842",
+      "display_value": "≈ 2.82842712474619009760337744842",
+      "display_mathematical_form": "2 * sqrt(2)",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "ADD(CALL_SQRT(RAT(2/1)),CALL_SQRT(RAT(2/1)))",
+      "semantic_canonical": "MUL(RAT(2/1),SQRT(RAT(2/1)))",
+      "structure_certificate_sha256": "46e047341b00869a21dd181bf35b06b9efa76f5884d616edfcefa801ec95ed91",
+      "semantic_certificate_sha256": "458d0fa89aa7c42190140164f82457d3b7c9d1759389973852c0392ded5a811a",
+      "display_receipt_sha256": "a2c3b451625a6b20f81ac672803c0810d9407090a351de0af14aab4db2a93d1f",
+      "error_code": null
+    }
+  },
+  {
+    "id": "zero_half_power",
+    "expression": "0^(1/2)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "0",
+      "decimal_approximation": "0",
+      "display_value": "0",
+      "display_mathematical_form": "0",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "POW(RAT(0/1),DIV(RAT(1/1),RAT(2/1)))",
+      "semantic_canonical": "RAT(0/1)",
+      "structure_certificate_sha256": "47f7eacceed0949d52a80ccb4718f215e81fa0a5b68f2844031837d48044c09d",
+      "semantic_certificate_sha256": "a0d217926a2914fdae3e90f0f8032cae9a8d01abaac348f9c0e7548722b2ca71",
+      "display_receipt_sha256": "3d551070b7bc8fd7eba5cd4b93b1057a92d407b1cdb869a7ca6277bc31ed7c3f",
+      "error_code": null
+    }
+  },
+  {
+    "id": "zero_three_half_power",
+    "expression": "0^(3/2)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "0",
+      "decimal_approximation": "0",
+      "display_value": "0",
+      "display_mathematical_form": "0",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "POW(RAT(0/1),DIV(RAT(3/1),RAT(2/1)))",
+      "semantic_canonical": "RAT(0/1)",
+      "structure_certificate_sha256": "18f1c4a2a5e5f4e6751bcc3a079e7c648c0e0f5e2293c20489a124389e524953",
+      "semantic_certificate_sha256": "a0d217926a2914fdae3e90f0f8032cae9a8d01abaac348f9c0e7548722b2ca71",
+      "display_receipt_sha256": "3d551070b7bc8fd7eba5cd4b93b1057a92d407b1cdb869a7ca6277bc31ed7c3f",
+      "error_code": null
+    }
+  },
+  {
+    "id": "zero_negative_half_power",
+    "expression": "0^(-1/2)",
+    "precision": 30,
+    "expected": {
+      "state": "FORBIDDEN",
+      "resolution_class": "REFUSED",
+      "display_kind": "UNDEFINED",
+      "exact_value": null,
+      "decimal_approximation": null,
+      "display_value": "undefined",
+      "display_mathematical_form": "0^(-1/2)",
+      "display_form_label": "Evaluated expression",
+      "structure_canonical": "POW(RAT(0/1),DIV(UNARY_MINUS(RAT(1/1)),RAT(2/1)))",
+      "semantic_canonical": "FORBIDDEN",
+      "structure_certificate_sha256": "0d299802a4b0f935500cd0c05efaff5d558173c0977191e9dacbad2fe871e613",
+      "semantic_certificate_sha256": "8d3bf4e97e5575ff1bce337df08d2396052ba19bd52bd840581a9ce548d74543",
+      "display_receipt_sha256": "89c809e9e20b35ec1596b1377ce7d45b75d962ed0f06605de30cd9674c40db7f",
+      "error_code": null
+    }
+  },
+  {
+    "id": "gcd_zero_positive",
+    "expression": "gcd(0,5)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "5",
+      "decimal_approximation": "5",
+      "display_value": "5",
+      "display_mathematical_form": "5",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_GCD(RAT(0/1),RAT(5/1))",
+      "semantic_canonical": "RAT(5/1)",
+      "structure_certificate_sha256": "c40bf07760b5d638ff7cb680157dae96222db065c0ad83d35378ef7db9922a7e",
+      "semantic_certificate_sha256": "52defe44059d1a4b4589d2df5057cb8c49f8b00572fa3cf894471276ef73e416",
+      "display_receipt_sha256": "8eac9b25d6de30055d48ad784b15b6fe36156b1b681df25463b1a94a335d95e5",
+      "error_code": null
+    }
+  },
+  {
+    "id": "gcd_zero_zero",
+    "expression": "gcd(0,0)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "0",
+      "decimal_approximation": "0",
+      "display_value": "0",
+      "display_mathematical_form": "0",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_GCD(RAT(0/1),RAT(0/1))",
+      "semantic_canonical": "RAT(0/1)",
+      "structure_certificate_sha256": "07605559a8f70e8fe735acaeed9088b89fcf5d64477607402698e4e38330fc9b",
+      "semantic_certificate_sha256": "a0d217926a2914fdae3e90f0f8032cae9a8d01abaac348f9c0e7548722b2ca71",
+      "display_receipt_sha256": "3d551070b7bc8fd7eba5cd4b93b1057a92d407b1cdb869a7ca6277bc31ed7c3f",
+      "error_code": null
+    }
+  },
+  {
+    "id": "lcm_zero_positive",
+    "expression": "lcm(0,5)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_TERMINATING",
+      "exact_value": "0",
+      "decimal_approximation": "0",
+      "display_value": "0",
+      "display_mathematical_form": "0",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_LCM(RAT(0/1),RAT(5/1))",
+      "semantic_canonical": "RAT(0/1)",
+      "structure_certificate_sha256": "d09be977a99bddb305e83e3d945ed065d6d4a0970e439daec6c6bf140e25b258",
+      "semantic_certificate_sha256": "a0d217926a2914fdae3e90f0f8032cae9a8d01abaac348f9c0e7548722b2ca71",
+      "display_receipt_sha256": "3d551070b7bc8fd7eba5cd4b93b1057a92d407b1cdb869a7ca6277bc31ed7c3f",
+      "error_code": null
+    }
+  },
+  {
+    "id": "repeating_one_third",
+    "expression": "1/3",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_REPEATING",
+      "exact_value": "1/3",
+      "decimal_approximation": "0.3…",
+      "display_value": "0.3…",
+      "display_mathematical_form": "1/3",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "DIV(RAT(1/1),RAT(3/1))",
+      "semantic_canonical": "RAT(1/3)",
+      "structure_certificate_sha256": "35a99012e00510fd940360b86ef01d7ba02644e5b5b80b5c9c6c5d3a0dda83b8",
+      "semantic_certificate_sha256": "0614f0485f966508cc98d70fbb3cddfd7b134714d9ddb1dfd9e7610bc4678a00",
+      "display_receipt_sha256": "cd5dfd5c1545b7dfe3eeb293332e19b0563c758661dd495e1e9ad110cb6f2bb5",
+      "error_code": null
+    }
+  },
+  {
+    "id": "repeating_one_sixth",
+    "expression": "1/6",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_REPEATING",
+      "exact_value": "1/6",
+      "decimal_approximation": "0.16…",
+      "display_value": "0.16…",
+      "display_mathematical_form": "1/6",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "DIV(RAT(1/1),RAT(6/1))",
+      "semantic_canonical": "RAT(1/6)",
+      "structure_certificate_sha256": "8a08b298831b2913bd9b0427a78a68f4169e4630a0da632c103010521d48bb6b",
+      "semantic_certificate_sha256": "ebae06c8ff7fd306dbcd77ddb8a99e5199488fb00767a30b83bbc43c7bf15d50",
+      "display_receipt_sha256": "22c326d123d394670900c61702fd7659fc38569ae6ec6956407fe27683724dcf",
+      "error_code": null
+    }
+  },
+  {
+    "id": "repeating_abs_rational",
+    "expression": "abs(-7/3)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_REPEATING",
+      "exact_value": "7/3",
+      "decimal_approximation": "2.3…",
+      "display_value": "2.3…",
+      "display_mathematical_form": "7/3",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_ABS(DIV(UNARY_MINUS(RAT(7/1)),RAT(3/1)))",
+      "semantic_canonical": "RAT(7/3)",
+      "structure_certificate_sha256": "847a8cd67950770c38d526742e0a4b210862cbce63dfa4dca6c618b7f30ba631",
+      "semantic_certificate_sha256": "65ed9427f3baf1eb3b2dd5943f9907087f4b5d7fcc6a4f72795e819c950a7a95",
+      "display_receipt_sha256": "e6f605f04e49cb67c979669ea7bb513ac581c218e62b8f95a65d7df61c29570b",
+      "error_code": null
+    }
+  },
+  {
+    "id": "repeating_min_rational",
+    "expression": "min(1/2,1/3)",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_REPEATING",
+      "exact_value": "1/3",
+      "decimal_approximation": "0.3…",
+      "display_value": "0.3…",
+      "display_mathematical_form": "1/3",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "CALL_MIN(DIV(RAT(1/1),RAT(2/1)),DIV(RAT(1/1),RAT(3/1)))",
+      "semantic_canonical": "RAT(1/3)",
+      "structure_certificate_sha256": "60f3c132c6d28b96f447cbe2fdb37707228b5c8ab27acff0bffcf3d9afc5b3b6",
+      "semantic_certificate_sha256": "0614f0485f966508cc98d70fbb3cddfd7b134714d9ddb1dfd9e7610bc4678a00",
+      "display_receipt_sha256": "cd5dfd5c1545b7dfe3eeb293332e19b0563c758661dd495e1e9ad110cb6f2bb5",
+      "error_code": null
+    }
+  },
+  {
+    "id": "repeating_mod_rational",
+    "expression": "1/2 % 1/3",
+    "precision": 30,
+    "expected": {
+      "state": "RESOLVED_EXACT_RATIONAL",
+      "resolution_class": "EXACT_RATIONAL",
+      "display_kind": "EXACT_RATIONAL_REPEATING",
+      "exact_value": "1/6",
+      "decimal_approximation": "0.16…",
+      "display_value": "0.16…",
+      "display_mathematical_form": "1/6",
+      "display_form_label": "Exact mathematical form",
+      "structure_canonical": "DIV(MOD(DIV(RAT(1/1),RAT(2/1)),RAT(1/1)),RAT(3/1))",
+      "semantic_canonical": "RAT(1/6)",
+      "structure_certificate_sha256": "4829f2ac5995866325ad1b0f655a8239f374be00b8d0aef2b3e8b1c54ebe38b8",
+      "semantic_certificate_sha256": "ebae06c8ff7fd306dbcd77ddb8a99e5199488fb00767a30b83bbc43c7bf15d50",
+      "display_receipt_sha256": "22c326d123d394670900c61702fd7659fc38569ae6ec6956407fe27683724dcf",
+      "error_code": null
+    }
+  },
+  {
+    "id": "deep_power_tower_limit",
+    "expression": "2^2^2^2^2^2",
+    "precision": 30,
+    "expected": {
+      "state": "LIMIT_EXCEEDED",
+      "resolution_class": "LIMITED",
+      "display_kind": "LIMIT_EXCEEDED",
+      "exact_value": null,
+      "decimal_approximation": null,
+      "display_value": "limit exceeded",
+      "display_mathematical_form": "2^2^2^2^2^2",
+      "display_form_label": "Submitted expression",
+      "structure_canonical": "POW(RAT(2/1),POW(RAT(2/1),POW(RAT(2/1),POW(RAT(2/1),POW(RAT(2/1),RAT(2/1))))))",
+      "semantic_canonical": "LIMIT_EXCEEDED",
+      "structure_certificate_sha256": "684dddbabca95d843dfe8500081e8dbf711b3b1d16619e909725577280edb4f1",
+      "semantic_certificate_sha256": "00f838d7ebd67d2137d9f41021a0400cbb616682daa8e29919c41347d2adf039",
+      "display_receipt_sha256": "b73a3841a4d8804501ccd7b093c93e8be2d2e816b1ee1ae943650eb93bfbda06",
+      "error_code": "MAX_EXACT_RESULT_DIGITS"
+    }
+  },
+  {
+    "id": "non_ascii_digit_rejection",
+    "expression": "١+١",
+    "precision": 30,
+    "expected": {
+      "state": "CONFLICT",
+      "resolution_class": "REFUSED",
+      "display_kind": "UNRESOLVED",
+      "exact_value": null,
+      "decimal_approximation": null,
+      "display_value": "unresolved",
+      "display_mathematical_form": "١+١",
+      "display_form_label": "Submitted expression",
+      "structure_canonical": "UNRESOLVED",
+      "semantic_canonical": "CONFLICT",
+      "structure_certificate_sha256": "0846961325c1c5586c35cc30d24a305fe5404be3ec3977ab9943d71bcfed272e",
+      "semantic_certificate_sha256": "f2c0cc118b71f230ea80ce439c243c82971e567d7e66db78074d0df474182186",
+      "display_receipt_sha256": "d7983f03c89efabfcb20a3c3e0c54746490639adbc0abb0f9ea1ca1be4ae616d",
+      "error_code": "UNSUPPORTED_CHARACTER"
+    }
+  }
+];
+
+const STATES = {
+  RAT: "RESOLVED_EXACT_RATIONAL",
+  SYM: "RESOLVED_EXACT_SYMBOLIC",
+  FORBIDDEN: "FORBIDDEN",
+  INDET: "INDETERMINATE",
+  SINGULAR: "SINGULAR",
+  INCOMPLETE: "INCOMPLETE",
+  CONFLICT: "CONFLICT",
+  ABSTAIN: "ABSTAIN",
+  LIMIT: "LIMIT_EXCEEDED",
+  INTERNAL: "INTERNAL_ERROR",
+};
+const ARITY = {
+  sqrt: [1, 1],
+  abs: [1, 1],
+  sign: [1, 1],
+  floor: [1, 1],
+  ceil: [1, 1],
+  trunc: [1, 1],
+  round: [1, 1],
+  min: [1, null],
+  max: [1, null],
+  gcd: [2, null],
+  lcm: [2, null],
+  sin: [1, 1],
+  cos: [1, 1],
+  tan: [1, 1],
+  asin: [1, 1],
+  acos: [1, 1],
+  atan: [1, 1],
+  ln: [1, 1],
+  log10: [1, 1],
+  log: [1, 2],
+  exp: [1, 1],
+  deg: [1, 1],
+  rad: [1, 1],
+};
+function absBig(x) {
+  return x < 0n ? -x : x;
+}
+function gcdBig(a, b) {
+  a = absBig(a);
+  b = absBig(b);
+  while (b) {
+    const t = a % b;
+    a = b;
+    b = t;
+  }
+  return a;
+}
+function mkRat(n, d = 1n) {
+  if (d === 0n) throw stateError(STATES.FORBIDDEN, "Zero denominator");
+  if (d < 0n) {
+    n = -n;
+    d = -d;
+  }
+  if (n === 0n) return { op: "RAT", n: 0n, d: 1n, args: [] };
+  const g = gcdBig(n, d);
+  n /= g;
+  d /= g;
+  enforceRationalSize(n, d);
+  return { op: "RAT", n, d, args: [] };
+}
+function isRat(x) {
+  return x && x.op === "RAT";
+}
+function mkSym(op, ...args) {
+  return { op, args };
+}
+const PI = mkSym("PI"),
+  EC = mkSym("E"),
+  TAU = mkSym("TAU");
+function stateError(state, message, code = null, details = null) {
+  const error = new Error(message);
+  error.state = state;
+  error.code = code;
+  error.details = details || {};
+  return error;
+}
+
+function decimalDigitUpperBound(value) {
+  const magnitude = absBig(value);
+  if (magnitude < 10n) return 1;
+  const bits = magnitude.toString(2).length;
+  return Math.floor((bits * 30103 + 99999) / 100000) + 1;
+}
+
+function enforceIntegerSize(value, code = "MAX_EXACT_RESULT_DIGITS") {
+  const estimated = decimalDigitUpperBound(value);
+  if (estimated > LIMITS.max_exact_result_digits) {
+    throw stateError(
+      STATES.LIMIT,
+      "The exact integer result exceeds the configured digit limit",
+      code,
+      {
+        estimated_digits_upper_bound: estimated,
+        allowed_digits: LIMITS.max_exact_result_digits,
+      },
+    );
+  }
+}
+
+function enforceRationalSize(
+  numerator,
+  denominator,
+  code = "MAX_EXACT_RESULT_DIGITS",
+) {
+  const numeratorDigits = decimalDigitUpperBound(numerator);
+  const denominatorDigits = decimalDigitUpperBound(denominator);
+  if (
+    Math.max(numeratorDigits, denominatorDigits) >
+    LIMITS.max_exact_result_digits
+  ) {
+    throw stateError(
+      STATES.LIMIT,
+      "The exact rational result exceeds the configured digit limit",
+      code,
+      {
+        estimated_numerator_digits_upper_bound: numeratorDigits,
+        estimated_denominator_digits_upper_bound: denominatorDigits,
+        allowed_digits: LIMITS.max_exact_result_digits,
+      },
+    );
+  }
+}
+
+function guardProduct(
+  a,
+  b,
+  message = "The exact rational result exceeds the configured digit limit",
+) {
+  const estimated = decimalDigitUpperBound(a) + decimalDigitUpperBound(b);
+  if (estimated > LIMITS.max_exact_result_digits + 1) {
+    throw stateError(STATES.LIMIT, message, "MAX_EXACT_RESULT_DIGITS", {
+      estimated_digits_upper_bound: estimated,
+      allowed_digits: LIMITS.max_exact_result_digits,
+    });
+  }
+}
+
+function preflightSurface(text) {
+  if (text.length > LIMITS.max_input_characters) {
+    throw stateError(
+      STATES.LIMIT,
+      "The expression exceeds the configured input-length limit",
+      "MAX_INPUT_CHARACTERS",
+      { observed: text.length, allowed: LIMITS.max_input_characters },
+    );
+  }
+  let depth = 0;
+  let maximum = 0;
+  for (const character of text) {
+    if (character === "(") {
+      depth += 1;
+      maximum = Math.max(maximum, depth);
+      if (maximum > LIMITS.max_nesting_depth) {
+        throw stateError(
+          STATES.LIMIT,
+          "The expression exceeds the configured nesting-depth limit",
+          "MAX_NESTING_DEPTH",
+          { observed: maximum, allowed: LIMITS.max_nesting_depth },
+        );
+      }
+    } else if (character === ")") {
+      depth = Math.max(0, depth - 1);
+    }
+  }
+}
+
+function countAstNodes(root) {
+  let count = 0;
+  const stack = [root];
+  while (stack.length) {
+    const node = stack.pop();
+    count += 1;
+    if (count > LIMITS.max_ast_nodes) {
+      throw stateError(
+        STATES.LIMIT,
+        "The expression exceeds the configured syntax-tree size limit",
+        "MAX_AST_NODES",
+        { observed: count, allowed: LIMITS.max_ast_nodes },
+      );
+    }
+    stack.push(...node.args);
+  }
+  return count;
+}
+
+class ResolutionBudget {
+  constructor() {
+    this.remaining = LIMITS.max_operation_budget;
+  }
+  consume(amount = 1) {
+    this.remaining -= amount;
+    if (this.remaining < 0) {
+      throw stateError(
+        STATES.LIMIT,
+        "The expression exceeded the configured operation budget",
+        "MAX_OPERATION_BUDGET",
+        { allowed: LIMITS.max_operation_budget },
+      );
+    }
+  }
+}
+
+function canonical(x) {
+  if (isRat(x)) return `RAT(${x.n}/${x.d})`;
+  if (!x.args || !x.args.length) return x.op;
+  return `${x.op}(${x.args.map(canonical).join(",")})`;
+}
+function normalizeConst(x) {
+  return x.op === "TAU" ? mul(mkRat(2n), PI) : x;
+}
+function neg(x) {
+  x = normalizeConst(x);
+  if (isRat(x)) return mkRat(-x.n, x.d);
+  if (x.op === "NEG") return x.args[0];
+  return mkSym("NEG", x);
+}
+function add(...xs) {
+  let rational = mkRat(0n);
+  const grouped = new Map();
+
+  function addRat(a, b) {
+    guardProduct(a.n, b.d);
+    guardProduct(b.n, a.d);
+    guardProduct(a.d, b.d);
+    return mkRat(a.n * b.d + b.n * a.d, a.d * b.d);
+  }
+
+  function multiplyRat(a, b) {
+    guardProduct(a.n, b.n);
+    guardProduct(a.d, b.d);
+    return mkRat(a.n * b.n, a.d * b.d);
+  }
+
+  function splitTerm(term) {
+    term = normalizeConst(term);
+    let coefficient = mkRat(1n);
+    if (term.op === "NEG") {
+      coefficient = mkRat(-1n);
+      term = term.args[0];
+    }
+    if (isRat(term)) return [multiplyRat(coefficient, term), null];
+    if (term.op === "MUL") {
+      const symbolic = [];
+      for (const arg of term.args) {
+        if (isRat(arg)) coefficient = multiplyRat(coefficient, arg);
+        else symbolic.push(arg);
+      }
+      if (!symbolic.length) return [coefficient, null];
+      symbolic.sort((a, b) => canonical(a).localeCompare(canonical(b)));
+      term = symbolic.length === 1 ? symbolic[0] : mkSym("MUL", ...symbolic);
+    }
+    return [coefficient, term];
+  }
+
+  const expanded = [];
+  for (let item of xs) {
+    item = normalizeConst(item);
+    expanded.push(...(item.op === "ADD" ? item.args : [item]));
+  }
+
+  for (const term of expanded) {
+    const [coefficient, core] = splitTerm(term);
+    if (core === null) {
+      rational = addRat(rational, coefficient);
+      continue;
+    }
+    const key = canonical(core);
+    const previous = grouped.get(key);
+    grouped.set(key, {
+      core,
+      coefficient: previous
+        ? addRat(previous.coefficient, coefficient)
+        : coefficient,
+    });
+  }
+
+  const flat = [];
+  for (const key of [...grouped.keys()].sort()) {
+    const { core, coefficient } = grouped.get(key);
+    if (coefficient.n === 0n) continue;
+    if (coefficient.n === coefficient.d) flat.push(core);
+    else if (coefficient.n === -coefficient.d) flat.push(neg(core));
+    else flat.push(mul(coefficient, core));
+  }
+  if (rational.n !== 0n) flat.push(rational);
+  if (!flat.length) return mkRat(0n);
+  flat.sort((a, b) => canonical(a).localeCompare(canonical(b)));
+  return flat.length === 1 ? flat[0] : mkSym("ADD", ...flat);
+}
+function mul(...xs) {
+  let flat = [],
+    coef = mkRat(1n);
+  for (let x of xs) {
+    x = normalizeConst(x);
+    let items = x.op === "MUL" ? x.args : [x];
+    for (let y of items) {
+      if (isRat(y)) {
+        guardProduct(coef.n, y.n);
+        guardProduct(coef.d, y.d);
+        coef = mkRat(coef.n * y.n, coef.d * y.d);
+      } else flat.push(y);
+    }
+  }
+  if (coef.n === 0n) return coef;
+  flat.sort((a, b) => canonical(a).localeCompare(canonical(b)));
+  if (coef.n !== coef.d || !flat.length) flat.unshift(coef);
+  return flat.length === 1 ? flat[0] : mkSym("MUL", ...flat);
+}
+function divv(a, b) {
+  a = normalizeConst(a);
+  b = normalizeConst(b);
+  if (isRat(b) && b.n === 0n) {
+    if (isRat(a) && a.n === 0n)
+      throw stateError(
+        STATES.INDET,
+        "Zero divided by Zero has no unique value",
+      );
+    throw stateError(
+      STATES.FORBIDDEN,
+      "Division by Zero is outside the real numeric domain",
+    );
+  }
+  if (isRat(a) && isRat(b)) {
+    guardProduct(a.n, b.d);
+    guardProduct(a.d, b.n);
+    return mkRat(a.n * b.d, a.d * b.n);
+  }
+  if (isRat(a) && a.n === 0n) return mkRat(0n);
+  if (isRat(b)) return mul(a, mkRat(b.d, b.n));
+  if (canonical(a) === canonical(b)) return mkRat(1n);
+  return mkSym("DIV", a, b);
+}
+function floorDivBig(left, right) {
+  let quotient = left / right;
+  const remainder = left % right;
+  if (remainder !== 0n && left < 0n !== right < 0n) quotient -= 1n;
+  return quotient;
+}
+
+function modd(a, b) {
+  if (isRat(b) && b.n === 0n)
+    throw stateError(
+      STATES.FORBIDDEN,
+      "Modulo by Zero is outside the numeric domain",
+    );
+  if (isRat(a) && isRat(b)) {
+    guardProduct(a.n, b.d);
+    guardProduct(a.d, b.n);
+    const left = a.n * b.d;
+    const right = a.d * b.n;
+    const quotient = floorDivBig(left, right);
+    return add(a, neg(mul(mkRat(quotient), b)));
+  }
+  return mkSym("MOD", a, b);
+}
+
+function estimatePowerDigits(base, exponent) {
+  if (
+    exponent === 0n ||
+    (base.d === 1n && [0n, 1n, -1n].includes(base.n))
+  ) {
+    return {
+      estimated_numerator_digits_upper_bound: 1n,
+      estimated_denominator_digits_upper_bound: 1n,
+    };
+  }
+  const magnitude = exponent < 0n ? -exponent : exponent;
+  const limit = BigInt(LIMITS.max_exact_result_digits);
+  const saturation = limit + 1n;
+
+  function componentEstimate(component) {
+    component = absBig(component);
+    if (component <= 1n) return 1n;
+    if (magnitude > limit * 4n) return saturation;
+    const bits = BigInt(component.toString(2).length);
+    const estimate =
+      (magnitude * bits * 30103n + 99999n) / 100000n + 1n;
+    return estimate > saturation ? saturation : estimate;
+  }
+
+  let numeratorDigits = componentEstimate(base.n);
+  let denominatorDigits = componentEstimate(base.d);
+  if (exponent < 0n)
+    [numeratorDigits, denominatorDigits] = [denominatorDigits, numeratorDigits];
+  return {
+    estimated_numerator_digits_upper_bound: numeratorDigits,
+    estimated_denominator_digits_upper_bound: denominatorDigits,
+  };
+}
+
+function enforcePowerSize(base, exponent) {
+  const estimate = estimatePowerDigits(base, exponent);
+  const limit = BigInt(LIMITS.max_exact_result_digits);
+  if (
+    estimate.estimated_numerator_digits_upper_bound > limit ||
+    estimate.estimated_denominator_digits_upper_bound > limit
+  ) {
+    const present = (value) =>
+      value > limit ? `>${LIMITS.max_exact_result_digits}` : Number(value);
+    throw stateError(
+      STATES.LIMIT,
+      "The exact power result exceeds the configured digit limit",
+      "MAX_EXACT_RESULT_DIGITS",
+      {
+        estimated_numerator_digits_upper_bound: present(
+          estimate.estimated_numerator_digits_upper_bound,
+        ),
+        estimated_denominator_digits_upper_bound: present(
+          estimate.estimated_denominator_digits_upper_bound,
+        ),
+        allowed_digits: LIMITS.max_exact_result_digits,
+      },
+    );
+  }
+}
+
+function integerSqrtBigInt(value) {
+  if (value < 0n) return null;
+  if (value < 2n) return value;
+  let x = 1n << BigInt(Math.ceil(value.toString(2).length / 2));
+  while (true) {
+    const next = (x + value / x) >> 1n;
+    if (next >= x) return x;
+    x = next;
+  }
+}
+
+function perfectSquareRat(value) {
+  if (value.n < 0n) return null;
+  const n = integerSqrtBigInt(value.n);
+  const d = integerSqrtBigInt(value.d);
+  return n !== null && d !== null && n * n === value.n && d * d === value.d
+    ? mkRat(n, d)
+    : null;
+}
+
+function poww(a, b) {
+  a = normalizeConst(a);
+  b = normalizeConst(b);
+  if (isRat(b)) {
+    if (isRat(a) && a.n === 0n) {
+      if (b.n === 0n)
+        throw stateError(
+          STATES.INDET,
+          "Zero to the Zero power is indeterminate",
+        );
+      if (b.n < 0n)
+        throw stateError(
+          STATES.FORBIDDEN,
+          "Zero cannot be raised to a negative power",
+        );
+      return mkRat(0n);
+    }
+    if (b.d === 1n) {
+      const exponent = b.n;
+      if (exponent === 0n) return mkRat(1n);
+      if (a.op === "SQRT" && exponent === 2n) return a.args[0];
+      if (isRat(a)) {
+        enforcePowerSize(a, exponent);
+        const power = exponent < 0n ? -exponent : exponent;
+        const numerator = a.n ** power;
+        const denominator = a.d ** power;
+        return exponent < 0n
+          ? mkRat(denominator, numerator)
+          : mkRat(numerator, denominator);
+      }
+      if (exponent === 1n) return a;
+      return mkSym("POW", a, b);
+    }
+    if (isRat(a) && a.n < 0n)
+      throw stateError(
+        STATES.FORBIDDEN,
+        "Negative real base with non-integer exponent is outside the real domain",
+      );
+    if (isRat(a) && b.d === 2n && b.n === 1n) {
+      const root = perfectSquareRat(a);
+      if (root !== null) return root;
+    }
+  }
+  return mkSym("POW", a, b);
+}
+
+function fracSurface(surface) {
+  const match = surface.match(
+    /^((?:\d+(?:\.\d*)?)|(?:\.\d+))(?:[eE]([+-]?\d+))?$/,
+  );
+  if (!match)
+    throw stateError(STATES.CONFLICT, `Invalid number literal '${surface}'`);
+  const mantissa = match[1];
+  const exponentText = match[2] || "0";
+  const unsignedExponent =
+    exponentText.replace(/^[+-]/, "").replace(/^0+/, "") || "0";
+  if (unsignedExponent.length > 6)
+    throw stateError(
+      STATES.LIMIT,
+      "The numeric literal exponent exceeds the configured limit",
+      "MAX_LITERAL_EXPONENT_ABS",
+      { allowed: LIMITS.max_literal_exponent_abs },
+    );
+  const exponent = Number(exponentText);
+  if (
+    !Number.isSafeInteger(exponent) ||
+    Math.abs(exponent) > LIMITS.max_literal_exponent_abs
+  )
+    throw stateError(
+      STATES.LIMIT,
+      "The numeric literal exponent exceeds the configured limit",
+      "MAX_LITERAL_EXPONENT_ABS",
+      {
+        observed: Math.abs(exponent),
+        allowed: LIMITS.max_literal_exponent_abs,
+      },
+    );
+  const parts = mantissa.split(".");
+  const left = parts[0] || "0";
+  const right = parts[1] || "";
+  const digits = (left + right).replace(/^0+/, "") || "0";
+  if (digits.length > LIMITS.max_literal_digits)
+    throw stateError(
+      STATES.LIMIT,
+      "The numeric literal exceeds the configured digit limit",
+      "MAX_LITERAL_DIGITS",
+      { observed: digits.length, allowed: LIMITS.max_literal_digits },
+    );
+  const decimalShift = exponent - right.length;
+  const numeratorDigits = digits.length + Math.max(0, decimalShift);
+  const denominatorDigits = Math.max(1, -decimalShift + 1);
+  if (
+    Math.max(numeratorDigits, denominatorDigits) >
+    LIMITS.max_exact_result_digits
+  )
+    throw stateError(
+      STATES.LIMIT,
+      "The exact value represented by the numeric literal exceeds the configured digit limit",
+      "MAX_EXACT_RESULT_DIGITS",
+      {
+        estimated_numerator_digits: numeratorDigits,
+        estimated_denominator_digits: denominatorDigits,
+        allowed_digits: LIMITS.max_exact_result_digits,
+      },
+    );
+  let value = mkRat(BigInt(digits), 10n ** BigInt(right.length));
+  value =
+    exponent >= 0
+      ? mkRat(value.n * 10n ** BigInt(exponent), value.d)
+      : mkRat(value.n, value.d * 10n ** BigInt(-exponent));
+  return value;
+}
+
+function tokenize(s) {
+  let out = [],
+    i = 0;
+  while (i < s.length) {
+    let ch = s[i];
+    if (/\s/.test(ch)) {
+      i++;
+      continue;
+    }
+    if (s.startsWith("**", i)) {
+      out.push({ k: "POW", v: "**", p: i });
+      i += 2;
+      continue;
+    }
+    if ("+-*/%^(),".includes(ch)) {
+      out.push({ k: ch === "^" ? "POW" : ch, v: ch, p: i });
+      i++;
+      continue;
+    }
+    let rest = s.slice(i),
+      m = rest.match(/^(?:(?:\d+(?:\.\d*)?)|(?:\.\d+))(?:[eE][+-]?\d+)?/);
+    if (m) {
+      out.push({ k: "NUMBER", v: m[0], p: i });
+      i += m[0].length;
+      continue;
+    }
+    m = rest.match(/^[A-Za-z_][A-Za-z0-9_]*/);
+    if (m) {
+      out.push({ k: "NAME", v: m[0].toLowerCase(), p: i });
+      i += m[0].length;
+      continue;
+    }
+    throw stateError(
+      STATES.CONFLICT,
+      `Unsupported token '${ch}' at position ${i}`,
+      "UNSUPPORTED_CHARACTER",
+    );
+  }
+  if (out.length > LIMITS.max_token_count)
+    throw stateError(
+      STATES.LIMIT,
+      "The expression exceeds the configured token-count limit",
+      "MAX_TOKEN_COUNT",
+      { observed: out.length, allowed: LIMITS.max_token_count },
+    );
+  out.push({ k: "EOF", v: "", p: s.length });
+  return out;
+}
+class Parser {
+  constructor(t) {
+    this.t = t;
+    this.i = 0;
+  }
+  cur() {
+    return this.t[this.i];
+  }
+  take(k) {
+    let x = this.cur();
+    if (k && x.k !== k)
+      throw stateError(
+        x.k === "EOF" ? STATES.INCOMPLETE : STATES.CONFLICT,
+        `Expected ${k} at position ${x.p}`,
+      );
+    this.i++;
+    return x;
+  }
+  parse() {
+    if (this.cur().k === "EOF")
+      throw stateError(STATES.INCOMPLETE, "Expression is empty");
+    let n = this.add();
+    if (this.cur().k !== "EOF")
+      throw stateError(
+        STATES.CONFLICT,
+        `Unexpected token '${this.cur().v}' at position ${this.cur().p}`,
+      );
+    return n;
+  }
+  add() {
+    let n = this.mul();
+    while (["+", "-"].includes(this.cur().k)) {
+      let o = this.take().k;
+      n = { kind: "binary", value: o, args: [n, this.mul()] };
+    }
+    return n;
+  }
+  mul() {
+    let n = this.unary();
+    while (["*", "/", "%"].includes(this.cur().k)) {
+      const operator = this.take().k;
+      n = { kind: "binary", value: operator, args: [n, this.unary()] };
+    }
+    return n;
+  }
+  power() {
+    let n = this.primary();
+    if (this.cur().k === "POW") {
+      this.take("POW");
+      n = { kind: "binary", value: "^", args: [n, this.unary()] };
+    }
+    return n;
+  }
+  unary() {
+    if (["+", "-"].includes(this.cur().k)) {
+      const operator = this.take().k;
+      return { kind: "unary", value: operator, args: [this.unary()] };
+    }
+    return this.power();
+  }
+  primary() {
+    let x = this.cur();
+    if (x.k === "NUMBER") {
+      this.take();
+      return { kind: "number", value: x.v, args: [] };
+    }
+    if (x.k === "NAME") {
+      this.take();
+      let name = x.v;
+      if (this.cur().k === "(") {
+        this.take("(");
+        let args = [];
+        if (this.cur().k !== ")") {
+          args.push(this.add());
+          while (this.cur().k === ",") {
+            this.take(",");
+            args.push(this.add());
+          }
+        }
+        if (this.cur().k !== ")")
+          throw stateError(
+            this.cur().k === "EOF" ? STATES.INCOMPLETE : STATES.CONFLICT,
+            `Function '${name}' is missing or has an invalid closing parenthesis`,
+          );
+        this.take(")");
+        return { kind: "call", value: name, args };
+      }
+      return { kind: "name", value: name, args: [] };
+    }
+    if (x.k === "(") {
+      this.take("(");
+      let n = this.add();
+      if (this.cur().k !== ")")
+        throw stateError(
+          this.cur().k === "EOF" ? STATES.INCOMPLETE : STATES.CONFLICT,
+          "Grouped expression is missing a closing parenthesis",
+        );
+      this.take(")");
+      return n;
+    }
+    if (x.k === "EOF")
+      throw stateError(
+        STATES.INCOMPLETE,
+        "Expression ended before a value was supplied",
+      );
+    throw stateError(STATES.CONFLICT, `Invalid expression at position ${x.p}`);
+  }
+}
+function canonNode(n) {
+  if (n.kind === "number") return canonical(fracSurface(n.value));
+  if (n.kind === "name") return n.value.toUpperCase();
+  if (n.kind === "unary")
+    return `UNARY_${n.value === "+" ? "PLUS" : "MINUS"}(${canonNode(n.args[0])})`;
+  if (n.kind === "binary") {
+    let map = {
+        "+": "ADD",
+        "-": "SUB",
+        "*": "MUL",
+        "/": "DIV",
+        "%": "MOD",
+        "^": "POW",
+      },
+      a = canonNode(n.args[0]),
+      b = canonNode(n.args[1]),
+      op = map[n.value];
+    if (["ADD", "MUL"].includes(op)) [a, b] = [a, b].sort();
+    return `${op}(${a},${b})`;
+  }
+  if (n.kind === "call") {
+    let a = n.args.map(canonNode);
+    if (["min", "max", "gcd", "lcm"].includes(n.value)) a.sort();
+    return `CALL_${n.value.toUpperCase()}(${a.join(",")})`;
+  }
+  throw stateError(STATES.CONFLICT, "Unknown structural node");
+}
+function sqrtInt(n) {
+  if (n < 0n)
+    throw stateError(
+      STATES.FORBIDDEN,
+      "Integer square root requires a nonnegative value",
+    );
+  if (n < 2n) return n;
+  let x = 1n << BigInt((n.toString(2).length + 1) >> 1),
+    y = (x + n / x) >> 1n;
+  while (y < x) {
+    x = y;
+    y = (x + n / x) >> 1n;
+  }
+  return x;
+}
+function perfectSqrt(r) {
+  if (r.n < 0n) return null;
+  let a = sqrtInt(r.n),
+    b = sqrtInt(r.d);
+  return a * a === r.n && b * b === r.d ? mkRat(a, b) : null;
+}
+function sqrtSymInt(n) {
+  let r = perfectSqrt(mkRat(BigInt(n)));
+  return r || mkSym("SQRT", mkRat(BigInt(n)));
+}
+function extractPi(x) {
+  x = normalizeConst(x);
+  if (x.op === "PI") return mkRat(1n);
+  if (x.op === "NEG") {
+    let r = extractPi(x.args[0]);
+    return r ? mkRat(-r.n, r.d) : null;
+  }
+  if (x.op === "MUL") {
+    let c = mkRat(1n),
+      count = 0;
+    for (let a of x.args) {
+      if (isRat(a)) c = mkRat(c.n * a.n, c.d * a.d);
+      else if (a.op === "PI") count++;
+      else return null;
+    }
+    return count === 1 ? c : null;
+  }
+  return null;
+}
+function trigBase(i) {
+  let s2 = sqrtSymInt(2),
+    s3 = sqrtSymInt(3),
+    s6 = sqrtSymInt(6);
+  let s = [
+    mkRat(0n),
+    divv(add(s6, neg(s2)), mkRat(4n)),
+    mkRat(1n, 2n),
+    divv(s2, mkRat(2n)),
+    divv(s3, mkRat(2n)),
+    divv(add(s6, s2), mkRat(4n)),
+    mkRat(1n),
+  ];
+  let c = [
+    mkRat(1n),
+    divv(add(s6, s2), mkRat(4n)),
+    divv(s3, mkRat(2n)),
+    divv(s2, mkRat(2n)),
+    mkRat(1n, 2n),
+    divv(add(s6, neg(s2)), mkRat(4n)),
+    mkRat(0n),
+  ];
+  let t = [
+    mkRat(0n),
+    add(mkRat(2n), neg(s3)),
+    divv(s3, mkRat(3n)),
+    mkRat(1n),
+    s3,
+    add(mkRat(2n), s3),
+    null,
+  ];
+  return [s[i], c[i], t[i]];
+}
+function exactTrig(name, coef) {
+  let num = coef.n * 12n;
+  if (num % coef.d !== 0n) return null;
+  let k = Number((((num / coef.d) % 24n) + 24n) % 24n),
+    q = Math.floor(k / 6),
+    off = k % 6,
+    idx,
+    ss,
+    cs,
+    ts;
+  if (q === 0) {
+    idx = off;
+    ss = 1;
+    cs = 1;
+    ts = 1;
+  } else if (q === 1) {
+    idx = 6 - off;
+    ss = 1;
+    cs = -1;
+    ts = -1;
+  } else if (q === 2) {
+    idx = off;
+    ss = -1;
+    cs = -1;
+    ts = 1;
+  } else {
+    idx = 6 - off;
+    ss = -1;
+    cs = 1;
+    ts = -1;
+  }
+  let [s, c, t] = trigBase(idx);
+  if (name === "sin") return ss > 0 ? s : neg(s);
+  if (name === "cos") return cs > 0 ? c : neg(c);
+  if (!t)
+    throw stateError(
+      STATES.SINGULAR,
+      "Tangent is singular where cosine is zero",
+    );
+  return ts > 0 ? t : neg(t);
+}
+function powerOfTen(r) {
+  if (r.n <= 0n) return null;
+  function p10(x) {
+    let p = 0;
+    while (x % 10n === 0n) {
+      x /= 10n;
+      p++;
+    }
+    return x === 1n ? p : null;
+  }
+  let a = p10(r.n),
+    b = p10(r.d);
+  return a === null || b === null ? null : a - b;
+}
+function eq(a, b) {
+  return canonical(a) === canonical(b);
+}
+function inverseTrig(name, arg) {
+  for (let k = 0; k <= 6; k++) {
+    let [s, c, t] = trigBase(k),
+      angle = mul(mkRat(BigInt(k), 12n), PI);
+    if (name === "asin") {
+      if (eq(arg, s)) return angle;
+      if (eq(arg, neg(s))) return neg(angle);
+    }
+    if (name === "acos") {
+      if (eq(arg, c)) return angle;
+      if (eq(arg, neg(c))) return mul(mkRat(BigInt(12 - k), 12n), PI);
+    }
+    if (name === "atan" && t) {
+      if (eq(arg, t)) return angle;
+      if (eq(arg, neg(t))) return neg(angle);
+    }
+  }
+  return null;
+}
+function knownSign(expression) {
+  const value = normalizeConst(expression);
+  if (isRat(value)) return value.n === 0n ? 0 : value.n > 0n ? 1 : -1;
+  if (["PI", "E", "TAU", "EXP"].includes(value.op)) return 1;
+  if (value.op === "NEG") {
+    const sign = knownSign(value.args[0]);
+    return sign === null ? null : -sign;
+  }
+  if (value.op === "ABS") {
+    const sign = knownSign(value.args[0]);
+    return sign === 0 ? 0 : 1;
+  }
+  if (value.op === "SQRT") {
+    const sign = knownSign(value.args[0]);
+    return sign === 0 ? 0 : 1;
+  }
+  if (value.op === "LN") {
+    const argument = value.args[0];
+    if (isRat(argument))
+      return argument.n === argument.d ? 0 : argument.n > argument.d ? 1 : -1;
+    if (argument.op === "E") return 1;
+    if (argument.op === "EXP") return knownSign(argument.args[0]);
+  }
+  if (value.op === "LOG10") {
+    const argument = value.args[0];
+    if (isRat(argument))
+      return argument.n === argument.d ? 0 : argument.n > argument.d ? 1 : -1;
+  }
+  if (value.op === "MUL") {
+    let result = 1;
+    for (const argument of value.args) {
+      const sign = knownSign(argument);
+      if (sign === null) return null;
+      if (sign === 0) return 0;
+      result *= sign;
+    }
+    return result;
+  }
+  if (value.op === "DIV") {
+    const left = knownSign(value.args[0]);
+    const right = knownSign(value.args[1]);
+    if (left === null || right === null || right === 0) return null;
+    return left === 0 ? 0 : left * right;
+  }
+  if (value.op === "POW" && isRat(value.args[1]) && value.args[1].d === 1n) {
+    const exponent = value.args[1].n;
+    const baseSign = knownSign(value.args[0]);
+    if (baseSign === null) return null;
+    if (exponent === 0n) return 1;
+    if (baseSign === 0) return exponent > 0n ? 0 : null;
+    return exponent % 2n === 0n ? 1 : baseSign;
+  }
+  return null;
+}
+
+function call(name, args) {
+  if (!ARITY[name])
+    throw stateError(
+      STATES.ABSTAIN,
+      `Function '${name}' is not in the bounded registry`,
+    );
+  let [lo, hi] = ARITY[name];
+  if (args.length < lo || (hi !== null && args.length > hi))
+    throw stateError(STATES.CONFLICT, `Function '${name}' has invalid arity`);
+  let a = args[0];
+  if (name === "sqrt") {
+    const sign = knownSign(a);
+    if (sign !== null && sign < 0)
+      throw stateError(
+        STATES.FORBIDDEN,
+        "Square root of a negative value is outside the real domain",
+      );
+    if (sign === 0) return mkRat(0n);
+    if (isRat(a)) {
+      const root = perfectSqrt(a);
+      if (root) return root;
+    }
+    return mkSym("SQRT", a);
+  }
+  if (name === "abs") {
+    if (isRat(a)) return mkRat(absBig(a.n), a.d);
+    if (a.op === "NEG") return a.args[0];
+    return mkSym("ABS", a);
+  }
+  if (name === "sign") {
+    if (isRat(a)) return mkRat(a.n === 0n ? 0n : a.n > 0n ? 1n : -1n);
+    return mkSym("SIGN", a);
+  }
+  if (["floor", "ceil", "trunc", "round"].includes(name)) {
+    if (isRat(a)) {
+      let q = a.n / a.d,
+        r = a.n % a.d;
+      if (name === "floor" && a.n < 0n && r !== 0n) q--;
+      if (name === "ceil" && a.n > 0n && r !== 0n) q++;
+      if (name === "round") {
+        let low = a.n / a.d,
+          rem = a.n - low * a.d;
+        if (rem < 0n) {
+          rem += a.d;
+          low--;
+        }
+        let twice = rem * 2n;
+        q =
+          twice < a.d
+            ? low
+            : twice > a.d
+              ? low + 1n
+              : low % 2n === 0n
+                ? low
+                : low + 1n;
+      }
+      return mkRat(q);
+    }
+    return mkSym(name.toUpperCase(), a);
+  }
+  if (name === "min" || name === "max") {
+    if (args.every(isRat)) {
+      let best = args[0];
+      for (let x of args.slice(1)) {
+        let cmp = x.n * best.d - best.n * x.d;
+        if ((name === "min" && cmp < 0n) || (name === "max" && cmp > 0n))
+          best = x;
+      }
+      return best;
+    }
+    let x = [...args].sort((u, v) => canonical(u).localeCompare(canonical(v)));
+    return mkSym(name.toUpperCase(), ...x);
+  }
+  if (name === "gcd" || name === "lcm") {
+    if (!args.every((x) => isRat(x) && x.d === 1n))
+      throw stateError(STATES.FORBIDDEN, `${name} requires integer arguments`);
+    let nums = args.map((x) => absBig(x.n)),
+      v = name === "gcd" ? 0n : 1n;
+    for (const number of nums) {
+      if (name === "gcd") {
+        v = gcdBig(v, number);
+      } else if (v === 0n || number === 0n) {
+        v = 0n;
+      } else {
+        const common = gcdBig(v, number);
+        const reduced = v / common;
+        guardProduct(
+          reduced,
+          number,
+          "The exact lcm result exceeds the configured digit limit",
+        );
+        v = absBig(reduced * number);
+        enforceIntegerSize(v);
+      }
+    }
+    return mkRat(v);
+  }
+  if (name === "deg") return mul(a, mkRat(1n, 180n), PI);
+  if (name === "rad") return a;
+  if (["sin", "cos", "tan"].includes(name)) {
+    let coef = extractPi(a);
+    if (coef) {
+      let e = exactTrig(name, coef);
+      if (e) return e;
+    }
+    if (isRat(a) && a.n === 0n) return mkRat(name === "cos" ? 1n : 0n);
+    return mkSym(name.toUpperCase(), a);
+  }
+  if (["asin", "acos"].includes(name) && isRat(a) && (a.n < -a.d || a.n > a.d))
+    throw stateError(
+      STATES.FORBIDDEN,
+      `${name} requires an argument in [-1,1]`,
+    );
+  if (["asin", "acos", "atan"].includes(name)) {
+    let e = inverseTrig(name, a);
+    return e || mkSym(name.toUpperCase(), a);
+  }
+  if (name === "ln") {
+    const sign = knownSign(a);
+    if (sign !== null && sign <= 0)
+      throw stateError(
+        STATES.FORBIDDEN,
+        "Natural logarithm requires a positive real argument",
+      );
+    if (isRat(a) && a.n === a.d) return mkRat(0n);
+    if (a.op === "E") return mkRat(1n);
+    if (a.op === "POW" && a.args[0].op === "E") return a.args[1];
+    return mkSym("LN", a);
+  }
+  if (name === "log10") {
+    const sign = knownSign(a);
+    if (sign !== null && sign <= 0)
+      throw stateError(
+        STATES.FORBIDDEN,
+        "Base-10 logarithm requires a positive real argument",
+      );
+    if (isRat(a)) {
+      let p = powerOfTen(a);
+      if (p !== null) return mkRat(BigInt(p));
+    }
+    return mkSym("LOG10", a);
+  }
+  if (name === "log") {
+    if (args.length === 1) return call("ln", args);
+    let [v, b] = args;
+    const valueSign = knownSign(v);
+    const baseSign = knownSign(b);
+    if (valueSign !== null && valueSign <= 0)
+      throw stateError(
+        STATES.FORBIDDEN,
+        "Logarithm requires a positive real value",
+      );
+    if (baseSign !== null && baseSign <= 0)
+      throw stateError(
+        STATES.FORBIDDEN,
+        "Logarithm base must be positive and not equal to 1",
+      );
+    if (isRat(b) && b.n === b.d)
+      throw stateError(
+        STATES.FORBIDDEN,
+        "Logarithm base must be positive and not equal to 1",
+      );
+    if (
+      isRat(v) &&
+      isRat(b) &&
+      Math.max(
+        decimalDigitUpperBound(v.n),
+        decimalDigitUpperBound(v.d),
+        decimalDigitUpperBound(b.n),
+        decimalDigitUpperBound(b.d),
+      ) <= 128
+    ) {
+      for (let k = -64; k <= 64; k++) {
+        const power = poww(b, mkRat(BigInt(k)));
+        if (eq(power, v)) return mkRat(BigInt(k));
+      }
+    }
+    return mkSym("LOG", v, b);
+  }
+  if (name === "exp") {
+    if (isRat(a) && a.n === 0n) return mkRat(1n);
+    if (a.op === "LN") return a.args[0];
+    if (isRat(a) && a.n === a.d) return EC;
+    return mkSym("EXP", a);
+  }
+  throw stateError(STATES.ABSTAIN, `Function '${name}' is not implemented`);
+}
+function evaluate(node, records, budget) {
+  budget.consume();
+  let output;
+  if (node.kind === "number") output = fracSurface(node.value);
+  else if (node.kind === "name") {
+    if (node.value === "pi") output = PI;
+    else if (node.value === "e") output = EC;
+    else if (node.value === "tau") output = TAU;
+    else throw stateError(STATES.ABSTAIN, `Unbound name '${node.value}'`);
+  } else if (node.kind === "unary") {
+    const argument = evaluate(node.args[0], records, budget);
+    output = node.value === "+" ? argument : neg(argument);
+  } else if (node.kind === "binary") {
+    const left = evaluate(node.args[0], records, budget);
+    const right = evaluate(node.args[1], records, budget);
+    output =
+      node.value === "+"
+        ? add(left, right)
+        : node.value === "-"
+          ? add(left, neg(right))
+          : node.value === "*"
+            ? mul(left, right)
+            : node.value === "/"
+              ? divv(left, right)
+              : node.value === "%"
+                ? modd(left, right)
+                : poww(left, right);
+  } else if (node.kind === "call") {
+    output = call(
+      node.value,
+      node.args.map((argument) => evaluate(argument, records, budget)),
+    );
+  } else {
+    throw stateError(STATES.CONFLICT, "Unknown expression node");
+  }
+  records.push({
+    node: canonNode(node),
+    state: isRat(output) ? STATES.RAT : STATES.SYM,
+    exact: pretty(output),
+  });
+  return output;
+}
+
+function pretty(x, p = 0) {
+  if (isRat(x)) return x.d === 1n ? String(x.n) : `${x.n}/${x.d}`;
+  if (x.op === "PI") return "pi";
+  if (x.op === "E") return "e";
+  if (x.op === "TAU") return "tau";
+  if (x.op === "NEG") {
+    let t = "-" + pretty(x.args[0], 40);
+    return p > 40 ? `(${t})` : t;
+  }
+  if (x.op === "ADD") {
+    let parts = x.args.map((a, i) => {
+        if (a.op === "NEG") return (i ? "- " : "-") + pretty(a.args[0], 10);
+        if (isRat(a) && a.n < 0n)
+          return (i ? "- " : "-") + pretty(mkRat(-a.n, a.d), 10);
+        return (i ? "+ " : "") + pretty(a, 10);
+      }),
+      t = parts.join(" ");
+    return p > 10 ? `(${t})` : t;
+  }
+  if (x.op === "MUL") {
+    let t = x.args.map((a) => pretty(a, 20)).join(" * ");
+    return p > 20 ? `(${t})` : t;
+  }
+  if (x.op === "DIV") {
+    let t = `${pretty(x.args[0], 20)} / ${pretty(x.args[1], 21)}`;
+    return p > 20 ? `(${t})` : t;
+  }
+  if (x.op === "MOD") {
+    let t = `${pretty(x.args[0], 20)} % ${pretty(x.args[1], 21)}`;
+    return p > 20 ? `(${t})` : t;
+  }
+  if (x.op === "POW") {
+    let t = `${pretty(x.args[0], 30)} ^ ${pretty(x.args[1], 29)}`;
+    return p > 30 ? `(${t})` : t;
+  }
+  return `${x.op.toLowerCase()}(${x.args.map((a) => pretty(a)).join(", ")})`;
+}
+function configureDecimal(digits) {
+  Decimal.set({
+    precision: Math.max(40, Number(digits) + 28),
+    rounding: Decimal.ROUND_HALF_EVEN,
+    toExpNeg: -1000000,
+    toExpPos: 1000000,
+    maxE: 9000000000000000,
+    minE: -9000000000000000,
+    modulo: Decimal.ROUND_DOWN,
+  });
+}
+function decimalFromRat(x) {
+  return new Decimal(x.n.toString()).div(x.d.toString());
+}
+function approxDecimal(x, digits) {
+  configureDecimal(digits);
+  if (isRat(x)) return decimalFromRat(x);
+  if (x.op === "PI") return Decimal.acos(-1);
+  if (x.op === "E") return Decimal.exp(1);
+  if (x.op === "TAU") return Decimal.acos(-1).times(2);
+  if (x.op === "NEG") return approxDecimal(x.args[0], digits).neg();
+  if (x.op === "ADD")
+    return x.args.reduce(
+      (s, a) => s.plus(approxDecimal(a, digits)),
+      new Decimal(0),
+    );
+  if (x.op === "MUL")
+    return x.args.reduce(
+      (s, a) => s.times(approxDecimal(a, digits)),
+      new Decimal(1),
+    );
+  if (x.op === "DIV") {
+    const denominator = approxDecimal(x.args[1], digits);
+    if (denominator.isZero())
+      throw stateError(
+        STATES.SINGULAR,
+        "Decimal approximation encountered a zero denominator",
+      );
+    return approxDecimal(x.args[0], digits).div(denominator);
+  }
+  if (x.op === "MOD")
+    return approxDecimal(x.args[0], digits).mod(
+      approxDecimal(x.args[1], digits),
+    );
+  if (x.op === "POW") {
+    const base = approxDecimal(x.args[0], digits);
+    const exponent = approxDecimal(x.args[1], digits);
+    if (!exponent.isInteger() && base.lte(0))
+      throw stateError(
+        STATES.FORBIDDEN,
+        "Decimal non-integer power requires a positive base in the real domain",
+      );
+    return Decimal.pow(base, exponent);
+  }
+  if (x.op === "SQRT") {
+    const value = approxDecimal(x.args[0], digits);
+    if (value.isNegative())
+      throw stateError(
+        STATES.FORBIDDEN,
+        "Square root is outside the real domain",
+      );
+    return Decimal.sqrt(value);
+  }
+  if (x.op === "ABS") return approxDecimal(x.args[0], digits).abs();
+  if (x.op === "SIGN")
+    return new Decimal(approxDecimal(x.args[0], digits).cmp(0));
+  if (x.op === "FLOOR") return approxDecimal(x.args[0], digits).floor();
+  if (x.op === "CEIL") return approxDecimal(x.args[0], digits).ceil();
+  if (x.op === "TRUNC") return approxDecimal(x.args[0], digits).trunc();
+  if (x.op === "ROUND")
+    return approxDecimal(x.args[0], digits).toDecimalPlaces(
+      0,
+      Decimal.ROUND_HALF_EVEN,
+    );
+  if (x.op === "MIN")
+    return Decimal.min(...x.args.map((a) => approxDecimal(a, digits)));
+  if (x.op === "MAX")
+    return Decimal.max(...x.args.map((a) => approxDecimal(a, digits)));
+  if (x.op === "SIN") return Decimal.sin(approxDecimal(x.args[0], digits));
+  if (x.op === "COS") return Decimal.cos(approxDecimal(x.args[0], digits));
+  if (x.op === "TAN") {
+    const angle = approxDecimal(x.args[0], digits);
+    const cosine = Decimal.cos(angle);
+    const threshold = new Decimal(10).pow(-(digits + 2));
+    if (cosine.abs().lte(threshold))
+      throw stateError(STATES.SINGULAR, "Tangent is singular at this angle");
+    return Decimal.sin(angle).div(cosine);
+  }
+  if (x.op === "ASIN") {
+    const value = approxDecimal(x.args[0], digits);
+    if (value.lt(-1) || value.gt(1))
+      throw stateError(STATES.FORBIDDEN, "asin requires a value in [-1, 1]");
+    return Decimal.asin(value);
+  }
+  if (x.op === "ACOS") {
+    const value = approxDecimal(x.args[0], digits);
+    if (value.lt(-1) || value.gt(1))
+      throw stateError(STATES.FORBIDDEN, "acos requires a value in [-1, 1]");
+    return Decimal.acos(value);
+  }
+  if (x.op === "ATAN") return Decimal.atan(approxDecimal(x.args[0], digits));
+  if (x.op === "LN") {
+    const value = approxDecimal(x.args[0], digits);
+    if (value.lte(0))
+      throw stateError(STATES.FORBIDDEN, "ln requires a positive value");
+    return Decimal.ln(value);
+  }
+  if (x.op === "LOG10") {
+    const value = approxDecimal(x.args[0], digits);
+    if (value.lte(0))
+      throw stateError(STATES.FORBIDDEN, "log10 requires a positive value");
+    return Decimal.log(value, 10);
+  }
+  if (x.op === "LOG") {
+    const value = approxDecimal(x.args[0], digits);
+    const base = approxDecimal(x.args[1], digits);
+    if (value.lte(0) || base.lte(0) || base.eq(1))
+      throw stateError(
+        STATES.FORBIDDEN,
+        "log requires value > 0, base > 0, and base != 1",
+      );
+    return Decimal.log(value, base);
+  }
+  if (x.op === "EXP") return Decimal.exp(approxDecimal(x.args[0], digits));
+  throw stateError(
+    STATES.ABSTAIN,
+    `No high-precision decimal approximation rule for ${x.op}`,
+  );
+}
+function rationalDecimal(x, digits) {
+  const sign = x.n < 0n ? "-" : "";
+  const n = absBig(x.n);
+  const whole = n / x.d;
+  let remainder = n % x.d;
+  if (remainder === 0n) return sign + whole;
+  let output = "";
+  const seen = new Set();
+  while (remainder !== 0n && output.length < digits) {
+    if (seen.has(remainder)) break;
+    seen.add(remainder);
+    remainder *= 10n;
+    output += String(remainder / x.d);
+    remainder %= x.d;
+  }
+  return `${sign}${whole}.${output}${remainder !== 0n ? "…" : ""}`;
+}
+function formatDecimalHighPrecision(value, digits) {
+  if (!value || !value.isFinite()) return "not_available";
+  if (value.isZero()) return "0";
+  let rounded = value.toSignificantDigits(digits, Decimal.ROUND_HALF_EVEN);
+  let text = rounded.toString();
+  if (text.includes("e")) {
+    let [m, e] = text.split("e");
+    m = m.replace(/\.0+$|(?<=\.[0-9]*?)0+$/g, "").replace(/\.$/, "");
+    e = e.replace(/^\+/, "").replace(/^(-?)0+(\d)/, "$1$2");
+    return `${m}e${e}`;
+  }
+  if (text.includes(".")) text = text.replace(/0+$/, "").replace(/\.$/, "");
+  return text;
+}
+function approxText(x, digits) {
+  if (isRat(x)) return rationalDecimal(x, digits);
+  return formatDecimalHighPrecision(approxDecimal(x, digits), digits);
+}
+function sha256Fallback(text) {
+  const bytes = new TextEncoder().encode(text);
+  const constants = [];
+  const initial = [];
+  const composite = {};
+  let candidate = 2;
+  while (constants.length < 64) {
+    if (!composite[candidate]) {
+      for (
+        let multiple = candidate * candidate;
+        multiple < 400;
+        multiple += candidate
+      )
+        composite[multiple] = true;
+      initial.push((Math.sqrt(candidate) * 0x100000000) >>> 0);
+      constants.push((Math.cbrt(candidate) * 0x100000000) >>> 0);
+    }
+    candidate += 1;
+  }
+  const bitLength = bytes.length * 8;
+  const paddedLength = Math.ceil((bytes.length + 9) / 64) * 64;
+  const padded = new Uint8Array(paddedLength);
+  padded.set(bytes);
+  padded[bytes.length] = 0x80;
+  const view = new DataView(padded.buffer);
+  const high = Math.floor(bitLength / 0x100000000);
+  const low = bitLength >>> 0;
+  view.setUint32(paddedLength - 8, high, false);
+  view.setUint32(paddedLength - 4, low, false);
+  const hash = initial.slice(0, 8);
+  const words = new Uint32Array(64);
+  const rotateRight = (value, shift) =>
+    (value >>> shift) | (value << (32 - shift));
+  for (let offset = 0; offset < paddedLength; offset += 64) {
+    for (let index = 0; index < 16; index += 1)
+      words[index] = view.getUint32(offset + index * 4, false);
+    for (let index = 16; index < 64; index += 1) {
+      const previous15 = words[index - 15];
+      const previous2 = words[index - 2];
+      const sigma0 =
+        rotateRight(previous15, 7) ^
+        rotateRight(previous15, 18) ^
+        (previous15 >>> 3);
+      const sigma1 =
+        rotateRight(previous2, 17) ^
+        rotateRight(previous2, 19) ^
+        (previous2 >>> 10);
+      words[index] =
+        (words[index - 16] + sigma0 + words[index - 7] + sigma1) >>> 0;
+    }
+    let [a, b, c, d, e, f, g, h] = hash;
+    for (let index = 0; index < 64; index += 1) {
+      const sum1 =
+        (rotateRight(e, 6) ^ rotateRight(e, 11) ^ rotateRight(e, 25)) >>> 0;
+      const choice = ((e & f) ^ (~e & g)) >>> 0;
+      const temporary1 =
+        (h + sum1 + choice + constants[index] + words[index]) >>> 0;
+      const sum0 =
+        (rotateRight(a, 2) ^ rotateRight(a, 13) ^ rotateRight(a, 22)) >>> 0;
+      const majority = ((a & b) ^ (a & c) ^ (b & c)) >>> 0;
+      const temporary2 = (sum0 + majority) >>> 0;
+      h = g;
+      g = f;
+      f = e;
+      e = (d + temporary1) >>> 0;
+      d = c;
+      c = b;
+      b = a;
+      a = (temporary1 + temporary2) >>> 0;
+    }
+    hash[0] = (hash[0] + a) >>> 0;
+    hash[1] = (hash[1] + b) >>> 0;
+    hash[2] = (hash[2] + c) >>> 0;
+    hash[3] = (hash[3] + d) >>> 0;
+    hash[4] = (hash[4] + e) >>> 0;
+    hash[5] = (hash[5] + f) >>> 0;
+    hash[6] = (hash[6] + g) >>> 0;
+    hash[7] = (hash[7] + h) >>> 0;
+  }
+  return hash.map((value) => value.toString(16).padStart(8, "0")).join("");
+}
+
+async function sha(text) {
+  if (globalThis.crypto && crypto.subtle) {
+    const digest = await crypto.subtle.digest(
+      "SHA-256",
+      new TextEncoder().encode(text),
+    );
+    return [...new Uint8Array(digest)]
+      .map((value) => value.toString(16).padStart(2, "0"))
+      .join("");
+  }
+  return sha256Fallback(text);
+}
+
+function presentationFor(state, surface, exact, approximation, displayKind) {
+  if (state === STATES.RAT)
+    return {
+      display_kind: displayKind,
+      display_value: approximation,
+      display_mathematical_form: exact,
+      display_form_label: "Exact mathematical form",
+    };
+  if (state === STATES.SYM)
+    return {
+      display_kind: "APPROXIMATE_SYMBOLIC",
+      display_value:
+        approximation === null
+          ? "approximation unavailable"
+          : `≈ ${approximation}`,
+      display_mathematical_form: exact,
+      display_form_label: "Exact mathematical form",
+    };
+  if (state === STATES.SINGULAR || state === STATES.FORBIDDEN)
+    return {
+      display_kind: "UNDEFINED",
+      display_value: "undefined",
+      display_mathematical_form: surface || "—",
+      display_form_label: "Evaluated expression",
+    };
+  if (state === STATES.INDET)
+    return {
+      display_kind: "INDETERMINATE",
+      display_value: "indeterminate",
+      display_mathematical_form: surface || "—",
+      display_form_label: "Evaluated expression",
+    };
+  if (state === STATES.INCOMPLETE)
+    return {
+      display_kind: "INCOMPLETE",
+      display_value: "incomplete",
+      display_mathematical_form: surface || "—",
+      display_form_label: "Submitted expression",
+    };
+  if (state === STATES.ABSTAIN)
+    return {
+      display_kind: "NOT_EVALUATED",
+      display_value: "not evaluated",
+      display_mathematical_form: surface || "—",
+      display_form_label: "Submitted expression",
+    };
+  if (state === STATES.LIMIT)
+    return {
+      display_kind: "LIMIT_EXCEEDED",
+      display_value: "limit exceeded",
+      display_mathematical_form: surface || "—",
+      display_form_label: "Submitted expression",
+    };
+  if (state === STATES.INTERNAL)
+    return {
+      display_kind: "INTERNAL_ERROR",
+      display_value: "internal error",
+      display_mathematical_form: surface || "—",
+      display_form_label: "Submitted expression",
+    };
+  return {
+    display_kind: "UNRESOLVED",
+    display_value: "unresolved",
+    display_mathematical_form: surface || "—",
+    display_form_label: "Submitted expression",
+  };
+}
+
+async function resolveExpression(text, digits) {
+  const precision = Math.max(
+    6,
+    Math.min(120, Number(digits) || DEFAULT_PRECISION),
+  );
+  const surface = text.trim();
+  const records = [];
+  let structure = "UNRESOLVED";
+  let state;
+  let exact = null;
+  let approximation = null;
+  let approximationNote = null;
+  let displayKind = "UNRESOLVED";
+  let note;
+  let semantic = "UNRESOLVED";
+  let errorCode = null;
+  let internalErrorCode = null;
+  let limit = null;
+
+  try {
+    preflightSurface(surface);
+    const tokens = tokenize(surface);
+    const root = new Parser(tokens).parse();
+    countAstNodes(root);
+    structure = canonNode(root);
+    const value = evaluate(root, records, new ResolutionBudget());
+    state = isRat(value) ? STATES.RAT : STATES.SYM;
+    exact = pretty(value);
+    semantic = canonical(value);
+    try {
+      approximation = approxText(value, precision);
+      if (isRat(value)) {
+        displayKind = approximation.endsWith("…")
+          ? "EXACT_RATIONAL_REPEATING"
+          : "EXACT_RATIONAL_TERMINATING";
+        approximationNote = approximation.endsWith("…")
+          ? "Exact repeating rational decimal using ellipsis notation"
+          : "Exact terminating decimal";
+        note = "Exact rational result";
+      } else {
+        displayKind = "APPROXIMATE_SYMBOLIC";
+        approximationNote =
+          "Deterministic high-precision decimal approximation using the embedded Decimal.js runtime; excluded from exact identity certificates";
+        note = "Exact symbolic result; decimal approximation is display-only";
+      }
+    } catch (error) {
+      if (
+        [STATES.FORBIDDEN, STATES.SINGULAR, STATES.LIMIT].includes(error.state)
+      ) {
+        state = error.state;
+        note = error.message;
+        errorCode = error.code || null;
+        limit = state === STATES.LIMIT ? error.details || {} : null;
+        exact = null;
+        approximation = null;
+        approximationNote = null;
+        semantic = state;
+      } else {
+        throw error;
+      }
+    }
+  } catch (error) {
+    if (error && error.state) {
+      state = error.state;
+      note = error.message;
+      errorCode = error.code || null;
+      limit = state === STATES.LIMIT ? error.details || {} : null;
+      semantic = state;
+    } else if (error instanceof RangeError) {
+      state = STATES.LIMIT;
+      note = "The expression exceeded the supported recursion boundary";
+      errorCode = "MAX_RECURSION_BOUNDARY";
+      limit = {
+        max_nesting_depth: LIMITS.max_nesting_depth,
+        max_ast_nodes: LIMITS.max_ast_nodes,
+      };
+      semantic = state;
+    } else {
+      state = STATES.INTERNAL;
+      note = "The resolver encountered an unexpected internal failure";
+      internalErrorCode = "SVARE_INTERNAL_001";
+      semantic = state;
+    }
+  }
+
+  const structureCertificate = await sha(
+    `SVARE|CERTIFICATE_SCHEMA|${CERTIFICATE_SCHEMA_VERSION}|CANONICALIZATION|${CANONICALIZATION_VERSION}|STRUCTURE|${structure}`,
+  );
+  const semanticCertificate = await sha(
+    `SVARE|CERTIFICATE_SCHEMA|${CERTIFICATE_SCHEMA_VERSION}|SEMANTIC_RULES|${SEMANTIC_RULES_VERSION}|SEMANTIC|${semantic}|${state}`,
+  );
+  const display = presentationFor(
+    state,
+    surface,
+    exact,
+    approximation,
+    displayKind,
+  );
+  const displayCertificate = await sha(
+    `SVARE|APPLICATION|${VERSION}|CERTIFICATE_SCHEMA|${CERTIFICATE_SCHEMA_VERSION}|DISPLAY|${semanticCertificate}|${precision}|${display.display_kind}|${display.display_value || ""}|${display.display_form_label}|${display.display_mathematical_form || ""}`,
+  );
+
+  return {
+    engine: "SVARE Exact and Scientific Resolution",
+    version: VERSION,
+    canonicalization_version: CANONICALIZATION_VERSION,
+    semantic_rules_version: SEMANTIC_RULES_VERSION,
+    certificate_schema_version: CERTIFICATE_SCHEMA_VERSION,
+    resource_policy_version: RESOURCE_POLICY_VERSION,
+    conformance_vector_sha256: CONFORMANCE_VECTOR_SHA256,
+    surface,
+    state,
+    resolution_class:
+      state === STATES.RAT
+        ? "EXACT_RATIONAL"
+        : state === STATES.SYM
+          ? "EXACT_SYMBOLIC"
+          : state === STATES.LIMIT
+            ? "LIMITED"
+            : state === STATES.INTERNAL
+              ? "FAILED"
+              : "REFUSED",
+    ...display,
+    resolved_value:
+      state === STATES.RAT || state === STATES.SYM
+        ? display.display_value
+        : null,
+    exact_mathematical_form: exact,
+    exact_value: exact,
+    decimal_approximation: approximation,
+    precision,
+    precision_unit: "significant_digits",
+    note,
+    approximation_note: approximationNote,
+    error_code: errorCode,
+    internal_error_code: internalErrorCode,
+    limit,
+    resource_policy: {
+      policy_version: RESOURCE_POLICY_VERSION,
+      ...LIMITS,
+    },
+    structure_canonical: structure,
+    semantic_canonical: semantic,
+    structure_certificate_sha256: structureCertificate,
+    semantic_certificate_sha256: semanticCertificate,
+    display_receipt_sha256: displayCertificate,
+    records,
+    function_registry: Object.keys(ARITY).sort(),
+    certificate_policy:
+      "Structure and semantic certificates are versioned independently of display precision; display receipts include the application version, display precision, and display kind",
+    operator_policy: {
+      power_associativity: "right",
+      unary_minus_precedence: "below_power",
+      remainder_convention:
+        "floor_division; remainder follows the divisor sign",
+      numeric_literal_alphabet: "ASCII digits 0-9",
+    },
+  };
+}
+
+function autoGrow() {
+  let e = document.getElementById("expr");
+  e.style.height = "auto";
+  e.style.height = Math.min(e.scrollHeight, 260) + "px";
+}
+let LAST = null;
+async function render() {
+  autoGrow();
+  let digits =
+      parseInt(document.getElementById("precision").value, 10) ||
+      DEFAULT_PRECISION,
+    r = await resolveExpression(document.getElementById("expr").value, digits);
+  LAST = r;
+  let resolved = r.display_value,
+    form = r.display_mathematical_form;
+  document.getElementById("resolvedValue").textContent = resolved;
+  document.getElementById("exactValue").textContent = form;
+  document.getElementById("formLabel").textContent = r.display_form_label;
+  let meta;
+  if (r.state === STATES.SINGULAR || r.state === STATES.FORBIDDEN)
+    meta = "No defined real numeric value";
+  else if (r.state === STATES.INDET) meta = "No unique numeric value";
+  else if (r.state === STATES.LIMIT)
+    meta = "Configured resource boundary reached";
+  else if (r.state === STATES.INTERNAL) meta = "Unexpected internal failure";
+  else if (!r.state.startsWith("RESOLVED")) meta = "No numeric value emitted";
+  else if (r.resolution_class === "EXACT_SYMBOLIC")
+    meta = `Decimal approximation · ${r.precision} significant digits`;
+  else if (r.display_kind === "EXACT_RATIONAL_REPEATING")
+    meta = "Exact repeating rational expansion";
+  else if (r.display_kind === "EXACT_RATIONAL_TERMINATING")
+    meta = "Exact decimal representation";
+  else meta = "Resolved representation";
+  document.getElementById("resolvedMeta").textContent = meta;
+  document.getElementById("exactBadge").textContent = r.state.startsWith(
+    "RESOLVED",
+  )
+    ? r.resolution_class.replaceAll("_", " ")
+    : r.state;
+  document.getElementById("copyExact").textContent = r.state.startsWith(
+    "RESOLVED",
+  )
+    ? "Copy exact"
+    : "Copy expression";
+  let st = document.getElementById("state");
+  st.textContent = r.state;
+  st.className =
+    "v " + (r.state.startsWith("RESOLVED") ? "status-good" : "status-bad");
+  document.getElementById("class").textContent = r.resolution_class;
+  document.getElementById("digits").textContent =
+    r.precision + " significant digits";
+  document.getElementById("structCert").textContent =
+    r.structure_certificate_sha256;
+  document.getElementById("semanticCert").textContent =
+    r.semantic_certificate_sha256;
+  document.getElementById("displayCert").textContent = r.display_receipt_sha256;
+  document.getElementById("surface").textContent = r.surface;
+  document.getElementById("structure").textContent = r.structure_canonical;
+  document.getElementById("semantic").textContent = r.semantic_canonical;
+  document.getElementById("note").textContent = [
+    r.note,
+    r.approximation_note,
+    r.error_code ? `Code: ${r.error_code}` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+  document.getElementById("receipt").textContent = JSON.stringify(r, null, 2);
+  document.getElementById("registry").textContent =
+    r.function_registry.join("\n");
+  let nodes = document.getElementById("nodes");
+  nodes.innerHTML = "";
+  r.records.forEach((x, i) => {
+    let d = document.createElement("div"),
+      recordValue = x.exact;
+    if (recordValue === null || recordValue === undefined)
+      recordValue =
+        x.state === STATES.SINGULAR || x.state === STATES.FORBIDDEN
+          ? "undefined"
+          : x.state === STATES.INDET
+            ? "indeterminate"
+            : "unresolved";
+    d.className = "node";
+    d.textContent = `${String(i + 1).padStart(2, "0")} | ${x.state} | ${recordValue} | ${x.node}`;
+    nodes.appendChild(d);
+  });
+}
+function copyFallback(text) {
+  let area = document.createElement("textarea");
+  area.value = text;
+  area.setAttribute("readonly", "");
+  area.style.position = "fixed";
+  area.style.opacity = "0";
+  document.body.appendChild(area);
+  area.select();
+  let ok = document.execCommand("copy");
+  document.body.removeChild(area);
+  if (!ok) throw new Error("COPY_UNAVAILABLE");
+}
+async function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext)
+    await navigator.clipboard.writeText(text);
+  else copyFallback(text);
+}
+function buttonFeedback(id, label = "Copied") {
+  let b = document.getElementById(id),
+    old = b.textContent;
+  b.textContent = label;
+  setTimeout(() => (b.textContent = old), 1000);
+}
+async function copyResolvedValue() {
+  if (!LAST) return;
+  await copyText(LAST.display_value);
+  buttonFeedback("copyValue");
+}
+async function copyExactForm() {
+  if (!LAST) return;
+  await copyText(LAST.display_mathematical_form);
+  buttonFeedback("copyExact");
+}
+async function copyReceipt() {
+  if (!LAST) return;
+  await copyText(JSON.stringify(LAST, null, 2));
+  buttonFeedback("copyReceipt");
+}
+function downloadReceipt() {
+  if (!LAST) return;
+  let blob = new Blob([JSON.stringify(LAST, null, 2)], {
+      type: "application/json",
+    }),
+    a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "SVARE_v10_0_6_receipt.json";
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+async function selfTest() {
+  const failures = [];
+  const comparisonFields = [
+    "state",
+    "resolution_class",
+    "display_kind",
+    "exact_value",
+    "decimal_approximation",
+    "display_value",
+    "display_mathematical_form",
+    "display_form_label",
+    "structure_canonical",
+    "semantic_canonical",
+    "structure_certificate_sha256",
+    "semantic_certificate_sha256",
+    "display_receipt_sha256",
+    "error_code",
+  ];
+
+  const payload = {
+    schema_version: CONFORMANCE_VECTOR_SCHEMA_VERSION,
+    release_version: VERSION,
+    vectors: CONFORMANCE_VECTORS,
+  };
+  const calculatedVectorHash = await sha(JSON.stringify(payload));
+  if (calculatedVectorHash !== CONFORMANCE_VECTOR_SHA256)
+    failures.push({
+      test: "embedded conformance vector hash",
+      expected: CONFORMANCE_VECTOR_SHA256,
+      actual: calculatedVectorHash,
+    });
+
+  for (const vector of CONFORMANCE_VECTORS) {
+    const result = await resolveExpression(vector.expression, vector.precision);
+    const differences = {};
+    for (const field of comparisonFields) {
+      const expected = vector.expected[field] ?? null;
+      const actual = result[field] ?? null;
+      if (expected !== actual) differences[field] = { expected, actual };
+    }
+    if (Object.keys(differences).length)
+      failures.push({
+        test: "conformance vector",
+        id: vector.id,
+        expression: vector.expression,
+        differences,
+      });
+  }
+
+  const equivalents = await Promise.all(
+    ["sin(pi/6)", "sin(deg(30))", "1/2"].map((expression) =>
+      resolveExpression(expression, 30),
+    ),
+  );
+  if (
+    new Set(equivalents.map((item) => item.semantic_certificate_sha256))
+      .size !== 1
+  )
+    failures.push({
+      test: "semantic equivalence",
+      actual: equivalents.map((item) => item.semantic_certificate_sha256),
+    });
+
+  const precision20 = await resolveExpression(
+    "sin(pi/6) + cos(pi) + sqrt(2) + ln(2)",
+    20,
+  );
+  const precision60 = await resolveExpression(
+    "sin(pi/6) + cos(pi) + sqrt(2) + ln(2)",
+    60,
+  );
+  if (
+    precision20.structure_certificate_sha256 !==
+      precision60.structure_certificate_sha256 ||
+    precision20.semantic_certificate_sha256 !==
+      precision60.semantic_certificate_sha256 ||
+    precision20.display_receipt_sha256 === precision60.display_receipt_sha256 ||
+    precision20.decimal_approximation === precision60.decimal_approximation
+  )
+    failures.push({ test: "precision isolation" });
+
+  const symbolic = await resolveExpression("sqrt(2)", 30);
+  if (!String(symbolic.display_value).startsWith("≈ "))
+    failures.push({
+      test: "symbolic approximation marker",
+      actual: symbolic.display_value,
+    });
+
+  const output = document.getElementById("selfTestOutput");
+  output.className = "selftest show " + (failures.length ? "fail" : "pass");
+  output.textContent = JSON.stringify(
+    {
+      version: VERSION,
+      conformance_vector_sha256: CONFORMANCE_VECTOR_SHA256,
+      case_count: CONFORMANCE_VECTORS.length + 4,
+      failure_count: failures.length,
+      all_pass: failures.length === 0,
+      failures,
+    },
+    null,
+    2,
+  );
+}
+
+document.getElementById("resolve").onclick = render;
+document.getElementById("clear").onclick = () => {
+  document.getElementById("expr").value = "";
+  autoGrow();
+  document.getElementById("expr").focus();
+};
+document.getElementById("copyValue").onclick = copyResolvedValue;
+document.getElementById("copyExact").onclick = copyExactForm;
+document.getElementById("copyReceipt").onclick = copyReceipt;
+document.getElementById("download").onclick = downloadReceipt;
+document.getElementById("precision").onchange = render;
+document.getElementById("selfTest").onclick = selfTest;
+document.getElementById("expr").addEventListener("input", autoGrow);
+document.getElementById("expr").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    render();
+  }
+});
+document.querySelectorAll(".chip").forEach(
+  (c) =>
+    (c.onclick = () => {
+      document.getElementById("expr").value = c.textContent;
+      render();
+    }),
+);
+autoGrow();
+render();
+</script>
+</body>
+</html>
