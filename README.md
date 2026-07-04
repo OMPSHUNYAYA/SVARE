@@ -16,13 +16,13 @@ SVARE resolves supported mathematical expressions into exact rational values, ex
 ![Deterministic](https://img.shields.io/badge/resolution-deterministic-green)
 ![No Eval](https://img.shields.io/badge/arbitrary%20eval-not%20used-lightgrey)
 
+[![SVARE Verify](https://github.com/OMPSHUNYAYA/SVARE/actions/workflows/svare-verify.yml/badge.svg)](https://github.com/OMPSHUNYAYA/SVARE/actions/workflows/svare-verify.yml)
+
 ---
 
 ## 🧭 **Visual Overview**
 
 ![SVARE Concept Diagram](docs/SVARE_Diagram.png)
-
-[![SVARE Verify](https://github.com/OMPSHUNYAYA/SVARE/actions/workflows/svare-verify.yml/badge.svg)](https://github.com/OMPSHUNYAYA/SVARE/actions/workflows/svare-verify.yml)
 
 The diagram summarizes the bounded SVARE v10.0.6 resolution architecture:
 
