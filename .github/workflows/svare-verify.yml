@@ -383,7 +383,8 @@ jobs:
 
           required_markers = [
               "SVARE v10.0.6",
-              "Structural Value Resolution Engine",
+              "Exact and Scientific Resolution",
+              "standalone browser release",
               "76e1fff4dee7fe2361d5d2a869f589e6f413049df3cf394544e371669fb48f69",
               "RESOLVED_EXACT_RATIONAL",
               "RESOLVED_EXACT_SYMBOLIC",
