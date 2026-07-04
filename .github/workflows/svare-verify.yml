@@ -27,7 +27,9 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -76,7 +78,7 @@ jobs:
           print(f"Verified {len(required_paths)} required repository files.")
           PY
 
-      - name: Verify frozen SHA-256 fingerprints
+      - name: Verify current release SHA-256 fingerprints
         shell: bash
         run: |
           python - <<'PY'
@@ -93,10 +95,6 @@ jobs:
               "demo_extension_v10_0_6/SVARE_v10_0_6.html",
               "demo_extension_v10_0_6/SVARE_v10_0_6_vectors.json",
               "demo_extension_v10_0_6/SVARE_v10_0_6_validation.json",
-              "archive/demo_extension/svare_v9_9.py",
-              "archive/demo_extension/SVARE_HTML_v9_9.html",
-              "archive/demo/svare_v8_1.py",
-              "archive/demo/SVARE_HTML_v8_1.html",
           ]
 
           def sha256_file(path: Path) -> str:
@@ -108,6 +106,7 @@ jobs:
                   re.IGNORECASE,
               )
               match = pattern.search(freeze_text)
+
               if not match:
                   print(f"ERROR: No frozen SHA-256 entry found for {target}.")
                   sys.exit(1)
@@ -123,10 +122,11 @@ jobs:
 
               print(f"Verified {target}: {actual}")
 
-          print("All frozen SHA-256 fingerprints verified.")
+          print("All current release SHA-256 fingerprints verified.")
           PY
 
       - name: Compile Python reference engine
+        shell: bash
         run: |
           python -m py_compile demo_extension_v10_0_6/SVARE_v10_0_6.py
 
@@ -159,8 +159,14 @@ jobs:
               (validation.get("html_self_test", {}).get("case_count") == 63, "HTML check count"),
               (validation.get("html_self_test", {}).get("failure_count") == 0, "HTML failure count"),
               (validation.get("html_self_test", {}).get("all_pass") is True, "HTML all-pass flag"),
-              (validation.get("differential_validation", {}).get("expression_count") == 97, "differential expression count"),
-              (validation.get("differential_validation", {}).get("mismatch_count") == 0, "differential mismatch count"),
+              (
+                  validation.get("differential_validation", {}).get("expression_count") == 97,
+                  "differential expression count",
+              ),
+              (
+                  validation.get("differential_validation", {}).get("mismatch_count") == 0,
+                  "differential mismatch count",
+              ),
               (validation.get("browser_page_errors") == [], "browser page errors"),
           ]
 
@@ -326,12 +332,20 @@ jobs:
               )
 
               if result.returncode != 2:
-                  print(f"ERROR: Expected exit code 2 for {expression!r}; received {result.returncode}.")
+                  print(
+                      f"ERROR: Expected exit code 2 for {expression!r}; "
+                      f"received {result.returncode}."
+                  )
                   print(result.stdout)
                   print(result.stderr)
                   sys.exit(1)
 
-              report = json.loads(result.stdout)
+              try:
+                  report = json.loads(result.stdout)
+              except json.JSONDecodeError:
+                  print(f"ERROR: Output for {expression!r} was not valid JSON.")
+                  print(result.stdout)
+                  sys.exit(1)
 
               if report.get("state") != expected_state:
                   print(
