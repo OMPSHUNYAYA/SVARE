@@ -2,56 +2,30 @@ SVARE — Hash Freeze (SHA-256)
 
 SVARE v10.0.6 — Current Public Release
 
-demo_extension_v10_0_6\SVARE_v10_0_6.py
+demo_extension_v10_0_6/SVARE_v10_0_6.py
 
 SHA-256: 63b39595c3c68c57e5095d8a46f8b1dad94b29e3c763538f87d1c0ccb5d82232
 
-demo_extension_v10_0_6\SVARE_v10_0_6.html
+
+demo_extension_v10_0_6/SVARE_v10_0_6.html
 
 SHA-256: 2d26821a09184daa877e386c3f13438bc75c461a2102eaae2e26b3cd9ea2d4c7
 
-demo_extension_v10_0_6\SVARE_v10_0_6_vectors.json
+
+demo_extension_v10_0_6/SVARE_v10_0_6_vectors.json
 
 SHA-256: 2ae958543e886f66118b3c7b506e7509a8004c5e29e97933acd7eef1f28d5d31
 
-demo_extension_v10_0_6\SVARE_v10_0_6_validation.json
+
+demo_extension_v10_0_6/SVARE_v10_0_6_validation.json
 
 SHA-256: b5677652a0624be2c11f15b6ef3768c343957405c371016674bf0047b2b4241a
 
----
-
-Historical Releases — Archive Folder
-
-SVARE v9.9 — Historical Reference Release
-
-archive\demo_extension\svare_v9_9.py
-
-SHA-256: b0a04028c7531929354e4491c7af39c789fadc94d350c322147077c2027b4603
-
-archive\demo_extension\SVARE_HTML_v9_9.html
-
-SHA-256: 125540378c0e1600ff32814a81a900b2ee80dcdf0ba15bcb725361ca41b1a7d3
-
----
-
-SVARE v8.1 — Historical Reference Release
-
-archive\demo\svare_v8_1.py
-
-SHA-256: 6efad28201ce096badd0ec4226383ade9def2e02177e7bd0423f2f158ff34d7f
-
-archive\demo\SVARE_HTML_v8_1.html
-
-SHA-256: d00f9d202a58f9f04669409d7e8e82adf176e0dce4397ed657f886900c1a0641
-
----
 
 same file bytes -> same SHA-256
 
-changed file bytes are expected to produce a different SHA-256
+changed file bytes -> different SHA-256
 
 SHA-256 provides a reproducible fingerprint of each frozen artifact
 
-v8.1 and v9.9 hashes remain historical freeze records
-
-v10.0.6 hashes define the current public release artifacts
+These hashes define the frozen SVARE v10.0.6 current public release artifacts
