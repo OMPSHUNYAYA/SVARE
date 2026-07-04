@@ -22,6 +22,8 @@ SVARE resolves supported mathematical expressions into exact rational values, ex
 
 ![SVARE Concept Diagram](docs/SVARE_Diagram.png)
 
+[![SVARE Verify](https://github.com/OMPSHUNYAYA/SVARE/actions/workflows/svare-verify.yml/badge.svg)](https://github.com/OMPSHUNYAYA/SVARE/actions/workflows/svare-verify.yml)
+
 The diagram summarizes the bounded SVARE v10.0.6 resolution architecture:
 
 ```text
