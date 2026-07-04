@@ -18,6 +18,24 @@ SVARE resolves supported mathematical expressions into exact rational values, ex
 
 ---
 
+## 🧭 **Visual Overview**
+
+![SVARE Concept Diagram](docs/SVARE_Diagram.png)
+
+The diagram summarizes the bounded SVARE v10.0.6 resolution architecture:
+
+```text
+surface expression
+        ↓
+parsing and canonical structure
+        ↓
+exact semantic result or explicit state
+        ↓
+visible display and version-scoped receipts
+```
+
+---
+
 ## Positioning
 
 SVARE has two complementary roles.
@@ -1078,10 +1096,17 @@ The purpose is not to claim universal superiority over established mathematics l
 The purpose is to test whether SVARE preserves:
 
 ```text
-same supported structure -> same canonical structure
-same exact semantic value -> same semantic certificate
-same display policy       -> same display receipt
+same submitted input
+-> same parsed structure or parser state
+-> same canonical structure or canonical unresolved placeholder
+-> same resolution state
+-> same exact semantic result or explicit state
+-> same structure and semantic certificates
 ```
+
+For resolved exact results, the same display precision and display policy produce the same visible display and display receipt.
+
+For explicit states whose display includes the submitted expression, reproducibility of the display receipt additionally requires the same submitted surface.
 
 ---
 
