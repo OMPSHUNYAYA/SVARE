@@ -138,28 +138,45 @@ Receipts are therefore version-scoped.
 ┌──────────────────────────────┐
 │ Parsed Expression Tree       │
 │ Submitted operation shape    │
-└──────────────┬───────────────┘
-               ↓
-┌──────────────────────────────┐
-│ Structural Canonicalizer     │
-│ Versioned canonical encoding │
-└──────────────┬───────────────┘
-               ↓
-┌──────────────────────────────┐
-│ Semantic Resolver            │
-│ Rational, symbolic, or state │
-└──────────────┬───────────────┘
-               ↓
-┌──────────────────────────────┐
-│ Display Resolver             │
-│ Exact, repeating, approx.    │
-└──────────────┬───────────────┘
-               ↓
-┌──────────────────────────────┐
-│ Receipt Layer                │
-│ Structure, semantic, display │
-└──────────────────────────────┘
+└──────────┬─────────────┬─────┘
+           │             │
+           ↓             ↓
+┌──────────────────┐  ┌──────────────────────────┐
+│ Structural       │  │ Semantic Resolver        │
+│ Canonicalizer    │  │ Rational, symbolic,      │
+│                  │  │ or explicit state        │
+└────────┬─────────┘  └────────────┬─────────────┘
+         ↓                         ↓
+┌──────────────────┐  ┌──────────────────────────┐
+│ Canonical        │  │ Exact Semantic Result    │
+│ Structure        │  │ or Explicit State        │
+└────────┬─────────┘  └────────────┬─────────────┘
+         │                         ↓
+         │              ┌──────────────────────────┐
+         │              │ Display Resolver         │
+         │              │ Exact, repeating,        │
+         │              │ approximate, or status   │
+         │              └────────────┬─────────────┘
+         │                           ↓
+         │              ┌──────────────────────────┐
+         │              │ Visible Display          │
+         │              └────────────┬─────────────┘
+         │                           │
+         └──────────────┬────────────┘
+                        ↓
+             ┌──────────────────────────┐
+             │ Receipt Layer            │
+             │ Structure, semantic,     │
+             │ and display receipts     │
+             └──────────────────────────┘
 ```
+
+The canonical structure and semantic result are deterministic outputs derived from the same parsed expression tree.
+
+The semantic resolver evaluates the parsed tree. It does not evaluate the serialized canonical-structure string.
+
+For explicit states whose visible presentation includes the evaluated or submitted expression, the display resolver also uses the surface expression.
+
 
 ---
 
@@ -276,7 +293,25 @@ This narrows the accepted language to the published mathematical grammar.
 
 The parser produces a structured expression tree.
 
-Examples of conceptual nodes include:
+The implementation-level parsed node kinds represent:
+
+```text
+number
+name
+unary operation
+binary operation
+function call
+```
+
+The tree preserves:
+
+* operator order;
+* parentheses as reflected in the resulting operation tree;
+* precedence;
+* associativity;
+* function argument order.
+
+Encodings such as:
 
 ```text
 RAT(...)
@@ -289,13 +324,7 @@ CALL_SQRT(...)
 CALL_SIN(...)
 ```
 
-The tree preserves:
-
-- operator order;
-- parentheses;
-- precedence;
-- associativity;
-- function argument order.
+belong to the canonical-structure layer described in Section 9. They are not the parser’s original node-kind names.
 
 SVARE does not claim that arbitrary reordering preserves meaning.
 
@@ -324,7 +353,7 @@ Its responsibilities include:
 - stable child ordering where defined;
 - exact rational normalization;
 - deterministic symbolic representation;
-- stable receipt payload construction.
+- stable structural material for structure-certificate payload construction;
 
 Canonicalization does not depend on:
 
@@ -548,7 +577,9 @@ no exact numeric result is forced
 
 The display layer converts a semantic result into a visible representation.
 
-It does not replace the semantic result.
+For explicit states whose visible presentation includes the evaluated or submitted expression, it also uses the surface expression.
+
+The display layer does not replace the semantic result.
 
 ### 16.1 Display kinds
 
@@ -684,7 +715,12 @@ same canonical structure
 same canonical semantic result and state
 -> same semantic certificate
 
-same semantic result and display policy
+same resolved semantic result and display policy
+-> same display receipt
+
+same explicit state
++ same applicable submitted surface
++ same display policy
 -> same display receipt
 ```
 
@@ -729,15 +765,15 @@ It does not independently prove that the implementation or mathematical rules ar
 Within the same application and policy versions:
 
 ```text
-same supported input
--> same parsed structure
--> same canonical structure
+same submitted input
+-> same parsed structure or parser state
+-> same canonical structure or canonical unresolved placeholder
 -> same resolution state
--> same exact semantic result
+-> same exact semantic result or explicit state
 -> same structure and semantic certificates
 ```
 
-At the same display precision:
+For resolved exact results, at the same display precision:
 
 ```text
 same exact semantic result
@@ -745,16 +781,26 @@ same exact semantic result
 -> same display receipt
 ```
 
+For explicit states whose visible presentation includes the submitted expression:
+
+```text
+same explicit state
++ same submitted surface
++ same display precision
+-> same status display
+-> same display receipt
+```
+
 This guarantee is version-scoped.
 
 A change to any of the following may intentionally change an outcome or receipt:
 
-- canonicalization;
-- semantic rules;
-- certificate schema;
-- resource policy;
-- application version;
-- display policy.
+* canonicalization;
+* semantic rules;
+* certificate schema;
+* resource policy;
+* application version;
+* display policy.
 
 ---
 
@@ -996,7 +1042,10 @@ A non-resolved state does not become a fabricated number.
 
 ### 28.4 Version-scoped reproducibility
 
-The same supported input under the same policies produces the same outcome and receipts.
+Under the same application and policy versions, the same supported input
+produces the same outcome and the same structure and semantic certificates.
+
+At the same display precision, it also produces the same display receipt.
 
 ### 28.5 Bounded resource refusal
 
@@ -1054,14 +1103,17 @@ Any such extension should preserve:
 Within fixed versions and policies:
 
 ```text
-same supported input structure
--> same canonical structure
+same submitted input
+-> same parsed structure or parser state
+-> same canonical structure or canonical unresolved placeholder
 -> same resolution state
--> same exact semantic result
--> same version-scoped receipts
+-> same exact semantic result or explicit state
+-> same structure and semantic certificates
 ```
 
-Display precision additionally determines the display receipt.
+For resolved exact results, the same display precision produces the same visible display and display receipt.
+
+For explicit states whose display contains the submitted expression, reproducibility of the display receipt additionally requires the same submitted surface.
 
 ---
 
