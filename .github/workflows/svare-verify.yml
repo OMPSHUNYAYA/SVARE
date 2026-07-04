@@ -5,20 +5,36 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: svare-verify-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   verify:
+    name: Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.9"
+          - "3.11"
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
-          python-version: '3.11'
+          python-version: ${{ matrix.python-version }}
 
-      - name: Verify required repository files exist
+      - name: Verify required repository files
         shell: bash
         run: |
           python - <<'PY'
@@ -26,13 +42,18 @@ jobs:
           import sys
 
           required_paths = [
+              ".github/workflows/svare-verify.yml",
               "README.md",
               "LICENSE",
-              "demo/svare_v8_1.py",
-              "demo/SVARE_HTML_v8_1.html",
-              "demo_extension/svare_v9_9.py",
-              "demo_extension/SVARE_HTML_v9_9.html",
-              "concept_demo/SVARE_Deterministic_Structural_Cinema_v8_8.py",
+              "demo_extension_v10_0_6/SVARE_v10_0_6.py",
+              "demo_extension_v10_0_6/SVARE_v10_0_6.html",
+              "demo_extension_v10_0_6/SVARE_v10_0_6_vectors.json",
+              "demo_extension_v10_0_6/SVARE_v10_0_6_validation.json",
+              "archive/concept_demo/SVARE_Deterministic_Structural_Cinema_v8_8.py",
+              "archive/demo/svare_v8_1.py",
+              "archive/demo/SVARE_HTML_v8_1.html",
+              "archive/demo_extension/svare_v9_9.py",
+              "archive/demo_extension/SVARE_HTML_v9_9.html",
               "docs/Quickstart.md",
               "docs/FAQ.md",
               "docs/Proof-Sketch.md",
@@ -41,279 +62,333 @@ jobs:
               "docs/SVARE_Diagram.png",
               "docs/Dependency-Elimination-Framework.png",
               "docs/Shunyaya-Structural-Stack.png",
-              "docs/archive/SVARE_v1.3_Historical_Architecture.pdf",
               "VERIFY/VERIFY.txt",
               "VERIFY/FREEZE_DEMO_SHA256.txt",
           ]
 
-          missing = [p for p in required_paths if not Path(p).exists()]
+          missing = [path for path in required_paths if not Path(path).is_file()]
           if missing:
               print("ERROR: Missing required repository files:")
-              for p in missing:
-                  print(" -", p)
+              for path in missing:
+                  print(" -", path)
               sys.exit(1)
 
-          print("Required repository files verified.")
+          print(f"Verified {len(required_paths)} required repository files.")
           PY
 
-      - name: Verify frozen SHA256 hashes
+      - name: Verify frozen SHA-256 fingerprints
         shell: bash
         run: |
           python - <<'PY'
+          from pathlib import Path
           import hashlib
           import re
           import sys
-          from pathlib import Path
 
           freeze_path = Path("VERIFY/FREEZE_DEMO_SHA256.txt")
+          freeze_text = freeze_path.read_text(encoding="utf-8").replace("\\", "/")
 
-          targets = {
-              "demo_extension/svare_v9_9.py": Path("demo_extension/svare_v9_9.py"),
-              "demo_extension/SVARE_HTML_v9_9.html": Path("demo_extension/SVARE_HTML_v9_9.html"),
-              "demo/svare_v8_1.py": Path("demo/svare_v8_1.py"),
-              "demo/SVARE_HTML_v8_1.html": Path("demo/SVARE_HTML_v8_1.html"),
-          }
-
-          freeze_text = freeze_path.read_text(encoding="utf-8")
+          targets = [
+              "demo_extension_v10_0_6/SVARE_v10_0_6.py",
+              "demo_extension_v10_0_6/SVARE_v10_0_6.html",
+              "demo_extension_v10_0_6/SVARE_v10_0_6_vectors.json",
+              "demo_extension_v10_0_6/SVARE_v10_0_6_validation.json",
+              "archive/demo_extension/svare_v9_9.py",
+              "archive/demo_extension/SVARE_HTML_v9_9.html",
+              "archive/demo/svare_v8_1.py",
+              "archive/demo/SVARE_HTML_v8_1.html",
+          ]
 
           def sha256_file(path: Path) -> str:
               return hashlib.sha256(path.read_bytes()).hexdigest()
 
-          for label, path in targets.items():
-              label_variants = [
-                  re.escape(label),
-                  re.escape(label.replace("/", "\\")),
-              ]
-
-              pattern = rf"({'|'.join(label_variants)})\s*SHA256:\s*([0-9a-f]{{64}})"
-              match = re.search(pattern, freeze_text, re.IGNORECASE)
-
+          for target in targets:
+              pattern = re.compile(
+                  re.escape(target) + r"\s+SHA-256:\s*([0-9a-fA-F]{64})",
+                  re.IGNORECASE,
+              )
+              match = pattern.search(freeze_text)
               if not match:
-                  print(f"ERROR: No frozen SHA256 entry found for {label}.")
+                  print(f"ERROR: No frozen SHA-256 entry found for {target}.")
                   sys.exit(1)
 
-              expected = match.group(2).lower()
-              actual = sha256_file(path).lower()
+              expected = match.group(1).lower()
+              actual = sha256_file(Path(target)).lower()
 
               if actual != expected:
-                  print(f"ERROR: Hash mismatch for {label}")
+                  print(f"ERROR: SHA-256 mismatch for {target}")
                   print("Expected:", expected)
                   print("Actual:  ", actual)
                   sys.exit(1)
 
-              print(f"Hash verified for {label}: {actual}")
+              print(f"Verified {target}: {actual}")
 
-          print("Frozen SHA256 verification completed.")
+          print("All frozen SHA-256 fingerprints verified.")
           PY
 
-      - name: Run SVARE v9.9 Python demo
-        shell: bash
+      - name: Compile Python reference engine
         run: |
-          python demo_extension/svare_v9_9.py "1 + 2 + 3"
+          python -m py_compile demo_extension_v10_0_6/SVARE_v10_0_6.py
 
-      - name: Verify SVARE v9.9 output markers
+      - name: Validate release JSON files
         shell: bash
         run: |
           python - <<'PY'
-          import subprocess
+          from pathlib import Path
+          import json
           import sys
 
-          cmd = [sys.executable, "demo_extension/svare_v9_9.py", "1 + 2 + 3"]
-          result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-          out = result.stdout
+          vectors_path = Path("demo_extension_v10_0_6/SVARE_v10_0_6_vectors.json")
+          validation_path = Path("demo_extension_v10_0_6/SVARE_v10_0_6_validation.json")
 
-          required_markers = [
-              "SVARE v9.9",
-              "Structural Value Resolution Engine",
-              "Resolution state",
-              "RESOLVED",
-              "FINAL VISIBLE VALUE",
-              "Certificate",
-              "Structural Tree Nodes",
+          vectors = json.loads(vectors_path.read_text(encoding="utf-8"))
+          validation = json.loads(validation_path.read_text(encoding="utf-8"))
+
+          expected_hash = "76e1fff4dee7fe2361d5d2a869f589e6f413049df3cf394544e371669fb48f69"
+
+          checks = [
+              (vectors.get("schema_version") == "2", "vector schema version"),
+              (vectors.get("release_version") == "10.0.6", "vector release version"),
+              (vectors.get("conformance_vector_sha256") == expected_hash, "vector payload hash"),
+              (len(vectors.get("vectors", [])) == 59, "shared vector count"),
+              (validation.get("version") == "10.0.6", "validation release version"),
+              (validation.get("conformance_vector_sha256") == expected_hash, "validation vector hash"),
+              (validation.get("python_self_test", {}).get("case_count") == 63, "Python check count"),
+              (validation.get("python_self_test", {}).get("failure_count") == 0, "Python failure count"),
+              (validation.get("python_self_test", {}).get("all_pass") is True, "Python all-pass flag"),
+              (validation.get("html_self_test", {}).get("case_count") == 63, "HTML check count"),
+              (validation.get("html_self_test", {}).get("failure_count") == 0, "HTML failure count"),
+              (validation.get("html_self_test", {}).get("all_pass") is True, "HTML all-pass flag"),
+              (validation.get("differential_validation", {}).get("expression_count") == 97, "differential expression count"),
+              (validation.get("differential_validation", {}).get("mismatch_count") == 0, "differential mismatch count"),
+              (validation.get("browser_page_errors") == [], "browser page errors"),
           ]
 
-          missing = [marker for marker in required_markers if marker not in out]
-          if missing:
-              print("ERROR: SVARE output missing expected markers:")
-              for marker in missing:
-                  print(" -", marker)
-              print("\nFull output:\n")
-              print(out)
+          failed = [label for passed, label in checks if not passed]
+          if failed:
+              print("ERROR: Release JSON validation failed:")
+              for label in failed:
+                  print(" -", label)
               sys.exit(1)
 
-          print("SVARE v9.9 output markers verified.")
+          print("Release JSON records verified.")
           PY
 
-      - name: Verify deterministic single-input output
+      - name: Run SVARE v10.0.6 self-test
         shell: bash
         run: |
           python - <<'PY'
+          import json
           import subprocess
           import sys
 
-          cmd = [sys.executable, "demo_extension/svare_v9_9.py", "1 + 2 + 3"]
+          script = "demo_extension_v10_0_6/SVARE_v10_0_6.py"
+          expected_hash = "76e1fff4dee7fe2361d5d2a869f589e6f413049df3cf394544e371669fb48f69"
 
-          result1 = subprocess.run(cmd, capture_output=True, text=True, check=True)
-          result2 = subprocess.run(cmd, capture_output=True, text=True, check=True)
+          result = subprocess.run(
+              [sys.executable, script, "--self-test"],
+              capture_output=True,
+              text=True,
+          )
 
-          if result1.stdout != result2.stdout:
-              print("ERROR: Non-deterministic SVARE output for identical input")
+          if result.returncode != 0:
+              print(result.stdout)
+              print(result.stderr)
+              sys.exit(result.returncode)
+
+          try:
+              report = json.loads(result.stdout)
+          except json.JSONDecodeError:
+              print("ERROR: Self-test output was not valid JSON.")
+              print(result.stdout)
               sys.exit(1)
 
-          required = [
-              "SVARE v9.9",
-              "Resolution state",
-              "RESOLVED",
-              "Visible value",
-              "6",
-              "Certificate",
-              "Structural Tree Nodes",
-              "MERGE",
-          ]
-
-          missing = [m for m in required if m not in result1.stdout]
-          if missing:
-              print("ERROR: Deterministic test output missing expected markers:")
-              for m in missing:
-                  print(" -", m)
-              print(result1.stdout)
-              sys.exit(1)
-
-          print("Deterministic single-input output verified.")
-          PY
-
-      - name: Verify expression-tree examples
-        shell: bash
-        run: |
-          python - <<'PY'
-          import subprocess
-          import sys
-
-          cases = [
-              ("1 + 2 + 3", "6"),
-              ("(1 + 2) * 3", "9"),
-              ("2 * (3 + 4 * (5 - 2))", "30"),
-              ("(2 / 3) + (1 / 6)", "0.833333333333333333"),
-          ]
-
-          for expr, expected_value in cases:
-              cmd = [sys.executable, "demo_extension/svare_v9_9.py", expr]
-              result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-              out = result.stdout
-
-              required = [
-                  "Resolution state",
-                  "RESOLVED",
-                  "Visible value",
-                  expected_value,
-                  "FINAL VISIBLE VALUE",
-              ]
-
-              missing = [m for m in required if m not in out]
-              if missing:
-                  print(f"ERROR: Expected output markers not found for input: {expr}")
-                  for m in missing:
-                      print(" -", m)
-                  print(out)
-                  sys.exit(1)
-
-              print(f"Verified expression tree: {expr}")
-
-          print("Expression-tree examples verified.")
-          PY
-
-      - name: Verify SVARE v9.9 edge states
-        shell: bash
-        run: |
-          python - <<'PY'
-          import subprocess
-          import sys
-
-          cases = {
-              "2 / (3 - 3)": "FORBIDDEN",
-              "0 / 0": "INDETERMINATE_ZERO",
-              "(1 + 2": "INCOMPLETE",
-              "depth 24 (2 / 3)": "RESOLVED",
+          expected = {
+              "version": "10.0.6",
+              "case_count": 63,
+              "failure_count": 0,
+              "all_pass": True,
+              "external_vectors_checked": True,
+              "conformance_vector_sha256": expected_hash,
           }
 
-          for expr, marker in cases.items():
-              cmd = [sys.executable, "demo_extension/svare_v9_9.py", expr]
-              result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-              out = result.stdout
+          failures = [
+              f"{key}: expected {value!r}, received {report.get(key)!r}"
+              for key, value in expected.items()
+              if report.get(key) != value
+          ]
 
-              if marker not in out:
-                  print(f"ERROR: Expected marker {marker} not found for input: {expr}")
-                  print(out)
+          if failures:
+              print("ERROR: Self-test report did not match the frozen release:")
+              for failure in failures:
+                  print(" -", failure)
+              sys.exit(1)
+
+          print("SVARE v10.0.6 self-test verified.")
+          PY
+
+      - name: Verify deterministic receipts and precision isolation
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import subprocess
+          import sys
+
+          script = "demo_extension_v10_0_6/SVARE_v10_0_6.py"
+
+          def resolve(expression: str, precision=None) -> dict:
+              command = [sys.executable, script]
+              if precision is not None:
+                  command.extend(["--precision", str(precision)])
+              command.extend(["--json", expression])
+
+              result = subprocess.run(command, capture_output=True, text=True)
+              if result.returncode != 0:
+                  print(result.stdout)
+                  print(result.stderr)
+                  raise SystemExit(result.returncode)
+
+              return json.loads(result.stdout)
+
+          first = resolve("sin(pi/6)")
+          second = resolve("sin(pi/6)")
+
+          deterministic_fields = [
+              "state",
+              "exact_value",
+              "structure_canonical",
+              "semantic_canonical",
+              "structure_certificate_sha256",
+              "semantic_certificate_sha256",
+              "display_receipt_sha256",
+          ]
+
+          for field in deterministic_fields:
+              if first.get(field) != second.get(field):
+                  print(f"ERROR: Non-deterministic field: {field}")
                   sys.exit(1)
 
-              print(f"Verified {expr}: {marker}")
+          p30 = resolve("sqrt(2)", 30)
+          p60 = resolve("sqrt(2)", 60)
 
-          print("SVARE v9.9 edge states verified.")
+          invariant_fields = [
+              "state",
+              "exact_value",
+              "structure_canonical",
+              "semantic_canonical",
+              "structure_certificate_sha256",
+              "semantic_certificate_sha256",
+          ]
+
+          for field in invariant_fields:
+              if p30.get(field) != p60.get(field):
+                  print(f"ERROR: Precision changed invariant field: {field}")
+                  sys.exit(1)
+
+          if p30.get("display_value") == p60.get("display_value"):
+              print("ERROR: Precision did not change the symbolic display.")
+              sys.exit(1)
+
+          if p30.get("display_receipt_sha256") == p60.get("display_receipt_sha256"):
+              print("ERROR: Precision did not change the display receipt.")
+              sys.exit(1)
+
+          print("Deterministic receipts and precision isolation verified.")
           PY
 
-      - name: Verify HTML v9.9 demo contains expected structural hooks
+      - name: Verify explicit states and exit codes
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import subprocess
+          import sys
+
+          script = "demo_extension_v10_0_6/SVARE_v10_0_6.py"
+
+          cases = [
+              ("tan(pi/2)", "SINGULAR", None),
+              ("1/0", "FORBIDDEN", None),
+              ("0/0", "INDETERMINATE", None),
+              ("(1+2", "INCOMPLETE", None),
+              ("atan(1,2)", "CONFLICT", None),
+              ("unknown_function(2)", "ABSTAIN", None),
+              ("١+١", "CONFLICT", "UNSUPPORTED_CHARACTER"),
+              ("2^2^2^2^2^2", "LIMIT_EXCEEDED", "MAX_EXACT_RESULT_DIGITS"),
+          ]
+
+          for expression, expected_state, expected_error in cases:
+              result = subprocess.run(
+                  [sys.executable, script, "--json", expression],
+                  capture_output=True,
+                  text=True,
+              )
+
+              if result.returncode != 2:
+                  print(f"ERROR: Expected exit code 2 for {expression!r}; received {result.returncode}.")
+                  print(result.stdout)
+                  print(result.stderr)
+                  sys.exit(1)
+
+              report = json.loads(result.stdout)
+
+              if report.get("state") != expected_state:
+                  print(
+                      f"ERROR: {expression!r} expected state {expected_state}; "
+                      f"received {report.get('state')}."
+                  )
+                  sys.exit(1)
+
+              if expected_error is not None and report.get("error_code") != expected_error:
+                  print(
+                      f"ERROR: {expression!r} expected error code {expected_error}; "
+                      f"received {report.get('error_code')}."
+                  )
+                  sys.exit(1)
+
+              if report.get("exact_value") is not None:
+                  print(f"ERROR: Non-resolved expression {expression!r} exposed an exact value.")
+                  sys.exit(1)
+
+              print(f"Verified {expression!r}: {expected_state}")
+
+          print("Explicit states and exit codes verified.")
+          PY
+
+      - name: Verify HTML release markers
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
           import sys
 
-          text = Path("demo_extension/SVARE_HTML_v9_9.html").read_text(encoding="utf-8")
+          html = Path(
+              "demo_extension_v10_0_6/SVARE_v10_0_6.html"
+          ).read_text(encoding="utf-8")
 
-          required_snippets = [
-              "SVARE v9.9",
+          required_markers = [
+              "SVARE v10.0.6",
               "Structural Value Resolution Engine",
-              "value_visible iff structure_uniquely_resolves",
-              "RESOLVED",
+              "76e1fff4dee7fe2361d5d2a869f589e6f413049df3cf394544e371669fb48f69",
+              "RESOLVED_EXACT_RATIONAL",
+              "RESOLVED_EXACT_SYMBOLIC",
+              "SINGULAR",
+              "FORBIDDEN",
+              "INDETERMINATE",
               "INCOMPLETE",
               "CONFLICT",
-              "FORBIDDEN",
-              "INDETERMINATE_ZERO",
-              "Expression",
-              "Structure Inspector",
-              "Decimal Visibility Limit",
+              "ABSTAIN",
+              "LIMIT_EXCEEDED",
+              "INTERNAL_ERROR",
           ]
 
-          missing = [snippet for snippet in required_snippets if snippet not in text]
+          missing = [marker for marker in required_markers if marker not in html]
           if missing:
-              print("ERROR: HTML demo is missing expected structural hooks:")
-              for snippet in missing:
-                  print(" -", snippet)
+              print("ERROR: HTML release is missing required markers:")
+              for marker in missing:
+                  print(" -", marker)
               sys.exit(1)
 
-          print("HTML v9.9 demo structural hooks verified.")
-          PY
-
-      - name: Verify README contains current SVARE claims
-        shell: bash
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          import sys
-
-          text = Path("README.md").read_text(encoding="utf-8")
-
-          required_snippets = [
-              "Structural Value Resolution Engine",
-              "Correctness Without Computation",
-              "SVARE v9.9",
-              "structural expression-tree resolver",
-              "value_visible iff structure_uniquely_resolves",
-              "structure_uniquely_resolves = complete AND consistent",
-              "value_visibility = resolve(structure)",
-              "Computation may reveal value",
-              "It does not create or determine correctness",
-              "SVARE Challenge",
-              "demo_extension/svare_v9_9.py",
-              "VERIFY/FREEZE_DEMO_SHA256.txt",
-          ]
-
-          missing = [snippet for snippet in required_snippets if snippet not in text]
-          if missing:
-              print("ERROR: README.md is missing expected SVARE claims:")
-              for snippet in missing:
-                  print(" -", snippet)
-              sys.exit(1)
-
-          print("README core claims verified.")
+          print("HTML release markers verified.")
           PY
