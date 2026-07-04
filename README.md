@@ -1,754 +1,74 @@
-# ⭐ SVARE
+# SVARE
 
-**Structural Value Resolution Engine — Correctness Without Computation**
+**Structural Value Resolution Engine**
 
----
+## Exact Scientific Calculator and Bounded Deterministic Math Oracle
 
-![SVARE](https://img.shields.io/badge/SVARE-Structural%20Value%20Resolution%20Engine-black)
-![Structure-Based](https://img.shields.io/badge/Correctness-Structure%20Based-purple)
-![Deterministic](https://img.shields.io/badge/Deterministic-Resolution-green)
-![Precision-Preserved](https://img.shields.io/badge/Precision-Preserved-blue)
+**Calculator at the interface. Deterministic, receipt-bearing resolution at the core.**
 
-![Expression-Tree](https://img.shields.io/badge/Resolution-Expression%20Tree-blue)
-![Explicit-States](https://img.shields.io/badge/States-RESOLVED%20%7C%20FORBIDDEN%20%7C%20INDETERMINATE_ZERO%20%7C%20INCOMPLETE%20%7C%20CONFLICT-orange)
-![No-FloatingPoint](https://img.shields.io/badge/Floating--Point-Not%20Required-lightgrey)
-![Execution-Independent](https://img.shields.io/badge/Execution-Order%20Independent-lightgrey)
+SVARE resolves supported mathematical expressions into exact rational values, exact symbolic forms, explicit resolution states, and reproducible version-scoped receipts.
 
-![Deterministic-Visibility](https://img.shields.io/badge/Visibility-Deterministic-success)
+![Release](https://img.shields.io/badge/release-v10.0.6-blue)
 ![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
-![Current-Release](https://img.shields.io/badge/Current%20Release-v9.9-blue)
-![Open-Standard](https://img.shields.io/badge/Reference-Open%20Standard-blue)
+![HTML](https://img.shields.io/badge/HTML-standalone-orange)
+![Domain](https://img.shields.io/badge/domain-real%20numbers-success)
+![Receipts](https://img.shields.io/badge/receipts-SHA--256-purple)
+![Deterministic](https://img.shields.io/badge/resolution-deterministic-green)
+![No Eval](https://img.shields.io/badge/arbitrary%20eval-not%20used-lightgrey)
 
 ---
 
-**Reveals structurally admissible values through deterministic structural resolution.**
+## Positioning
 
-**SVARE v9.9** is the current public release.
+SVARE has two complementary roles.
 
-It evolves SVARE from a single structural-relation resolver into a full **structural expression-tree resolver**.
+### For people
 
-The v9.9 reference engine demonstrates that:
+SVARE is an **exact scientific calculator** with:
 
-- value correctness can be validated structurally
-- chained expressions can resolve through expression trees
-- grouped and nested expressions can resolve deterministically
-- admissibility can be determined independently of floating-point approximation
-- incomplete or conflicting structure can safely refuse visibility
-- identical structural encoding produces deterministic outcomes
-- visibility depth controls revelation without changing structural resolution
+- exact finite-decimal and rational arithmetic;
+- bounded exact symbolic scientific rules;
+- clearly marked symbolic approximations;
+- explicit singular, forbidden, indeterminate, incomplete, unsupported, and limited states;
+- standalone Python and browser interfaces.
 
----
+### For software
 
-🌐 **SVARE — Structural Value Resolution Engine**
+SVARE is a **bounded deterministic math oracle** for supported expressions.
 
-Where Structure Resolves and Value Becomes Visible
+It returns structured outcomes rather than only a displayed number. A caller can distinguish:
 
-SVARE removes floating-point approximation and execution-order dependency as requirements for deterministic value correctness.
+- an exact rational result;
+- an exact symbolic result;
+- a visible approximation of an exact symbolic form;
+- a recognized singularity;
+- a real-domain refusal;
+- an indeterminate structure;
+- an incomplete or conflicting submission;
+- an unsupported expression;
+- a deterministic resource-limit refusal;
+- an unexpected implementation failure.
 
-Value correctness does not depend on floating-point execution behavior, evaluation order, or approximation-driven pipelines.
-
-Value is revealed only when structure uniquely resolves.
-
-`value_visible iff structure_uniquely_resolves`
-
-`structure_uniquely_resolves = complete AND consistent`
-
----
-
-**Deterministic • Structure-Based • Expression-Tree Resolution • Exact Structural Packets • Explicit Admissibility States • Order-Independent Structural Validation**
-
----
-
-**Release lineage:**
-
-- **SVARE v9.9** — current public release; structural expression-tree resolver
-- **SVARE v8.1** — historical reference release; single structural-relation resolver
-
----
-
-## ⚡ Instant Proof
-
-Type this into a classical calculator:
-
-1.0000000000000001 - 1.0000000000000000
-
-Some systems collapse this to:
-0
-
-Others display:
-1e-16
-
-Both are surface representations.
-
-SVARE reveals:
-0.0000000000000001
-
-The full structural residual — not an approximation.
-
-Not because it is "more precise."
-But because it does not make a value visible until the structure is complete and consistent.
-
----
-
-## ⚡ **The Claim**
-
-A valid value can be deterministically resolved from complete AND consistent structure without depending on floating-point approximation, evaluation order, or execution-specific behavior.
-
----
-
-## 🧱 **Core Principle**
-
-`value_visible iff structure_uniquely_resolves`  
-`structure_uniquely_resolves = complete AND consistent`
-
-SVARE establishes that value correctness is determined by structural sufficiency — not by arithmetic execution, evaluation order, or floating-point machinery.
-
----
-
-## 🚀 **The Core Insight (30-Second Revolution)**
-
-What if value correctness never required arithmetic execution, floating-point approximation, or step-by-step calculation?
-
----
-
-**Traditional systems assume:**
-
-value requires calculation  
-precision requires numeric computation  
-answers require evaluation  
-correctness requires arithmetic execution  
-
----
-
-**SVARE demonstrates:**
-
-When structure uniquely resolves, value becomes visible — deterministically and reproducibly.
-
-`same structure -> same value`  
-`incomplete structure -> no forced value`  
-`conflicting structure -> no arbitrary value`
-
----
-
-This is not a faster calculator.
-
-SVARE isolates a different layer:
-
-structural admissibility and deterministic value visibility.
-
-The reference engine demonstrates that deterministic correctness can be governed by structural completeness and consistency rather than floating-point execution behavior alone.
-
----
-
-## 🧱 **The Unifying Principle**
-
-`correctness = resolve(structure)`
-
-If correctness remains after removing a dependency, that dependency was never fundamental.
-
----
-
-## 🧩 **Structural Collapse Guarantee**
-
-This framework does not modify classical outcomes.  
-It preserves them.
-
-`phi((m, a, s)) = m`
-
-Where:
-
-- `m = classical value`  
-- `a = alignment`  
-- `s = structural state`  
-
-`structure_uniquely_resolves = complete AND consistent`
-
-No new value is created.  
-No approximation is introduced.  
-The system collapses to the same classical truth.
-
----
-
-## 🌍 **Structural Shift**
-
-From approximation-driven evaluation toward explicit structural admissibility and deterministic value visibility.
-
-Traditional systems inherit:  
-Approximation • Rounding • Execution dependency  
-
-SVARE systems inherit:  
-Determinism • Precision • Structural clarity  
-
-This is not an optimization.  
-This is the removal of a non-fundamental dependency.
-
-SVARE distinguishes between:
-
-- structural correctness
-- representational visibility
-- execution substrate
-
-The reference engine demonstrates that correctness can be validated structurally before representation-specific execution details become relevant.
-
-Computation may still participate in realization and visibility.
-SVARE isolates the structural conditions that govern admissibility.
-
----
-
-## ⚠️ **Clarification — Correctness Without Computation**
-
-SVARE does not claim that no computation ever occurs.
-
-**What SVARE demonstrates:**
-
-- Value correctness does not require computation as a prerequisite or source of truth  
-- The engine may perform internal resolution steps, but these act only as a resolution substrate  
-- Correctness is determined solely by whether the structure is complete AND consistent  
-
-Computation may reveal value.  
-It does not create or determine correctness.
-
----
-
-**This is the key distinction:**
-
-Traditional systems often treat correctness as emerging from execution and evaluation.
-
-SVARE isolates a different perspective:
-
-`value_visibility = resolve(structure)`
-
-where structural completeness and consistency govern admissibility before representation-specific execution behavior becomes relevant.
-
-The reference implementation includes internal steps for practicality, but those steps do not define truth — structure does.
-
----
-
-## ⚠️ **Boundary Clarification (Important)**
-
-SVARE is not a claim that all computation disappears.
-
-The reference implementation still performs:
-
-- parsing
-- normalization
-- exact digit manipulation
-- deterministic rule application
-- structural resolution steps
-
-These are computational processes in an implementation sense.
-
-The distinction made by SVARE is narrower and more precise:
-
-- floating-point approximation is not required
-- evaluation-order dependency is not required
-- correctness is governed by structural admissibility conditions
-- incomplete or conflicting structure safely prevents visibility
-
-SVARE therefore operates primarily as:
-
-- a deterministic structural validation model
-- an explicit admissibility-state system
-- a precision-preserving structural resolution engine
-
-rather than a claim that all forms of computation are eliminated.
-
----
-
-## 🧠 **Practical Interpretation**
-
-Use existing systems to display numbers.
-
-Use SVARE to determine whether the value is structurally correct.
-
----
-
-## 🧭 **Visual Overview**
-
-![SVARE Concept Diagram](docs/SVARE_Diagram.png)
-
----
-
-## 🧱 **Layer Separation (Critical)**
-
-**Structure Layer:**  
-determines value truth  
-
-**Representation Layer:**  
-numbers, expressions, formatting (optional)  
-
-**Execution Layer:**  
-calculation, arithmetic, evaluation (optional)  
-
-SVARE operates only at the Structure Layer.
-
----
-
-## 🔍 **Structural Correctness vs Execution**
-
-SVARE focuses on:
-
-- structural admissibility
-- deterministic visibility
-- explicit incompleteness handling
-- conflict-safe resolution
-
-The implementation may still perform internal evaluation steps.
-However, those steps do not override structural validity conditions.
-
----
-
-## 🔥 **Break This SVARE (Immediate Challenge)**
-
-If computation is required for correctness, this invariant must fail:
-
-`same structure -> same value`
-
-certificate identity depends on structural encoding  
-(canonical same-certificate identity is a future extension)
-
----
-
-**Or demonstrate:**
-
-`incomplete structure -> forced value`  
-`conflicting structure -> arbitrary value`  
-`reordered structure -> different outcome`
-
----
-
-If none occur, deterministic correctness depends fundamentally on structural validity conditions — not merely on floating-point execution behavior.
-
----
-
-## ⚡ **The Critical Line**
-
-Across every structural domain:
-
-`remove dependency -> structure remains -> correctness preserved`
-
-Nothing was improved.  
-Nothing was optimized.  
-Nothing was replaced.  
-
-Only the dependency was removed.  
-
-And correctness remained.
-
----
-
-## 🌍 **A World Built on Computation**
-
-For decades, systems have been built on dependencies:
-
-arithmetic  
-evaluation order  
-floating-point systems  
-execution pipelines  
-
-Each treated as essential.
-
----
-
-## 🔄 **The Shift**
-
-Across domains:
-
-correctness does not depend on the mechanism we assumed it did
-
-It is preserved by:
-
-**structure**
-
----
-
-## ⚡ **The One-Line Insight**
-
-Deterministic value visibility can be governed by structural completeness and consistency rather than floating-point approximation or execution-order behavior.
-
----
-
-## ⚡ **The Core Truth**
-
-`value_visibility = resolve(structure)`
-
-where:
-
-`structure_uniquely_resolves = complete AND consistent`
-
----
-
-## ⚡ **Structural Absence Principle**
-
-If structure is not complete and consistent:  
-value does not exist  
-
-`incomplete -> no value`  
-`conflict -> no value`
-
-Absence is structural truth.
-
----
-
-## ⚡ **Try It in 30 Seconds**
-
-Current public release:
-
-```bash
-python demo_extension/svare_v9_9.py
-```
-
-Single expression:
-
-```bash
-python demo_extension/svare_v9_9.py "1 + 2 + 3"
-```
-
-Expression-tree example:
-
-```bash
-python demo_extension/svare_v9_9.py "2 * (3 + 4 * (5 - 2))"
-```
-
----
-
-## 🔍 **What You Will Observe**
-
-- expression-tree resolution
-- deterministic structural visibility
-- structural node inspection
-- explicit resolution states
-- visibility-layer control
-- recurring-structure visibility
-- scientific visibility for large structures
-- structure-driven outcomes
-
----
-
-## 🔍 **Representative Examples**
-
-```text
-1 + 2 + 3
-```
-
-Result:
-
-```text
-6
-```
-
----
-
-```text
-(1 + 2) * 3
-```
-
-Result:
-
-```text
-9
-```
-
----
-
-```text
-2 * (3 + 4 * (5 - 2))
-```
-
-Result:
-
-```text
-30
-```
-
----
-
-```text
-(2 / 3) + (1 / 6)
-```
-
-Result:
-
-```text
-0.833333333333333333
-```
-
----
-
-```text
-2 / (3 - 3)
-```
-
-Result:
-
-```text
-FORBIDDEN
-```
-
----
-
-```text
-0 / 0
-```
-
-Result:
-
-```text
-INDETERMINATE_ZERO
-```
-
----
-
-## 🔐 **Reproducibility Guarantee (30-Second Proof)**
-
-Run the same expression multiple times:
-
-```bash
-python demo_extension/svare_v9_9.py "1 + 2 + 3"
-```
-
-```bash
-python demo_extension/svare_v9_9.py "1 + 2 + 3"
-```
-
-Expected:
-
-- identical visible value
-- identical resolution state
-- identical certificate
-- identical structural tree
-
-This is the empirical validation of structural determinism:
-
-`same input structure -> same visible value`
-
-`same input structure -> same resolution state`
-
-`same input structure -> same certificate`
-
-Canonical same-certificate identity across equivalent structural surfaces is a future extension.
-
-No floating-point variance.
-
-No ordering dependency.
-
-No external libraries.
-
----
-
-**SVARE v9.9 extends deterministic structural resolution from single relations to complete expression trees while preserving the same structural invariant:**
-
-`same structure -> same value`
-
----
-
-## 🧩 **From Minimal Engine to Expression Trees**
-
-SVARE v8.1 isolated the structural invariant through a single structural relation.
-
-SVARE v9.9 extends that invariant into a complete **expression-tree resolver**.
-
-The core principle remains unchanged:
-
-`same structure -> same value`
-
-What changes is the visible scope.
-
-v8.1 demonstrated:
-
-- one structural relation at a time
-- direct structural packet resolution
-- deterministic visibility for simple surfaces
-
-v9.9 demonstrates:
-
-- chained expressions
-- grouped expressions
-- nested structures
-- unary signs
-- parent-child node resolution
-- full structural expression trees
-- deterministic structural certificates for complete tree paths
-
----
-
-**The principle does not change with size.**
-
-Only its visibility increases.
-
-Minimal engines isolate the truth.
-
-Expression trees demonstrate it at scale.
-
----
-
-## 🧩 **Reference Demonstration**
-
-**Current demonstration:**
-
-```bash
-python demo_extension/svare_v9_9.py
-```
-
-**Current HTML demonstration:**
-
-`demo_extension/SVARE_HTML_v9_9.html`
-
----
-
-**Scenario 1 — Valid Expression Tree**
-
-`1 + 2 + 3`
-
-Expected:
-
-`RESOLVED`
-
-`6`
-
----
-
-**Scenario 2 — Grouped Expression**
-
-`(1 + 2) * 3`
-
-Expected:
-
-`RESOLVED`
-
-`9`
-
----
-
-**Scenario 3 — Nested Expression Tree**
-
-`2 * (3 + 4 * (5 - 2))`
-
-Expected:
-
-`RESOLVED`
-
-`30`
-
----
-
-**Scenario 4 — Recurring Visibility**
-
-`(2 / 3) + (1 / 6)`
-
-Expected:
-
-`RESOLVED`
-
-`0.833333333333333333`
-
----
-
-**Scenario 5 — Forbidden Structure**
-
-`2 / (3 - 3)`
-
-Expected:
-
-`FORBIDDEN`
-
-`undefined`
-
----
-
-**Scenario 6 — Indeterminate Zero Structure**
-
-`0 / 0`
-
-Expected:
-
-`INDETERMINATE_ZERO`
-
-`indeterminate`
-
----
-
-**Scenario 7 — Incomplete Structure**
-
-`(1 + 2`
-
-Expected:
-
-`INCOMPLETE`
-
-`not_visible`
-
----
-
-🔹 **What this output represents**
-
-- value appears only when structure resolves
-- each node resolves after its child structures resolve
-- structure governs visibility
-- decimal visibility does not alter structural resolution
-- values remain deterministic
-- invalid or incomplete structure does not force value
-
----
-
-## 🧭 **Framework & References**
-
-### **Docs**
-- [Quickstart](docs/Quickstart.md)  
-- [FAQ](docs/FAQ.md)  
-- [Proof Sketch](docs/Proof-Sketch.md)  
-- [SVARE Concept Diagram](docs/SVARE_Diagram.png)  
-
----
-
-**Note:**  
-Certificate identity shown in the SVARE concept diagram is illustrative.  
-In Phase I, certificate identity depends on structural encoding.  
-Canonical identity is a future extension.
-
----
-
-### **Framework**
-
-- [SVARE Architecture Notes](docs/SVARE-Architecture-Notes.md)  
-- [Dependency Elimination Framework](docs/Dependency-Elimination-Framework.png)  
-- [Shunyaya Structural Stack](docs/Shunyaya-Structural-Stack.png)  
-
----
-
-SVARE is part of the **Dependency Elimination Framework**, where:
-
-`correctness = structure`
-
-Removing assumed dependencies does not break correctness —  
-it reveals that correctness was always determined by structure.
+The word **oracle** is used in this bounded engineering sense. SVARE is not a universal source of mathematical truth, a theorem prover, or a formally verified system.
 
 ---
 
 ## 🧪 **Current Demonstrations**
 
-### **Current Public Release (v9.9)**
+### **Current Public Release (v10.0.6)**
 
-- [svare_v9_9.py](demo_extension/svare_v9_9.py)
-- [SVARE_HTML_v9_9.html](demo_extension/SVARE_HTML_v9_9.html)
+- [demo_extension_v10_0_6](demo_extension_v10_0_6/)
+- [SVARE_v10_0_6.py](demo_extension_v10_0_6/SVARE_v10_0_6.py)
+- [SVARE_v10_0_6.html](demo_extension_v10_0_6/SVARE_v10_0_6.html)
+- [SVARE_v10_0_6_vectors.json](demo_extension_v10_0_6/SVARE_v10_0_6_vectors.json)
+- [SVARE_v10_0_6_validation.json](demo_extension_v10_0_6/SVARE_v10_0_6_validation.json)
 
----
 
-### **Historical Reference Release (v8.1)**
+Earlier concept demonstrations and reference versions are preserved under [`archive/`](archive/) for historical continuity.
 
-- [svare_v8_1.py](demo/svare_v8_1.py)
-- [SVARE_HTML_v8_1.html](demo/SVARE_HTML_v8_1.html)
+Videos presenting those earlier versions are historical demonstrations and do not represent the current release.
 
----
-
-### **Concept Demonstration**
-
-- [SVARE_Deterministic_Structural_Cinema_v8_8.py](concept_demo/SVARE_Deterministic_Structural_Cinema_v8_8.py)
-
-**Note:** The cinema demonstration was created for the **SVARE v8.1 generation**. For current functionality and expression-tree resolution, see:
-
-- `demo_extension/svare_v9_9.py`
-- `demo_extension/SVARE_HTML_v9_9.html`
+The current supported release is SVARE v10.0.6 under [`demo_extension_v10_0_6/`](demo_extension_v10_0_6/).
 
 ---
 
@@ -759,172 +79,1029 @@ it reveals that correctness was always determined by structure.
 
 ---
 
-## ⚡ **Structural Resolution Model**
+## Overview
 
-`resolve(structure) ->`
+SVARE is a reference expression resolver for exact arithmetic and selected scientific functions.
 
-- RESOLVED
-- FORBIDDEN
-- INDETERMINATE_ZERO
-- INCOMPLETE
-- CONFLICT
+It:
+
+- parses a bounded expression grammar without arbitrary code evaluation;
+- converts finite decimal literals directly into exact rational values;
+- performs supported rational operations exactly;
+- preserves supported irrational and transcendental values in symbolic form;
+- recognizes a bounded set of exact scientific identities;
+- combines identical symbolic additive terms with exact rational coefficients;
+- produces deterministic decimal displays at a selected precision;
+- separates structural, semantic, and display receipts;
+- returns explicit states for invalid, incomplete, unsupported, limited, or failed resolution;
+- applies the same published conformance vectors to Python and HTML.
+
+SVARE is not a full computer algebra system. Its exact symbolic rules are intentionally bounded and exposed through deterministic, versioned behaviour.
 
 ---
 
-### **Structural Admissibility Rule**
+## Structural Foundation
 
-`structure_uniquely_resolves = complete AND consistent`
+SVARE preserves the structure-first principle developed in earlier releases:
 
-`value_visible iff structure_uniquely_resolves`
+```text
+value_visible iff structure_uniquely_resolves
+structure_uniquely_resolves = complete AND consistent
+```
+
+The current engine operationalizes that principle through:
+
+```text
+surface expression
+        ↓
+canonical structure
+        ↓
+exact semantic value or explicit state
+        ↓
+decimal or status display
+```
+
+SVARE does not claim that implementation performs no computation.
+
+The reference engines still perform:
+
+- parsing;
+- normalization;
+- exact integer and rational operations;
+- deterministic rule application;
+- symbolic resolution;
+- decimal presentation.
+
+The narrower claim is that mathematical identity is not created by floating-point approximation or presentation order. The exact semantic layer is established before the display layer.
 
 ---
 
-### **Visibility States**
+## Resolution Model
+
+### Structure layer
+
+Represents the submitted expression after parsing and structural canonicalization.
+
+### Semantic layer
+
+Contains an exact rational value, an exact symbolic form, or an explicit resolution state.
+
+### Display layer
+
+Presents the semantic result as:
+
+- an exact terminating decimal;
+- exact repeating-decimal notation;
+- a symbolic approximation marked with `≈`;
+- an explicit status label.
+
+The display layer does not replace the exact semantic identity.
+
+---
+
+## Instant Demonstration
+
+Input:
+
+```text
+1.0000000000000001 - 1
+```
+
+Result:
+
+```text
+Resolved value          : 0.0000000000000001
+Exact mathematical form : 1/10000000000000000
+State                   : RESOLVED_EXACT_RATIONAL
+Display kind            : EXACT_RATIONAL_TERMINATING
+```
+
+The decimal literals are converted directly into exact rational structures. The residual is not derived from binary floating-point subtraction.
+
+---
+
+## Demonstrations
+
+### Bounded symbolic scientific resolution
+
+Input:
+
+```text
+sin(pi/6) + cos(pi) + sqrt(2) + ln(2)
+```
+
+Result at 30 displayed significant digits:
+
+```text
+Resolved value          : ≈ 1.60736074293304035821892084567
+Exact mathematical form : ln(2) - 1/2 + sqrt(2)
+State                   : RESOLVED_EXACT_SYMBOLIC
+Display kind            : APPROXIMATE_SYMBOLIC
+```
+
+### Exact symbolic cancellation
+
+Inputs:
+
+```text
+pi - pi
+ln(2) - ln(2)
+pi + e - pi - e
+```
+
+Each resolves exactly to:
+
+```text
+Resolved value          : 0
+Exact mathematical form : 0
+State                   : RESOLVED_EXACT_RATIONAL
+```
+
+No numerical near-zero threshold is used. Cancellation occurs in the semantic layer by combining identical canonical symbolic terms with exact rational coefficients.
+
+### Repeating rational display
+
+Input:
+
+```text
+1/3
+```
+
+Result:
+
+```text
+Resolved value          : 0.3…
+Exact mathematical form : 1/3
+Display kind            : EXACT_RATIONAL_REPEATING
+```
+
+The ellipsis denotes an exact repeating rational expansion. It is not a rounded symbolic approximation.
+
+### Singularity handling
+
+Input:
+
+```text
+tan(pi/2)
+```
+
+Result:
+
+```text
+Resolved value       : undefined
+Evaluated expression : tan(pi/2)
+State                : SINGULAR
+```
+
+### Resource-limit handling
+
+Input:
+
+```text
+2^2^2^2^2^2
+```
+
+Result:
+
+```text
+Resolved value : limit exceeded
+State          : LIMIT_EXCEEDED
+Error code     : MAX_EXACT_RESULT_DIGITS
+```
+
+The resolver refuses the outer power before constructing the prohibited result.
+
+---
+
+## Quick Start
+
+### Python
+
+Run the self-test:
+
+```bash
+python demo_extension_v10_0_6/SVARE_v10_0_6.py --self-test
+```
+
+Expected report:
+
+```json
+{
+  "all_pass": true,
+  "case_count": 63,
+  "conformance_vector_sha256": "76e1fff4dee7fe2361d5d2a869f589e6f413049df3cf394544e371669fb48f69",
+  "external_vectors_checked": true,
+  "failure_count": 0,
+  "failures": [],
+  "version": "10.0.6"
+}
+```
+
+Resolve an expression:
+
+```bash
+python demo_extension_v10_0_6/SVARE_v10_0_6.py "1.0000000000000001 - 1"
+```
+
+Select display precision:
+
+```bash
+python demo_extension_v10_0_6/SVARE_v10_0_6.py --precision 60 "sqrt(2) + ln(2)"
+```
+
+Return the complete receipt:
+
+```bash
+python demo_extension_v10_0_6/SVARE_v10_0_6.py --json "sin(pi/6)"
+```
+
+List supported functions:
+
+```bash
+python demo_extension_v10_0_6/SVARE_v10_0_6.py --list-functions
+```
+
+Start interactive mode:
+
+```bash
+python demo_extension_v10_0_6/SVARE_v10_0_6.py
+```
+
+Python requirements:
+
+- Python 3.9 or later;
+- standard library only.
+
+### Standalone HTML
+
+Open:
+
+```text
+demo_extension_v10_0_6/SVARE_v10_0_6.html
+```
+
+The browser release:
+
+- runs as a standalone local HTML application;
+- does not require a server or network connection;
+- includes its bounded exact and symbolic resolver;
+- provides interface presets of 12, 18, 30, 48, and 72 significant digits;
+- applies a resolver precision range of 6 to 120 significant digits;
+- exports JSON receipts;
+- includes the same 59 conformance vectors used by Python;
+- includes a 63-check self-test.
+
+The embedded Decimal.js component is used for browser-side high-precision approximation. Its MIT attribution remains inside the HTML.
+
+---
+
+## Supported Syntax
+
+### Numeric literals
+
+```text
+12
+-7
+0.125
+1.0000000000000001
+6.02e23
+```
+
+Numeric literals use ASCII digits `0-9`. Non-ASCII numeral characters are rejected consistently by both reference engines.
+
+### Case-insensitive identifiers
+
+Function and constant identifiers are case-insensitive.
+
+```text
+pi
+PI
+Pi
+
+sin(pi/6)
+SIN(PI/6)
+```
+
+A standalone `e` or `E` is the mathematical constant.
+
+```text
+E
+```
+
+Within a numeric literal, `e` or `E` is the scientific-notation exponent marker.
+
+```text
+2E2 -> 200
+2e2 -> 200
+```
+
+Tokenization distinguishes the standalone constant from the exponent marker inside a numeric literal.
+
+### Operators
+
+```text
++   addition
+-   subtraction and unary negation
+*   multiplication
+/   division
+%   floor-division remainder
+^   exponentiation
+**  exponentiation
+```
+
+Parentheses are supported. Implicit multiplication is not supported.
+
+```text
+2 * pi    supported
+2pi       unsupported
+```
+
+### Operator policy
+
+```text
+2^3^2    -> 512
+-2^2     -> -4
+(-2)^2   -> 4
+2^-2     -> 1/4
+```
+
+Exponentiation is right-associative. Unary minus has lower precedence than exponentiation.
+
+Remainder follows floor-division semantics and the divisor sign:
+
+```text
+-3 % 2   -> 1
+3 % -2   -> -1
+-3 % -2  -> -1
+```
+
+### Constants
+
+```text
+pi
+e
+tau
+```
+
+### Functions
+
+Arithmetic and integer functions:
+
+```text
+sqrt abs sign floor ceil trunc round min max gcd lcm
+```
+
+Trigonometric functions:
+
+```text
+sin cos tan asin acos atan
+```
+
+Logarithmic and exponential functions:
+
+```text
+ln log10 log exp
+```
+
+Angle helpers:
+
+```text
+deg rad
+```
+
+`log(x)` means the natural logarithm.
+
+`log(value, base)` uses the supplied base.
+
+### Angle-helper semantics
+
+`deg(x)` interprets `x` as degrees and converts it exactly to radians:
+
+```text
+deg(x) = x * pi / 180
+sin(deg(30)) -> 1/2
+```
+
+`rad(x)` interprets `x` as an angle already expressed in radians and preserves the supplied value:
+
+```text
+rad(x) = x
+sin(rad(pi/6)) -> 1/2
+sin(rad(30))   -> sin(30 radians)
+```
+
+The names are input-unit wrappers. They are not counterparts to Python's `math.degrees()` and `math.radians()` conversion functions.
+
+### Function arity
+
+Functions accept only their published argument counts.
+
+Examples of invalid arity:
+
+```text
+atan(1,2)
+min()
+```
+
+Invalid function arity returns `CONFLICT`.
+
+---
+
+## Precision Policy
+
+Display precision is supported from 6 through 120 significant digits.
+
+Requested values outside this range are clamped:
+
+```text
+--precision 5   -> effective precision 6
+--precision 500 -> effective precision 120
+```
+
+Precision affects the decimal presentation and display receipt. It does not change the canonical structure or exact semantic certificate.
+
+---
+
+## Selected Exact Rules
+
+SVARE includes bounded rules such as:
+
+```text
+sin(pi/6)       -> 1/2
+cos(pi)         -> -1
+tan(pi/4)       -> 1
+sin(deg(30))    -> 1/2
+sqrt(81/25)     -> 9/5
+sqrt(2)^2       -> 2
+exp(ln(7))      -> 7
+log10(1000)     -> 3
+log(81,3)       -> 4
+pi - pi         -> 0
+2*pi - pi       -> pi
+sqrt(2)+sqrt(2) -> 2*sqrt(2)
+```
+
+Recognized exact trigonometric identities include supported multiples of `pi/12`.
+
+The symbolic coefficient collector combines identical canonical additive terms. It does not claim general algebraic equivalence across all possible expressions.
+
+---
+
+## Bounded Recognition
+
+SVARE applies a published, bounded identity set rather than general-purpose algebraic simplification.
+
+Mathematically equivalent expressions may therefore receive different resolution classes when an equivalence lies outside the implemented rule set.
+
+Example:
+
+```text
+sqrt(2)^2
+```
+
+resolves exactly to:
+
+```text
+2
+```
+
+while:
+
+```text
+sqrt(2) * sqrt(2)
+```
+
+remains symbolic in v10.0.6 and displays:
+
+```text
+≈ 2
+```
+
+Other expressions may display an approximation that numerically resembles an exact rational result:
+
+```text
+8^(1/3)
+ln(4) / ln(2)
+min(sqrt(2), 1)
+```
+
+The `≈` marker remains mandatory whenever the semantic result is retained symbolically.
+
+A displayed approximation that resembles an integer or rational does not claim that SVARE established that exact identity.
+
+---
+
+## Zero-Base Power Policy
+
+For exact rational exponents:
+
+```text
+0^positive -> 0
+0^0        -> INDETERMINATE
+0^negative -> FORBIDDEN
+```
+
+Examples:
+
+```text
+0^(1/2)   -> 0
+0^(3/2)   -> 0
+0^(-1/2)  -> FORBIDDEN
+```
+
+---
+
+## Resolution States
 
 | State | Meaning |
-|---------|---------|
-| RESOLVED | Structure uniquely resolves and value becomes visible |
-| FORBIDDEN | Structure contains an invalid operation |
-| INDETERMINATE_ZERO | Structure resolves to unresolved Zero divided by Zero |
-| INCOMPLETE | Structure is insufficient for visibility |
-| CONFLICT | Structure is internally inconsistent |
+|---|---|
+| `RESOLVED_EXACT_RATIONAL` | The semantic result is an exact rational value. |
+| `RESOLVED_EXACT_SYMBOLIC` | The semantic result is retained in exact symbolic form. |
+| `SINGULAR` | The expression reaches a recognized singular point. |
+| `FORBIDDEN` | The expression violates the supported real-number domain or an operation rule. |
+| `INDETERMINATE` | The structure has no unique value, such as `0/0` or `0^0`. |
+| `INCOMPLETE` | The submitted expression is unfinished. |
+| `CONFLICT` | The submitted syntax, token structure, argument structure, or function arity is invalid. |
+| `ABSTAIN` | A name or function is outside the bounded registry. |
+| `LIMIT_EXCEEDED` | A published deterministic resource boundary was reached. |
+| `INTERNAL_ERROR` | An unexpected implementation failure occurred. |
+
+`CONFLICT`, `LIMIT_EXCEEDED`, and `INTERNAL_ERROR` are distinct. An implementation failure is not reported as a structural conflict.
 
 ---
 
-### **v9.9 Extension**
+## Display Kinds
 
-SVARE v9.9 extends deterministic structural resolution from:
-
-- individual structural relations
-
-to
-
-- complete structural expression trees
-
-while preserving the same invariant:
-
-`same structure -> same value`
-
-The admissibility model remains unchanged.
-
-Only the structural scope expands.
+| Display kind | Meaning |
+|---|---|
+| `EXACT_RATIONAL_TERMINATING` | Exact integer or terminating rational decimal. |
+| `EXACT_RATIONAL_REPEATING` | Exact rational shown with repeating ellipsis notation. |
+| `APPROXIMATE_SYMBOLIC` | Decimal approximation of an exact symbolic form; displayed with `≈`. |
+| `UNDEFINED` | Singular or forbidden real-domain result. |
+| `INDETERMINATE` | No unique value. |
+| `INCOMPLETE` | Incomplete submission. |
+| `NOT_EVALUATED` | Resolver abstained. |
+| `LIMIT_EXCEEDED` | Resource policy refused the resolution. |
+| `INTERNAL_ERROR` | Unexpected implementation failure. |
+| `UNRESOLVED` | Other unresolved submission. |
 
 ---
 
-## 🔥 **Deterministic Invariant**
+## Exactness and Approximation
 
-`same structure -> same value`
+### Exact rational layer
 
-certificate identity depends on structural encoding  
-(canonical same-certificate identity is a future extension)
+Finite decimal literals are converted directly to fractions. Rational operations are exact within the published resource policy.
 
-No arithmetic, ordering, or execution can alter this.
+### Exact symbolic layer
 
----
+Supported non-rational values remain symbolic, including:
 
-## 📊 **Comparison**
+```text
+sqrt(2)
+ln(2)
+1/6 * pi
+ln(2) - 1/2 + sqrt(2)
+```
 
-| Model                | Computation Required            | Structure-Based | Deterministic |
-|----------------------|--------------------------------|-----------------|---------------|
-| Classical Arithmetic | Yes                            | No              | Conditional   |
-| Floating Point       | Yes                            | Partial         | Conditional   |
-| SVARE                | Not required for correctness   | Yes             | Yes           |
+### Decimal display layer
 
----
+- terminating rational decimals are exact;
+- repeating rational decimals use exact ellipsis notation;
+- symbolic decimals are marked with `≈`;
+- display precision does not change structure or semantic certificates;
+- display precision and display kind participate in the display receipt.
 
-## 🧠 **Critical Insight**
+The symbolic decimal layer is not certified interval arithmetic and does not provide formal lower-and-upper enclosures.
 
-The reference engine still performs internal evaluation and exact symbolic-style resolution steps.
+### Very large exact integers
 
-Its distinguishing property is not the elimination of all computation.
+Exact integers are displayed in full while they remain within the configured exact-result limit.
 
-Its distinguishing property is:
-
-- deterministic structural admissibility
-- explicit incompleteness handling
-- conflict-safe visibility
-- precision-preserving resolution
-- execution-independent structural validation
+For example, a valid large literal or exact result may produce a correspondingly long decimal display. Scientific-notation presentation for very large exact integers is a possible future display-layer enhancement.
 
 ---
 
-## 🌌 **Why This Is Bigger Than It Looks**
+## Deterministic Receipts
 
-Minimal proof that deterministic value visibility can be structurally validated independently of floating-point approximation and execution-order dependency:
+Every result contains three SHA-256 values.
 
-- deterministic correctness can be structurally validated  
-- precision can be preserved without floating-point approximation  
-- admissibility can be determined independently of execution-order behavior
+### Structure certificate
 
----
+Identifies the versioned canonical submitted structure.
 
-## 🔥 **SVARE Challenge — Where Structure Outperforms Computation**
+### Semantic certificate
 
-Explore real test cases where classical systems lose precision, collapse structure, or depend on evaluation — and how SVARE preserves correctness deterministically.
+Identifies the versioned canonical semantic result and state.
 
-→ [SVARE Challenge](docs/SVARE-Challenge.md)
+Recognized equivalent expressions may share a semantic certificate while retaining different structure certificates.
 
----
+Example:
 
-These are not benchmarks.
+```text
+sin(pi/6)
+sin(deg(30))
+1/2
+```
 
-They are structural falsification tests for the assumption that computation is required for correctness.
+All resolve to the exact semantic value `1/2`.
 
----
+### Display receipt
 
-## 🧾 **Structural Lineage**
+Identifies the visible representation using:
 
-SLANG → correctness without execution  
-STIME → correctness without time  
-STINT → correctness without connectivity  
-STILE → correctness without communication  
-SVARE → correctness without computation  
+- application version;
+- certificate-schema version;
+- semantic certificate;
+- precision;
+- display kind;
+- displayed value;
+- displayed mathematical form and label.
 
----
+### Receipt verification boundary
 
-## ⚖️ **What SVARE Is / Claims / Does Not Claim**
+Receipt comparison can confirm deterministic identity under the stated SVARE versions and policies.
 
-### **SVARE IS:**
+Receipt hashes are not:
 
-- a structural value-resolution engine
-- a deterministic proof that value correctness emerges from structure
-- a structural expression-tree resolver in v9.9
-- a system where the same structural encoding produces the same value; certificate identity depends on structural encoding
-- a model where incomplete, forbidden, indeterminate, or conflicting structure does not force arbitrary value
-- a reference model for correctness without computation dependency
-- a structure-first value resolution demonstration
-- part of the Shunyaya Dependency Elimination Framework
-
----
-
-### **SVARE CLAIMS:**
-
-- value correctness can be determined from complete AND consistent structure
-- computation is not required as the source of correctness
-- structure, not execution, defines admissibility
-- expression trees can resolve deterministically when their structure is complete and consistent
-- visibility is controlled by structure and reveal depth, not floating-point approximation
+- digital signatures;
+- proofs of authorship;
+- formal proofs of mathematical correctness;
+- protection against a compromised implementation;
+- substitutes for independent validation.
 
 ---
 
-### **SVARE IS NOT:**
+## Versioned Policies
 
-- a production calculator or drop-in replacement for decimal / mpmath
-- a replacement for all arithmetic systems
-- a symbolic algebra or computer algebra system
-- a certified financial, scientific, or safety-critical solution
-- an optimization of existing arithmetic
-- a claim that implementation performs zero internal work
+The v10.0.6 distribution defines separate identifiers for:
+
+```text
+application version        : 10.0.6
+canonicalization version   : 2
+semantic-rules version     : 2
+certificate-schema version : 2
+resource-policy version    : 2
+vector-schema version      : 2
+```
+
+This separation makes the source of future compatibility changes explicit.
 
 ---
 
-### **SVARE DOES NOT CLAIM:**
+## Resource Policy
 
-- that no computation occurs inside the reference implementation
-- that implementation steps define correctness
-- that canonical same-certificate identity across equivalent surfaces is complete in v9.9
-- that all mathematical functions are supported
-- that trigonometric, logarithmic, algebraic, or symbolic manipulation capabilities are included
+SVARE applies these deterministic boundaries in both engines:
+
+| Boundary | Limit |
+|---|---:|
+| Input characters | 10,000 |
+| Tokens | 512 |
+| Nesting depth | 128 |
+| AST nodes | 512 |
+| Operation budget | 4,096 |
+| Literal digits | 4,000 |
+| Absolute literal exponent | 50,000 |
+| Exact result digits | 50,000 |
+
+Power-size estimation saturates after the configured threshold. A huge exponent is not converted into an enormous diagnostic string.
+
+A limit result includes a stable error code such as:
+
+```text
+MAX_EXACT_RESULT_DIGITS
+MAX_NESTING_DEPTH
+MAX_TOKEN_COUNT
+```
+
+A public network service should still add:
+
+- process isolation;
+- request throttling;
+- memory limits;
+- execution deadlines;
+- monitoring.
+
+---
+
+## Shared Conformance Corpus
+
+The current distribution includes:
+
+```text
+demo_extension_v10_0_6/SVARE_v10_0_6_vectors.json
+```
+
+It contains **59 vectors** covering:
+
+- exact arithmetic;
+- symbolic identities;
+- refusal states;
+- operator semantics;
+- resource limits;
+- exact cancellation;
+- repeating decimals;
+- zero-base powers;
+- zero-valued `gcd` and `lcm` cases;
+- ASCII-numeral policy.
+
+Vector payload SHA-256:
+
+```text
+76e1fff4dee7fe2361d5d2a869f589e6f413049df3cf394544e371669fb48f69
+```
+
+Both Python and HTML embed the same vector payload and verify this hash during their self-tests.
+
+The self-tests contain:
+
+```text
+59 shared conformance vectors
+4 release invariants
+63 total checks per engine
+```
+
+The four release invariants verify:
+
+- embedded vector-hash integrity;
+- recognized semantic equivalence;
+- precision isolation;
+- symbolic approximation marking.
+
+The self-tests are regression and parity checks. They are not exhaustive formal verification.
+
+---
+
+## Reproducibility Check
+
+Run the same expression repeatedly:
+
+```bash
+python demo_extension_v10_0_6/SVARE_v10_0_6.py --json "sin(pi/6)"
+python demo_extension_v10_0_6/SVARE_v10_0_6.py --json "sin(pi/6)"
+```
+
+Under the same release and policy versions, the runs should produce identical:
+
+- state;
+- exact semantic value;
+- canonical structure;
+- structure certificate;
+- semantic certificate;
+- display receipt at the same precision.
+
+Equivalent expressions may share semantic certificates while retaining different structure certificates.
+
+---
+
+## JSON Receipt
+
+Principal fields include:
+
+```text
+engine
+version
+canonicalization_version
+semantic_rules_version
+certificate_schema_version
+resource_policy_version
+conformance_vector_sha256
+surface
+state
+resolution_class
+display_kind
+display_value
+display_mathematical_form
+display_form_label
+resolved_value
+exact_mathematical_form
+exact_value
+decimal_approximation
+precision
+precision_unit
+note
+approximation_note
+error_code
+internal_error_code
+limit
+resource_policy
+structure_canonical
+semantic_canonical
+structure_certificate_sha256
+semantic_certificate_sha256
+display_receipt_sha256
+records
+function_registry
+certificate_policy
+operator_policy
+```
+
+---
+
+## Security Characteristics
+
+The expression resolvers do not use:
+
+- Python `eval`;
+- JavaScript `eval`;
+- arbitrary source-code execution.
+
+The grammar admits only implemented operators, constants, functions, and ASCII numeric literals.
+
+The reference implementation remains unsuitable for direct untrusted high-volume network exposure without an operational containment layer.
+
+---
+
+## What SVARE Is
+
+SVARE is:
+
+- an exact scientific calculator for supported expressions;
+- an exact rational expression resolver;
+- a bounded symbolic scientific resolver;
+- a bounded deterministic math oracle;
+- a deterministic receipt generator;
+- a Python and standalone HTML reference pair;
+- a versioned cross-runtime conformance demonstration;
+- a structure-first mathematical resolution project.
+
+---
+
+## What SVARE Does Not Claim
+
+SVARE is not:
+
+- a complete computer algebra system;
+- a universal mathematical oracle;
+- a general theorem prover;
+- a formally verified platform;
+- certified interval arithmetic;
+- a complex-number engine;
+- a calculus system;
+- a units or dimensional-analysis engine;
+- a matrix or tensor package;
+- certified for financial, medical, engineering, legal, or safety-critical decisions.
+
+Unsupported identities may remain symbolic or return `ABSTAIN`.
+
+Exact-looking symbolic decimal output is prevented by the mandatory `≈` marker, but the decimal remains an approximation rather than a proof.
+
+---
+
+## Human and Machine Use
+
+### Human-facing use
+
+The Python CLI and standalone HTML application provide:
+
+- direct expression entry;
+- visible exact and decimal forms;
+- structure inspection;
+- state inspection;
+- receipt export;
+- self-tests.
+
+### Machine-facing use
+
+The current Python engine can emit structured JSON receipts suitable for:
+
+- deterministic regression checks;
+- reproducible test fixtures;
+- cache-key experiments;
+- cross-runtime comparisons;
+- bounded tool-use prototypes.
+
+The current release is not yet packaged as an installable agent-framework library.
+
+---
+
+## Planned Agentic Verification Direction
+
+A future minor release is intended to expose SVARE as an auditable mathematical tool for AI and agentic systems.
+
+Planned work includes:
+
+- an installable Python package;
+- a stable function API;
+- typed resolution results;
+- JSON schemas;
+- receipt verification;
+- explicit exact-only and bounded-symbolic policies;
+- deterministic cache-key guidance;
+- package installation tests;
+- concurrent-call tests;
+- generated differential testing;
+- receipt-tampering tests;
+- OpenAI and Anthropic tool examples;
+- an MCP server adapter.
+
+The intended positioning is:
+
+> **Exact calculator for people. Auditable deterministic math oracle for agents.**
+
+These are roadmap items, not current v10.0.6 capabilities.
+
+---
+
+## Exit Codes
+
+| Exit code | Meaning |
+|---|---|
+| `0` | Expression resolved, or an informational command completed successfully. |
+| `1` | Self-test failed. |
+| `2` | Expression returned a non-`RESOLVED_*` state. |
+
+Broken output pipes are handled without an avoidable traceback.
+
+---
+
+## Repository Documentation
+
+### User and technical guides
+
+- [Quickstart](docs/Quickstart.md)
+- [FAQ](docs/FAQ.md)
+- [Proof Sketch](docs/Proof-Sketch.md)
+- [SVARE Challenge](docs/SVARE-Challenge.md)
+- [SVARE Architecture Notes](docs/SVARE-Architecture-Notes.md)
+
+### Visual references
+
+- [SVARE Concept Diagram](docs/SVARE_Diagram.png)
+- [Dependency Elimination Framework](docs/Dependency-Elimination-Framework.png)
+- [Shunyaya Structural Stack](docs/Shunyaya-Structural-Stack.png)
+
+Conceptual documents explain the structure-first foundations of SVARE. Runtime behaviour and current commands are defined by the v10.0.6 reference files and this README.
+
+---
+
+## Structural Context
+
+SVARE is part of a broader structure-first research direction:
+
+```text
+correctness = resolve(structure)
+```
+
+The project asks whether mathematical admissibility and identity can be preserved without treating floating-point approximation or execution-specific presentation as the source of truth.
+
+A concise lineage used across the broader structural work is:
+
+```text
+SLANG -> execution
+STIME -> time
+STINT -> connectivity
+STILE -> communication
+STRAL -> traversal
+SVARE -> mathematical value resolution
+```
+
+This context is conceptual. Each project has its own scope, implementation, and validation boundary.
+
+---
+
+## Challenge
+
+Try expressions that expose:
+
+- finite-decimal precision loss in ordinary floating-point workflows;
+- exact rational residuals;
+- singular points;
+- indeterminate structures;
+- incomplete syntax;
+- unsupported functions;
+- resource-limit refusal;
+- semantic equivalence across different surface structures.
+
+The purpose is not to claim universal superiority over established mathematics libraries.
+
+The purpose is to test whether SVARE preserves:
+
+```text
+same supported structure -> same canonical structure
+same exact semantic value -> same semantic certificate
+same display policy       -> same display receipt
+```
+
+---
+
+## Roadmap
+
+Potential future work includes:
+
+- installable library packaging and a stable function API;
+- agentic verification adapters and MCP support;
+- higher-precision independent numerical cross-validation with a published corpus;
+- property-based testing for rational-kernel invariants;
+- deterministic generated differential testing with failure minimization;
+- certified interval-enclosed approximations;
+- a formal canonicalization and semantic-rule specification;
+- reproducible continuous-integration workflows and release badges;
+- broader exact symbolic identity coverage;
+- optional scientific-notation display for very large exact integers;
+- additional language bindings.
+
+Roadmap items are not current capabilities.
 
 ---
 
@@ -932,106 +1109,38 @@ SVARE → correctness without computation
 
 See: [LICENSE](LICENSE)
 
-**Reference Implementation (This Repository):**
+**Reference Implementation**
 
-This SVARE reference engine (Python + HTML demo) is released as an **Open Standard** —  
-free to use, study, implement, extend, and deploy.
+The SVARE reference implementation, including the Python engine and standalone HTML application, is released under the repository’s **SVARE Open Use License**.
 
-It represents a minimal deterministic demonstration of structural value resolution.
+You may use, study, reproduce, implement, modify, extend, and deploy the reference implementation, subject to the terms stated in the [LICENSE](LICENSE) file.
 
-**Architecture and Documentation:**
+SVARE provides a bounded deterministic reference implementation of structural value resolution.
 
-Licensed under **CC BY-NC 4.0**
+**Architecture and Documentation**
 
----
+Unless otherwise stated, the SVARE architecture descriptions and documentation are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
 
-## 🔭 **Roadmap (Exploratory)**
+**Third-Party Component**
 
-| Milestone                  | Description                                                                 | Status    |
-|---------------------------|-----------------------------------------------------------------------------|-----------|
-| Canonical equivalence certificates | Structurally equivalent expressions produce canonical proof identity | Planned |
-| Structural graphs         | Hierarchical resolution and dependency graphs                               | Planned   |
-| Object structures         | Shape, hierarchy, balance                                                   | Planned   |
-| Domain extensions         | Finance, scientific systems, verification                                   | Open      |
-| Formal verification       | Lightweight proof of resolution kernel correctness                          | Research  |
-| Language bindings         | Python package, WebAssembly, Rust port                                      | Future    |
-| Structural decidability bounds | Explicit admissibility boundaries for hierarchical and graph-based structures | Research |
+The standalone HTML application includes Decimal.js. Decimal.js remains subject to its own MIT licence and attribution.
+
+The Decimal.js licence applies only to that third-party component. It does not make the SVARE reference implementation an MIT-licensed project.
 
 ---
 
-## 🔗 **Related Structural References**
+## Final Statement
 
-SVARE is part of a broader structural ecosystem where each system removes a specific assumed dependency — yet correctness remains preserved.
+SVARE separates three questions:
 
-`correctness = resolve(structure)`
+```text
+What structure was submitted?
+What exact value or explicit state did it resolve to?
+How was that result displayed?
+```
 
----
+For supported expressions, exact rational or exact symbolic meaning is established before decimal presentation.
 
-## 🧱 **Cross-System Dependency Elimination Map**
+For invalid, unsupported, indeterminate, or resource-prohibited expressions, the resolver returns an explicit state instead of forcing a numeric answer.
 
-| Domain        | System | Removed Dependency                  | What Preserves Correctness |
-|---------------|--------|------------------------------------|----------------------------|
-| Computation   | [SLANG-Computation](https://github.com/OMPSHUNYAYA/SLANG-Computation) | Execution flow             | Structure |
-| Computation   | [STOCRS](https://github.com/OMPSHUNYAYA/STOCRS)                     | Execution pipelines        | Structure |
-| Arithmetic    | SVARE                                                               | Computation                | Structure |
-| Time          | [STIME](https://github.com/OMPSHUNYAYA/Structural-Time)              | Clocks                     | Structure |
-| Time          | [SSUM-Time](https://github.com/OMPSHUNYAYA/SSUM-Time)                | Time reconstruction        | Structure |
-| Ordering      | [ORL](https://github.com/OMPSHUNYAYA/Orderless-Ledger)              | Ordering / sequence        | Structure |
-| Connectivity  | [STINT-Money](https://github.com/OMPSHUNYAYA/STINT-Money)           | Continuous connectivity    | Structure |
-| Communication | [STILE](https://github.com/OMPSHUNYAYA/STILE)                       | Messaging / network        | Structure |
-| Traversal     | [STRAL-Path](https://github.com/OMPSHUNYAYA/STRAL-Path)             | Traversal / search         | Structure |
-| Finance       | [SLANG-Money](https://github.com/OMPSHUNYAYA/SLANG-Money)           | Transactions               | Structure |
-| Audit         | [SLANG-Audit](https://github.com/OMPSHUNYAYA/SLANG-Audit)           | Verification workflows     | Structure |
-
----
-
-### 🌌 **The Unifying Insight**
-
-remove dependency → structure remains → correctness preserved
-
-Nothing is replaced.  
-Nothing is approximated.  
-Only the dependency is eliminated.
-
-And correctness does not break.
-
----
-
-### 🧭 **Structural Lineage**
-
-SLANG → execution  
-STIME → time  
-STINT → connectivity  
-STILE → communication  
-STRAL → traversal  
-SVARE → computation  
-
----
-
-### ⚡ **The Pattern**
-
-Each system answers a deeper question:
-
-Does correctness depend on what we assumed it did?
-
-SVARE answers:
-
-**Does value require computation?**  
-
-**No. It requires structure.**
-
----
-
-## 🧭 **Final Statement**
-
-SVARE distinguishes between:
-
-- structural admissibility
-- representational realization
-- execution substrate
-
-The reference engine demonstrates that deterministic value visibility can be governed by structural completeness and consistency before execution-specific approximation behavior becomes relevant.
-
-When structure uniquely resolves, value becomes visible deterministically and reproducibly.
-
-**This is SVARE.**
+**SVARE is an exact scientific calculator for direct use and a bounded deterministic math oracle for reproducible resolution.**
