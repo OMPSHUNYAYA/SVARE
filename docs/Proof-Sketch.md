@@ -1,486 +1,701 @@
-# 🧩 **SVARE Proof Sketch — Deterministic Structural Value Guarantees**
+# SVARE Proof Sketch — Deterministic Structural and Semantic Resolution
 
-This document provides a minimal proof sketch for the deterministic structural guarantees of SVARE under the structural resolution model.
+**Structural Value Resolution Engine**
 
-SVARE is intentionally minimal and applies to **value correctness**.
-
-Its correctness does not come from:
-
-- arithmetic  
-- calculation  
-- evaluation order  
-- execution pipelines  
-- floating-point systems  
-- step-by-step derivation  
-- numeric procedures  
-
-It comes from:
-
-deterministic structural resolution of `structure_uniquely_resolves` (`complete AND consistent` structure).
+**Release: v10.0.6**
 
 ---
 
-## **What This Proof Establishes**
+## Purpose
 
-This proof sketch demonstrates that:
+This document gives a bounded proof sketch for the deterministic guarantees of the SVARE v10.0.6 reference implementation.
 
-- Value correctness can be derived deterministically from complete AND consistent structure.  
-- Correctness does not require computation, arithmetic execution, evaluation order, or floating-point machinery as a prerequisite.  
-- The reference implementation may perform internal evaluation, but such evaluation is not the source of correctness — it functions only as a resolution substrate.  
-- Incomplete or conflicting structure produces no value (safe absence).  
+It is not a machine-checked proof, a proof of universal mathematical correctness, or a claim that the implementation performs no computation.
 
-This is not a claim that zero computation occurs.  
-It is a claim that computation is not required for value truth.
+The claim is narrower:
 
----
+> For supported expressions, under fixed SVARE versions and policies, the same submitted structure resolves to the same exact semantic result or explicit state, and the same display policy produces the same visible representation and receipt.
 
-## 🧱 **The Unifying Principle**
+SVARE separates:
 
-`value correctness = resolve(structure)`
+```text
+surface expression
+        ↓
+canonical structure
+        ↓
+exact semantic value or explicit state
+        ↓
+decimal or status display
+```
 
-`value_visible iff structure_uniquely_resolves`
-
-If correctness remains after removing a dependency, that dependency was never fundamental.
-
----
-
-## **1. Deterministic Resolution**
-
-Each system evaluates the same structure using identical resolution rules.
-
-Resolution is defined as:
-
-`resolve(S)`
-
-where `S` is a structural value set.
-
-Since the resolution function is deterministic:
-
-`if S_A = S_B, then resolve(S_A) = resolve(S_B)`
-
-This determinism is expressed as:
-
-`S1 = S2 -> Value1 = Value2`
-
-certificate identity depends on structural encoding  
-(canonical same-certificate identity is a future extension)
-
-where:
-
-- Value is the visible structural outcome  
-- Certificate is a deterministic identity derived from the resolved state  
-
-Thus:
-
-`same structure -> same value`
-
-certificate identity depends on structural encoding  
-(canonical same-certificate identity is a future extension)
-
-Resolution correctness does not depend on:
-
-- floating-point approximation  
-- evaluation sequence  
-- execution-order dependency  
-- approximation-driven execution behavior  
-
-It depends only on structural equality.
+The display layer does not define the exact semantic identity.
 
 ---
 
-## **1.1 Resolution Function Definition**
+## 1. Versioned Resolution Model
 
-Let `S` be a structural set.
+Let:
 
-`resolve(S)` is defined as:
+- `x` be a submitted surface expression;
+- `p` be the requested display precision;
+- `P_v` be the parser under application version `v`;
+- `C_v` be the structural canonicalizer;
+- `R_v` be the semantic resolver;
+- `D_v` be the display function;
+- `H` be SHA-256 applied to a versioned canonical payload.
 
-- `RESOLVED`, if `structure_uniquely_resolves(S)`  
-- `INCOMPLETE`, if `S` is incomplete  
-- `CONFLICT`, if `S` is inconsistent  
+For SVARE v10.0.6:
 
-where:
+```text
+v                          = 10.0.6
+canonicalization_version   = 2
+semantic_rules_version     = 2
+certificate_schema_version = 2
+resource_policy_version    = 2
+vector_schema_version      = 2
+```
 
-`structure_uniquely_resolves(S) = complete AND consistent`
+Resolution is modeled as:
 
-This definition is total and deterministic over all inputs `S`.
+```text
+AST or state          = P_v(x)
+canonical structure   = C_v(AST)
+semantic result       = R_v(canonical structure)
+visible display       = D_v(semantic result, p)
+```
 
----
+A semantic result is either:
 
-## **Deterministic Guarantee — Core Invariant**
-
-`S1 = S2 -> Value1 = Value2`
-
-certificate identity depends on structural encoding  
-(canonical same-certificate identity is a future extension)
-
-This invariant holds across independent systems, repeated executions, and different implementation substrates.
-
-It is the empirical signature of structural correctness — not computational correctness.
-
----
-
-## **2. Order Independence**
-
-Structure is treated as a set, not a sequence.
-
-`S_A ∪ S_B = S_B ∪ S_A`
-
-Therefore:
-
-value is invariant under ordering.
-
-certificate identity depends on structural encoding.
-
-No evaluation order or execution sequence is required to produce correctness.
+- an exact rational value;
+- an exact symbolic form;
+- an explicit resolution state.
 
 ---
 
-## **3. Structural Validity Boundary**
+## 2. Deterministic Parsing
 
-Resolution is governed by:
+### Claim
 
-`structure_uniquely_resolves = complete AND consistent`
+For the same input string and the same parser version:
 
-Only when this condition is satisfied:
+```text
+x1 = x2
+-> P_v(x1) = P_v(x2)
+```
 
-`resolve(S) -> RESOLVED`
+### Sketch
 
-Otherwise:
+The parser applies a fixed grammar, fixed token rules, fixed precedence, and fixed associativity.
 
-`resolve(S) -> INCOMPLETE` (if incomplete)  
-`resolve(S) -> CONFLICT` (if inconsistent)
+The grammar does not use arbitrary source-code evaluation.
 
-Thus value correctness is defined by structural validity — not by computation.
+The same sequence of accepted characters therefore produces the same token stream and the same parsed structure.
 
----
+Examples of fixed operator policy:
 
-## **3A. Absence Law — Formal Statement**
+```text
+2^3^2   -> 512
+-2^2    -> -4
+(-2)^2  -> 4
+2^-2    -> 1/4
+```
 
-If structure is not `complete AND consistent`:
+Exponentiation is right-associative.
 
-`resolve(S) != RESOLVED`  
+Unary minus has lower precedence than exponentiation.
 
-value does not exist.
-
-This is not delay.  
-It is structural absence.
-
-Thus:
-
-`incomplete -> INCOMPLETE -> no value`  
-`conflicting -> CONFLICT -> no value`
-
----
-
-## **4. Incomplete Safety**
-
-If required structural elements are missing:
-
-`resolve(S) -> INCOMPLETE`
-
-No value is produced.
-
-This ensures:
-
-incomplete structure does not produce false value.
+The claim is not that order never matters. The submitted operator structure, precedence, and associativity are part of the input meaning.
 
 ---
 
-## **5. Conflict Safety**
+## 3. Deterministic Canonical Structure
 
-If structure contains contradiction:
+### Claim
 
-`resolve(S) -> CONFLICT`
+For the same parsed structure and canonicalization version:
 
-No incorrect value is forced.
+```text
+AST1 = AST2
+-> C_v(AST1) = C_v(AST2)
+```
 
-This ensures:
+### Sketch
 
-conflicting structure does not collapse into arbitrary value.
+Canonicalization applies fixed structural encodings to each supported node.
 
----
+Examples include:
 
-## **6. No Computation Dependency**
+```text
+RAT(...)
+ADD(...)
+SUB(...)
+MUL(...)
+DIV(...)
+POW(...)
+CALL_SQRT(...)
+CALL_SIN(...)
+```
 
-SVARE does not require:
+No random value, current time, execution history, or external service participates in canonicalization.
 
-- arithmetic execution  
-- evaluation pipelines  
-- floating-point computation  
-- step-by-step calculation  
-
-There exists no required process:
-
-`compute -> evaluate -> derive`
-
-Correctness exists independently of computation as a requirement for value truth.
-
----
-
-## **Clarification — Machine-Level Evaluation**
-
-The reference implementation performs internal evaluation to resolve structure.
-
-However, this evaluation is not treated as the source of correctness.
-
-Correctness is determined solely by structural sufficiency:
-
-`structure_uniquely_resolves = complete AND consistent`
-
-The internal steps (digit alignment, packet merging, depth revelation, normalization) serve only as a resolution substrate. They do not define truth. They merely make the structurally admissible value visible.
-
-**Key distinction:**
-
-Traditional numeric systems: value correctness = result of computation  
-SVARE: value correctness = result of resolved structure
-
-Computation may reveal value.  
-It does not create or determine correctness.
-
-This proof does not claim that the reference engine performs zero internal work.  
-It claims that correctness does not depend on that work.
+Therefore identical parsed structures produce identical canonical structures.
 
 ---
 
-## **7. Visibility from Structural Resolution**
+## 4. Exact Rational Kernel
 
-Outcome visibility is governed by:
+### Claim
 
-`value_visible iff structure_uniquely_resolves`
+For supported rational expressions within the published resource limits, SVARE produces the exact rational result.
 
-This ensures:
+### Sketch by structural induction
 
-no premature value from incomplete or invalid structure.
+#### Base case
 
----
+Every accepted integer or finite decimal literal is converted directly into a rational number.
 
-## **8. Idempotence and Stability**
+Examples:
 
-Repeated evaluation does not change value or resolution state:
+```text
+12                  -> 12/1
+0.125               -> 1/8
+1.0000000000000001  -> 10000000000000001/10000000000000000
+```
 
-`resolve(S) = resolve(S)`
+No binary floating-point conversion is required to establish these rational values.
 
-Duplicate structure does not alter result:
+#### Inductive step
 
-`resolve(S ∪ S) = resolve(S)`
+Assume child expressions resolve to exact rationals:
 
-Thus:
+```text
+a/b
+c/d
+```
 
-resolution is stable under repetition.
+The supported rational operations produce:
 
----
+```text
+addition       -> (ad + bc) / bd
+subtraction    -> (ad - bc) / bd
+multiplication -> ac / bd
+division       -> ad / bc, when c != 0
+```
 
-## **9. Monotonic Safety**
+The result is normalized by exact integer arithmetic.
 
-Structure evolves toward resolution.
+Integer-valued functions such as `gcd`, `lcm`, `floor`, `ceil`, and `trunc` likewise use exact rational or integer rules within their defined domains.
 
-Before resolution:
+Therefore every supported rational expression tree resolves to the exact rational result, unless an explicit state or resource boundary is reached.
 
-`INCOMPLETE -> no value`  
-`CONFLICT -> no value`
+### Example
 
-After resolution:
+```text
+1.0000000000000001 - 1
+```
 
-`RESOLVED -> deterministic value`  
+resolves to:
 
-certificate identity depends on structural encoding  
-(canonical same-certificate identity is a future extension)
-
-Thus:
-
-partial or invalid structure cannot produce false value.
-
----
-
-## **10. Conservative Correctness**
-
-SVARE does not redefine numeric truth.
-
-For valid structure:
-
-`classical value = SVARE value`
-
-Its innovation is:
-
-removing computation as a requirement for correctness.
+```text
+Exact mathematical form : 1/10000000000000000
+Resolved value          : 0.0000000000000001
+State                   : RESOLVED_EXACT_RATIONAL
+```
 
 ---
 
-## **11. Convergence Without Coordination**
+## 5. Exact Symbolic Preservation
 
-If independent systems receive the same structure:
+### Claim
 
-`S_A = S_B`
+For supported symbolic expressions, SVARE preserves exact semantic identity according to its published bounded rule set.
 
-Then:
+### Sketch
 
-`Value_A = Value_B`
+Values such as:
 
-certificate identity depends on structural encoding  
-(canonical same-certificate identity is a future extension)
+```text
+pi
+e
+sqrt(2)
+ln(2)
+1/6 * pi
+```
 
-No synchronization, ordering, or shared execution is required.
+are represented symbolically when no supported rational reduction applies.
 
-Convergence depends only on structural equivalence.
+Published identities may reduce a symbolic expression exactly.
 
----
+Examples:
 
-## **12. Structural Evidence Principle — Proof Without Computation Trace**
+```text
+sin(pi/6)       -> 1/2
+cos(pi)         -> -1
+tan(pi/4)       -> 1
+sqrt(81/25)     -> 9/5
+sqrt(2)^2       -> 2
+exp(ln(7))      -> 7
+log10(1000)     -> 3
+log(81,3)       -> 4
+```
 
-Value evidence is intrinsic to structure.
+Each rule is deterministic and versioned.
 
-There is no requirement for:
+SVARE does not claim complete symbolic equivalence recognition.
 
-- calculation steps  
-- execution logs  
-- evaluation traces  
-- intermediate states  
+For example, in v10.0.6:
 
-The resolved structure serves as proof:
+```text
+sqrt(2)^2
+```
 
-`same structure -> same value`
+resolves exactly to `2`, while:
 
-certificate identity depends on structural encoding  
-(canonical same-certificate identity is a future extension)
+```text
+sqrt(2) * sqrt(2)
+```
 
----
+remains symbolic and displays:
 
-### **Normalization Requirement**
+```text
+≈ 2
+```
 
-Value is normalized before certificate generation:
-
-`normalized_value = normalize(Value)`
-
-This ensures:
-
-- independence from representation  
-- independence from formatting  
-- consistent identity across systems  
-
-Thus:
-
-`same structure -> same normalized value`
-
-certificate identity depends on structural encoding  
-(canonical same-certificate identity is a future extension)
-
----
-
-## **13. Admissibility Principle**
-
-Structure defines admissibility.
-
-Only structurally supported value is admitted.
-
-Unsupported or inconsistent value:
-
-does not appear.
-
-Thus:
-
-- structure defines value truth  
-- computation does not determine correctness  
+This is a boundary of the implemented rule set, not a statement that the two expressions have different mathematical values.
 
 ---
 
-## **14. Canonical Value Identity — Future Extension**
+## 6. Exact Symbolic Cancellation
 
-Different valid structures may represent the same value:
+### Claim
 
-`STATE_A -> VALUE_X`  
-`STATE_B -> VALUE_X`
+Identical canonical symbolic additive terms cancel exactly.
 
-In the current reference implementation:
+### Sketch
 
-These may produce identical visible values,  
-but certificate identity depends on structural encoding.
+The symbolic coefficient collector represents additive terms with exact rational coefficients.
 
-Future direction:
+If two terms share the same canonical symbolic identity, their coefficients are combined exactly.
 
-`canonical(resolve(S)) -> value_identity`
+Examples:
 
-This would ensure:
+```text
+pi - pi
+ln(2) - ln(2)
+pi + e - pi - e
+```
 
-`same value truth -> same canonical identity`
+Each reduces to the exact rational value `0`.
 
----
-
-## **15. Truth vs Computation Separation**
-
-SVARE distinguishes:
-
-**Value Truth**
-
-- determined by structure  
-- independent of computation  
-
-**Value Computation**
-
-- may involve arithmetic  
-- may involve evaluation  
-- belongs to representation layer  
-
-SVARE defines truth.  
-It does not enforce computation.
+No numerical tolerance or near-zero threshold is required.
 
 ---
 
-## **16. Summary**
+## 7. Explicit Resolution States
 
-This proof sketch establishes that SVARE has the following properties:
+The resolver distinguishes successful resolution from recognized non-resolved conditions.
 
-- deterministic value from structure  
-- order independence (no evaluation sequence dependency)  
-- independence from computation as a requirement  
-- strict structural validity boundary  
-- incomplete safety (no premature value)  
-- conflict safety (no arbitrary value)  
-- idempotent evaluation  
-- monotonic safety  
-- conservative correctness  
-- value as structural proof  
-- certificate as reproducible structural artifact (encoding-dependent)  
-- canonical value identity (future direction)  
+The v10.0.6 states are:
 
-`value correctness is a property of structure — not of computation`
+```text
+RESOLVED_EXACT_RATIONAL
+RESOLVED_EXACT_SYMBOLIC
+SINGULAR
+FORBIDDEN
+INDETERMINATE
+INCOMPLETE
+CONFLICT
+ABSTAIN
+LIMIT_EXCEEDED
+INTERNAL_ERROR
+```
+
+### State separation
+
+Examples:
+
+```text
+tan(pi/2)          -> SINGULAR
+sqrt(-1)           -> FORBIDDEN
+0/0                -> INDETERMINATE
+0^0                -> INDETERMINATE
+(1 + 2             -> INCOMPLETE
+atan(1,2)          -> CONFLICT
+unknown_function(2)-> ABSTAIN
+2^2^2^2^2^2        -> LIMIT_EXCEEDED
+```
+
+An unexpected implementation failure is represented as `INTERNAL_ERROR`, not as `CONFLICT`.
+
+### Safety property
+
+For every non-`RESOLVED_*` state:
+
+```text
+no exact numeric result is forced
+```
+
+This preserves the distinction between mathematical singularity, real-domain refusal, indeterminacy, incomplete input, unsupported input, resource refusal, and implementation failure.
 
 ---
 
-## **Scope Note — Current Reference Model (v9.9)**
+## 8. Resource-Bounded Totality
 
-This proof sketch applies to the current SVARE v9.9 reference model.
+### Claim
 
-The proof covers:
+Within the published input and resource boundaries, every accepted submission produces either a resolved result or an explicit state.
 
-- expression-tree resolution
-- chained expressions
-- grouped expressions
-- nested expressions
-- deterministic resolution states
-- structural certificates
-- visibility-layer control
+The principal limits are:
 
-It does not include:
+| Boundary | Limit |
+|---|---:|
+| Input characters | 10,000 |
+| Tokens | 512 |
+| Nesting depth | 128 |
+| AST nodes | 512 |
+| Operation budget | 4,096 |
+| Literal digits | 4,000 |
+| Absolute literal exponent | 50,000 |
+| Exact result digits | 50,000 |
 
-- symbolic algebra systems
-- equation solving
-- calculus
-- hierarchical structural graphs
-- canonical value identity
+### Sketch
 
-It demonstrates:
+Every stage checks its applicable deterministic boundary.
 
-that deterministic value admissibility can be governed by structural completeness and consistency before representation-specific execution behavior becomes relevant.
+When a boundary is exceeded, the resolver returns `LIMIT_EXCEEDED` with a stable error code rather than attempting an unbounded construction.
+
+Example:
+
+```text
+2^2^2^2^2^2
+```
+
+returns:
+
+```text
+State      : LIMIT_EXCEEDED
+Error code : MAX_EXACT_RESULT_DIGITS
+```
+
+This establishes bounded termination behaviour for the published reference policy.
+
+It does not establish unlimited termination for arbitrary mathematical expressions.
 
 ---
 
-## 🏁 **Final Line**
+## 9. Display Determinism
 
-Value was never created by computation.  
-It was always determined by structure.
+### Claim
 
-Computation only reveals what structure already permits.
+For the same semantic result, application version, display precision, and display policy:
 
-When structure is complete and consistent, value becomes visible — deterministically, reproducibly, and independently of the mechanism used to reveal it.
+```text
+D_v(r, p) = D_v(r, p)
+```
 
-**This is SVARE.**
+### Sketch
+
+The display layer applies fixed rules:
+
+- terminating rational decimals are displayed exactly;
+- repeating rationals use exact ellipsis notation;
+- symbolic decimals are marked with `≈`;
+- explicit states receive fixed status displays.
+
+Examples:
+
+```text
+1/8  -> 0.125
+1/3  -> 0.3…
+sqrt(2) -> ≈ 1.41421356237309504880168872421
+```
+
+Changing precision may change the visible symbolic approximation and display receipt.
+
+It does not change the canonical structure or exact semantic certificate.
+
+---
+
+## 10. Receipt Determinism
+
+SVARE emits three SHA-256 receipts.
+
+### Structure certificate
+
+The structure certificate identifies the versioned canonical submitted structure.
+
+```text
+structure_certificate = H(
+    certificate-schema version,
+    canonicalization version,
+    canonical structure
+)
+```
+
+### Semantic certificate
+
+The semantic certificate identifies the versioned canonical semantic result and state.
+
+```text
+semantic_certificate = H(
+    certificate-schema version,
+    semantic-rules version,
+    canonical semantic result,
+    resolution state
+)
+```
+
+### Display receipt
+
+The display receipt identifies the visible representation.
+
+```text
+display_receipt = H(
+    application version,
+    certificate-schema version,
+    semantic certificate,
+    precision,
+    display kind,
+    displayed value,
+    displayed label,
+    displayed mathematical form
+)
+```
+
+### Consequence
+
+Under identical versions and policies:
+
+```text
+same canonical structure
+-> same structure certificate
+
+same canonical semantic result and state
+-> same semantic certificate
+
+same semantic result and display policy
+-> same display receipt
+```
+
+Recognized equivalent expressions may share a semantic certificate while retaining different structure certificates.
+
+Example:
+
+```text
+sin(pi/6)
+sin(deg(30))
+1/2
+```
+
+All resolve to the exact semantic value `1/2`.
+
+---
+
+## 11. Receipt Boundary
+
+The SHA-256 values are deterministic fingerprints of versioned resolution artifacts.
+
+They are not:
+
+- digital signatures;
+- proofs of authorship;
+- formal proofs of mathematical correctness;
+- protection against a compromised implementation;
+- substitutes for independent validation.
+
+A hash confirms identity of the hashed payload under the stated schema. It does not independently prove that the implementation or mathematical rules are correct.
+
+---
+
+## 12. Cross-Runtime Conformance
+
+SVARE v10.0.6 publishes one shared conformance corpus for Python and HTML.
+
+The release validation records:
+
+```text
+Shared conformance vectors : 59
+Python self-test checks    : 63
+Python failures            : 0
+HTML self-test checks      : 63
+HTML failures              : 0
+Differential expressions   : 97
+Differential mismatches    : 0
+Browser page errors        : 0
+```
+
+The shared vector payload SHA-256 is:
+
+```text
+76e1fff4dee7fe2361d5d2a869f589e6f413049df3cf394544e371669fb48f69
+```
+
+### Interpretation
+
+These results provide reproducible evidence that the two reference engines agree on the published corpus and differential set.
+
+They do not constitute exhaustive formal verification.
+
+---
+
+## 13. Reproducibility Invariant
+
+Within the same application and policy versions:
+
+```text
+same supported input
+-> same parsed structure
+-> same canonical structure
+-> same resolution state
+-> same exact semantic result
+-> same structure and semantic certificates
+```
+
+At the same display precision:
+
+```text
+same exact semantic result
+-> same visible display
+-> same display receipt
+```
+
+This invariant is version-scoped.
+
+A change to canonicalization, semantic rules, certificate schema, resource policy, application version, or display policy may intentionally change an outcome or receipt. 
+
+Structure and semantic certificates are scoped by the certificate schema and their respective policy versions. The display receipt also includes the application version.
+
+---
+
+## 14. What Is Independent of Display Approximation?
+
+For exact rational and exact symbolic results:
+
+- semantic identity is established before decimal presentation;
+- display precision does not alter canonical structure;
+- display precision does not alter the semantic certificate;
+- symbolic approximation is not treated as the exact value;
+- the `≈` marker remains mandatory for symbolic decimal displays.
+
+This is the precise sense in which SVARE separates exact meaning from visible approximation.
+
+---
+
+## 15. What Is Not Order-Independent?
+
+SVARE does not claim that arbitrary reordering preserves meaning.
+
+The following are part of the submitted structure:
+
+- operator order;
+- parentheses;
+- precedence;
+- associativity;
+- function argument order.
+
+For example:
+
+```text
+1 - 2 != 2 - 1
+```
+
+The valid determinism claim is:
+
+```text
+same supported structure under the same policies
+-> same outcome
+```
+
+---
+
+## 16. Conservative Resolution
+
+SVARE does not redefine established mathematical values.
+
+For a supported expression resolved by a valid exact rule:
+
+```text
+SVARE exact result = corresponding mathematical result
+```
+
+When the bounded rule set does not establish an exact reduction, SVARE may retain an exact symbolic form or return `ABSTAIN`.
+
+It does not infer unsupported identities merely because a decimal approximation resembles a rational or integer.
+
+---
+
+## 17. Scope of This Proof Sketch
+
+This proof sketch applies to the v10.0.6 reference files:
+
+```text
+demo_extension_v10_0_6/SVARE_v10_0_6.py
+demo_extension_v10_0_6/SVARE_v10_0_6.html
+demo_extension_v10_0_6/SVARE_v10_0_6_vectors.json
+demo_extension_v10_0_6/SVARE_v10_0_6_validation.json
+```
+
+It covers:
+
+- deterministic parsing under the published grammar;
+- deterministic structural canonicalization;
+- exact rational arithmetic within resource limits;
+- bounded symbolic identity rules;
+- exact symbolic cancellation for identical canonical terms;
+- explicit resolution states;
+- deterministic display policy;
+- structure, semantic, and display receipts;
+- Python–HTML conformance evidence.
+
+It does not establish:
+
+- completeness of symbolic algebra;
+- universal equivalence recognition;
+- formal verification of the implementation;
+- certified interval bounds;
+- correctness outside the real-number domain;
+- safety certification for high-stakes deployment;
+- resistance to a compromised runtime or source distribution.
+
+---
+
+## 18. Summary of Guarantees
+
+Under fixed v10.0.6 policies and within the supported grammar and resource limits:
+
+1. The same input text produces the same parsed structure.
+2. The same parsed structure produces the same canonical structure.
+3. Supported rational expression trees resolve exactly.
+4. Supported symbolic identities resolve according to a fixed bounded rule set.
+5. Non-resolved conditions remain distinct and do not force numeric values.
+6. The same semantic result and precision produce the same display.
+7. The same canonical payloads produce the same SHA-256 receipts.
+8. Python and HTML agree on the published conformance and differential validation sets.
+
+The central invariant is:
+
+```text
+same supported input structure
+-> same canonical structure
+-> same resolution state
+-> same exact semantic result
+-> same version-scoped receipts
+```
+
+---
+
+## Final Statement
+
+SVARE does not claim that computation disappears.
+
+It establishes a disciplined separation between:
+
+```text
+submitted structure
+exact semantic result or explicit state
+visible decimal or status display
+```
+
+For supported expressions, exact rational or exact symbolic meaning is resolved before decimal presentation.
+
+For singular, forbidden, indeterminate, incomplete, unsupported, conflicting, resource-prohibited, or failed expressions, SVARE returns an explicit state instead of forcing a numeric answer.
