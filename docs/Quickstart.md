@@ -678,7 +678,7 @@ The current public release files are under:
 demo_extension_v10_0_6/
 ```
 
-The `demo_extension/` directory contains the earlier v9.9 reference demonstration.
+The `archive/demo_extension/` directory contains the earlier v9.9 reference demonstration.
 
 ---
 
@@ -738,11 +738,14 @@ visible decimal or status display
 Within fixed versions and policies:
 
 ```text
-same supported input structure
--> same canonical structure
+same submitted input
+-> same parsed structure or parser state
+-> same canonical structure or canonical unresolved placeholder
 -> same resolution state
--> same exact semantic result
--> same version-scoped receipts
+-> same exact semantic result or explicit state
+-> same structure and semantic certificates
 ```
 
-Display precision additionally determines the display receipt.
+For resolved exact results, the same display precision produces the same visible display and display receipt.
+
+For explicit states whose display contains the submitted expression, reproducibility of the display receipt additionally requires the same submitted surface.
