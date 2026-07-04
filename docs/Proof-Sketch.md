@@ -14,7 +14,7 @@ It is not a machine-checked proof, a proof of universal mathematical correctness
 
 The claim is narrower:
 
-> For supported expressions, under fixed SVARE versions and policies, the same submitted structure resolves to the same exact semantic result or explicit state, and the same display policy produces the same visible representation and receipt.
+> Under fixed SVARE versions and policies, the same submitted input produces the same canonical structure or unresolved placeholder, the same exact semantic result or explicit state, and—under the same applicable display policy—the same visible representation and receipt.
 
 SVARE separates:
 
@@ -58,11 +58,21 @@ vector_schema_version      = 2
 Resolution is modeled as:
 
 ```text
-AST or state          = P_v(x)
+AST or parser state   = P_v(x)
 canonical structure   = C_v(AST)
-semantic result       = R_v(canonical structure)
-visible display       = D_v(semantic result, p)
+semantic result       = R_v(AST)
+visible display       = D_v(x, semantic result, p)
 ```
+
+The canonical structure and semantic result are deterministic outputs
+derived from the same parsed AST.
+
+In the v10.0.6 reference implementation, semantic evaluation operates
+on the parsed AST. The canonical structure is the deterministic
+structural encoding used for inspection and structure certification.
+
+The submitted surface expression is also used when an explicit
+non-resolved state displays the evaluated or submitted expression.
 
 A semantic result is either:
 
@@ -387,11 +397,21 @@ It does not establish unlimited termination for arbitrary mathematical expressio
 
 ### Claim
 
-For the same semantic result, application version, display precision, and display policy:
+For resolved exact results, under the same application version,
+display precision, and display policy:
 
-```text
-D_v(r, p) = D_v(r, p)
-```
+r1 = r2 and p1 = p2
+-> D_v(x1, r1, p1) = D_v(x2, r2, p2)
+
+The submitted surface expression does not alter the displayed
+mathematical form of a resolved exact rational or exact symbolic result.
+
+For explicit non-resolved states whose visible presentation includes
+the evaluated or submitted expression, the surface expression must
+also remain the same:
+
+x1 = x2 and r1 = r2 and p1 = p2
+-> D_v(x1, r1, p1) = D_v(x2, r2, p2)
 
 ### Sketch
 
@@ -473,7 +493,10 @@ same canonical structure
 same canonical semantic result and state
 -> same semantic certificate
 
-same semantic result and display policy
+same resolved semantic result and display policy
+-> same display receipt
+
+same explicit state, same applicable submitted surface, and same display policy
 -> same display receipt
 ```
 
@@ -543,15 +566,15 @@ They do not constitute exhaustive formal verification.
 Within the same application and policy versions:
 
 ```text
-same supported input
--> same parsed structure
--> same canonical structure
+same submitted input
+-> same parsed structure or parser state
+-> same canonical structure or canonical unresolved placeholder
 -> same resolution state
--> same exact semantic result
+-> same exact semantic result or explicit state
 -> same structure and semantic certificates
 ```
 
-At the same display precision:
+For resolved exact results, at the same display precision:
 
 ```text
 same exact semantic result
@@ -559,11 +582,21 @@ same exact semantic result
 -> same display receipt
 ```
 
+For explicit states whose visible presentation includes the submitted expression:
+
+```text
+same explicit state
++ same submitted surface
++ same display precision
+-> same status display
+-> same display receipt
+```
+
 This invariant is version-scoped.
 
-A change to canonicalization, semantic rules, certificate schema, resource policy, application version, or display policy may intentionally change an outcome or receipt. 
+A change to canonicalization, semantic rules, certificate schema, resource policy, application version, or display policy may intentionally change an outcome or receipt.
 
-Structure and semantic certificates are scoped by the certificate schema and their respective policy versions. The display receipt also includes the application version.
+Structure and semantic certificates are scoped by the certificate schema and their respective policy versions. The display receipt also includes the application version and the visible representation.
 
 ---
 
@@ -663,24 +696,31 @@ It does not establish:
 
 Under fixed v10.0.6 policies and within the supported grammar and resource limits:
 
-1. The same input text produces the same parsed structure.
+1. The same input text produces the same parsed structure or parser state.
 2. The same parsed structure produces the same canonical structure.
 3. Supported rational expression trees resolve exactly.
 4. Supported symbolic identities resolve according to a fixed bounded rule set.
 5. Non-resolved conditions remain distinct and do not force numeric values.
-6. The same semantic result and precision produce the same display.
+6. For resolved exact results, the same semantic result and precision
+   produce the same display. For explicit states whose display includes
+   the submitted expression, the surface expression must also be the same.
 7. The same canonical payloads produce the same SHA-256 receipts.
 8. Python and HTML agree on the published conformance and differential validation sets.
 
-The central invariant is:
+The central structural and semantic invariant is:
 
 ```text
-same supported input structure
--> same canonical structure
+same submitted input
+-> same parsed structure or parser state
+-> same canonical structure or canonical unresolved placeholder
 -> same resolution state
--> same exact semantic result
--> same version-scoped receipts
+-> same exact semantic result or explicit state
+-> same structure and semantic certificates
 ```
+
+For resolved exact results, the same display precision also produces the same visible display and display receipt.
+
+For explicit states whose display contains the submitted expression, reproducibility of the display receipt additionally requires the same submitted surface.
 
 ---
 
