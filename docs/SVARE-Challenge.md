@@ -48,18 +48,29 @@ python demo_extension_v10_0_6/SVARE_v10_0_6.py --json "EXPRESSION"
 The challenge asks whether SVARE v10.0.6 preserves these invariants under its published grammar, policies, and resource limits:
 
 ```text
-same supported input
--> same canonical structure
+same submitted input
+-> same parsed structure or parser state
+-> same canonical structure or canonical unresolved placeholder
 -> same resolution state
--> same exact semantic result
+-> same exact semantic result or explicit state
 -> same structure and semantic certificates
 ```
 
-At the same display precision:
+For resolved exact results, at the same display precision:
 
 ```text
 same exact semantic result
 -> same visible display
+-> same display receipt
+```
+
+For explicit states whose visible presentation includes the submitted expression:
+
+```text
+same explicit state
++ same submitted surface
++ same display precision
+-> same status display
 -> same display receipt
 ```
 
@@ -588,11 +599,19 @@ SVARE numeric literals use ASCII digits:
 
 A non-ASCII numeral character is not silently interpreted as an ASCII digit.
 
-It returns an explicit invalid-input state under the same policy in Python and HTML.
+It returns:
+
+```text
+State               : CONFLICT
+Error code          : UNSUPPORTED_CHARACTER
+Canonical structure : UNRESOLVED
+```
+
+under the same policy in Python and HTML.
 
 ### Property tested
 
-Cross-runtime agreement includes character admission, not only arithmetic output.
+Cross-runtime agreement includes character admission, parser-state classification, and error coding—not only arithmetic output.
 
 ---
 
@@ -684,16 +703,18 @@ They are not exhaustive formal verification.
 
 # Falsification Criteria
 
-A result would falsify a stated v10.0.6 guarantee if, under the same release files, policies, input, and precision, any of the following occurred:
+A result would falsify a stated v10.0.6 guarantee if, under the same release files, policies, submitted input, and applicable precision, any of the following occurred:
 
-1. The same supported input produced different canonical structures.
-2. The same canonical structure produced different states or exact semantic results.
-3. The same canonical semantic result and state produced different semantic certificates.
-4. The same semantic result and display policy produced different visible output or display receipts.
-5. A non-resolved state exposed a fabricated exact numeric result.
-6. Python and HTML disagreed on a published conformance vector.
-7. An exact rational result differed from the corresponding rational arithmetic result.
-8. A published resource boundary produced an uncontrolled implementation failure instead of its explicit state.
+1. The same submitted input produced a different parsed structure or parser state.
+2. The same submitted input produced a different canonical structure or canonical unresolved placeholder.
+3. The same successfully parsed structure produced a different resolution state or exact semantic result.
+4. The same canonical semantic result and state produced a different semantic certificate.
+5. For resolved exact results, the same semantic result, application version, precision, and display policy produced different visible output or display receipts.
+6. For an explicit state whose display includes the submitted expression, the same state, submitted surface, application version, precision, and display policy produced different status displays or display receipts.
+7. A non-resolved state exposed a fabricated exact numeric result.
+8. Python and HTML disagreed on a published conformance vector.
+9. An exact rational result differed from the corresponding rational arithmetic result.
+10. A published resource boundary produced an uncontrolled implementation failure instead of its documented explicit state.
 
 A failure of a case would identify a defect in the implementation, policy, validation corpus, or stated guarantee.
 
